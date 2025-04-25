@@ -1,4 +1,4 @@
-export interface IAvionState {
+export interface IProductsState {
   products: IProduct[];
   filteredProducts: IProduct[];
   status: string;

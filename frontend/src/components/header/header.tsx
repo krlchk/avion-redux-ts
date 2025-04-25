@@ -1,26 +1,31 @@
-import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { NavigateComponent } from "./header-components";
 import { BurgerWindow } from "./header-components";
 import { UserModal } from "./header-components";
 import { BasketIcon, BurgerIcon, LogoIcon, ProfileIcon } from "./icons";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  hideBurgerModal,
+  hideUserModal,
+  showBurgerModal,
+  showUserModal,
+} from "../store/ui/ui-slice";
 
-export function Header({ className }: { className: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
-  const handleOpen = () => {
-    setIsOpen((prev) => !prev);
-  };
-  const handleOpenForUserModal = () => {
-    setIsUserModalOpen((prev) => !prev);
-  };
+export const Header = () => {
+  const dispatch = useAppDispatch();
+  const { isBurgerModalOpen, isUserModalOpen } = useAppSelector(
+    (state) => state.root.ui,
+  );
 
   useEffect(() => {
     const handleResize = () => {
-      if ((window.innerWidth > 1279.99 && isOpen) || isUserModalOpen) {
-        setIsOpen(false);
-        setIsUserModalOpen(false);
+      if (
+        (window.innerWidth > 1279.99 && isBurgerModalOpen) ||
+        isUserModalOpen
+      ) {
+        dispatch(hideBurgerModal());
+        dispatch(hideUserModal());
       }
     };
     window.addEventListener("resize", handleResize);
@@ -28,13 +33,13 @@ export function Header({ className }: { className: string }) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [isOpen, isUserModalOpen]);
+  }, [dispatch, isBurgerModalOpen, isUserModalOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
-      if ((window.scrollY > 1 && isOpen) || isUserModalOpen) {
-        setIsOpen(false);
-        setIsUserModalOpen(false);
+      if ((window.scrollY > 1 && isBurgerModalOpen) || isUserModalOpen) {
+        dispatch(hideBurgerModal());
+        dispatch(hideUserModal());
       }
     };
 
@@ -43,29 +48,44 @@ export function Header({ className }: { className: string }) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [isOpen, isUserModalOpen]);
+  }, [dispatch, isBurgerModalOpen, isUserModalOpen]);
+
+  const handleUserButton = () => {
+    if (isUserModalOpen) {
+      dispatch(hideUserModal());
+    } else {
+      dispatch(showUserModal());
+    }
+  };
+  const handleBurgerButton = () => {
+    if (isBurgerModalOpen) {
+      dispatch(hideBurgerModal());
+    } else {
+      dispatch(showBurgerModal());
+    }
+  };
 
   return (
-    <section className={clsx(className, "")}>
+    <section className="container">
       <div className="flex justify-between">
         <Link to="/" className="flex items-center">
-          <LogoIcon className="text-[#22202E]" />
+          <LogoIcon />
         </Link>
-        <NavigateComponent className="font-Playfair mobile:hidden flex gap-11 text-lg font-normal leading-6 text-[#726E8D] [&>*:hover]:text-[#22202E] [&>*]:transition-colors" />
+        <NavigateComponent className="flex gap-11 font-Playfair text-lg font-normal leading-6 text-[#726E8D] mobile:hidden [&>*:hover]:text-[#22202E] [&>*]:transition-colors" />
         <div className="flex gap-4">
           <Link to="/basket-page">
-            <BasketIcon className="text-[#22202E] transition-colors hover:text-[#22202E]/80" />
+            <BasketIcon />
           </Link>
-          <button onClick={handleOpenForUserModal}>
-            <ProfileIcon className="text-[#22202E] transition-colors hover:text-[#22202E]/80" />
+          <button onClick={handleUserButton}>
+            <ProfileIcon />
           </button>
-          <button onClick={handleOpen} className="mobile:block hidden">
-            <BurgerIcon className="text-[#22202E] transition-colors hover:text-[#22202E]/80" />
+          <button className="hidden mobile:block" onClick={handleBurgerButton}>
+            <BurgerIcon />
           </button>
         </div>
       </div>
-      <BurgerWindow isOpen={isOpen} />
-      <UserModal className="mr-10" isUserModalOpen={isUserModalOpen} />
+      <BurgerWindow isBurgerModalOpen={isBurgerModalOpen} />
+      <UserModal isUserModalOpen={isUserModalOpen} />
     </section>
   );
-}
+};

@@ -1,33 +1,28 @@
 import clsx from "clsx";
-/**
- * Description placeholder
- *
- * @param {Object} props
- * @param {React.ReactNode} props.children
- * @param {string} props.className
- * @param {'md' | 'lg'} props.size
- * @param {'darkBlue' | 'white' | 'lightBlue'} props.color
- * @returns {JSX.Element}
- */
+import { ReactNode } from "react";
 
-interface IUiButtons {
-  type: string;
-  children: string;
-  color: string;
-  size: string;
-  className: string;
-  onClick: () => void;
+type ButtonSize = "md" | "lg";
+type ButtonColor = "darkBlue" | "white" | "lightBlue";
+
+interface IUiButtonsProps {
+  children: ReactNode | string;
+  size?: ButtonSize | string;
+  color?: ButtonColor | string;
+  className?: string;
+  type?: "button" | "submit" | "reset";
+  onClick?: () => void;
 }
 
 export function UiButtons({
   children,
-  color,
-  size,
-  className,
+  color = "darkBlue",
+  size = "md",
+  className = "",
+  type = "button",
   onClick,
-}: IUiButtons) {
+}: IUiButtonsProps) {
   const buttonClassName = clsx(
-    "h-14 px-8 py-4 text-base text-white justify-center transition-colors flex items-center font-normal text-sm leading-snug",
+    "h-14 text-base text-white justify-center transition-colors flex items-center font-normal text-sm leading-snug",
     className,
     {
       md: "w-[170px]",
@@ -38,9 +33,10 @@ export function UiButtons({
       white: "text-blue-800 bg-white transition-colors hover:bg-gray-400",
       lightBlue: "bg-violet-800/30 hover:bg-violet-800/50",
     }[color],
+    className,
   );
   return (
-    <button type="submit" onClick={onClick} className={buttonClassName}>
+    <button className={buttonClassName} type={type} onClick={onClick}>
       {children}
     </button>
   );

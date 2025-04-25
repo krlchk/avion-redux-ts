@@ -1,28 +1,21 @@
-import clsx from "clsx";
 import { Link } from "react-router-dom";
 import { FacebookIcon, InstagramIcon, SkypeIcon } from "./icons";
 import { EmailComponent } from "../reused-components";
+import { menu } from "../reused-components/CONSTANTS/constants";
 
-export function Footer({ className }:{className:string}) {
-  const menu = [
-    { name: "Homepage", to: "/" },
-    { name: "About Us", to: "/aboutus" },
-    { name: "All products", to: "/allproducts" },
-    { name: "Your basket", to: "/basket-page" },
-  ];
-
+export const Footer = () => {
   return (
-    <footer className={clsx(className, "bg-[#2A254B]")}>
+    <footer className="container bg-[#2A254B]">
       <div className="grid grid-cols-2 font-DMSans text-base font-normal text-white mobile:grid-cols-1">
-        <div className="flex flex-col items-center gap-3">
+        <div className="mx-auto flex flex-col gap-3">
           <p className="text-xl">Navigation menu</p>
-          {menu.map((item, index) => (
+          {menu.map((link) => (
             <Link
-              className="inline-flex cursor-default transition-colors"
-              to={item.to}
-              key={index}
+              className="inline-flex cursor-pointer transition-colors hover:text-gray-400"
+              to={link.to}
+              key={link.name}
             >
-              <p className="cursor-pointer hover:text-gray-400">{item.name}</p>
+              {link.name}
             </Link>
           ))}
         </div>
@@ -31,8 +24,8 @@ export function Footer({ className }:{className:string}) {
           <div className="flex flex-col items-center">
             <p className="text-xl">Join our mailing list</p>
             <EmailComponent
+              color="lightBlue"
               inputClassName="bg-violet-800/30"
-              buttonColor="lightBlue"
               className="mt-4 mobile:mt-2"
             />
           </div>
@@ -48,25 +41,25 @@ export function Footer({ className }:{className:string}) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FacebookIcon className="transition-colors hover:text-gray-400" />
+              <FacebookIcon />
             </Link>
             <Link
               to="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <InstagramIcon className="transition-colors hover:text-gray-400" />
+              <InstagramIcon />
             </Link>
             <Link
               to="https://skype.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <SkypeIcon className="transition-colors hover:text-gray-400" />
+              <SkypeIcon />
             </Link>
           </div>
         </div>
       </div>
     </footer>
   );
-}
+};

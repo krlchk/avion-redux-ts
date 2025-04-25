@@ -1,17 +1,12 @@
-import clsx from "clsx";
 import image from "./staticImages/get-in-touch-image.png";
 
 interface IGetInTouchConponent {
-  className: string;
-  handleScrole: () => void;
+  onScrollClick: () => void;
 }
 
-export function GetInTouchConponent({
-  className,
-  handleScrole,
-}: IGetInTouchConponent) {
+export function GetInTouchConponent({ onScrollClick }: IGetInTouchConponent) {
   return (
-    <section className={clsx(className, "mobile:pt-0")}>
+    <section className="pt-16 mobile:pt-0">
       <div className="grid grid-cols-2 font-DMSans text-base font-normal text-[#2A254B] mobile:grid-cols-1">
         <div className="px-20 py-16 tablet:pl-6 mobile:px-6">
           <h1 className="text-2xl">
@@ -27,7 +22,7 @@ export function GetInTouchConponent({
             for the London interior design community.
           </p>
           <button
-            onClick={handleScrole}
+            onClick={onScrollClick}
             className="mt-48 px-8 py-4 leading-6 transition-colors hover:text-[#2A254B]/70 mobile:mt-32"
           >
             Get in touch

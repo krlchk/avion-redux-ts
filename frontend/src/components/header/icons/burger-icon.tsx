@@ -1,7 +1,7 @@
-export function BurgerIcon({ className }: { className: string }) {
+export function BurgerIcon() {
   return (
     <svg
-      className={className}
+      className="text-[#22202E] transition-colors hover:text-[#22202E]/80"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"

@@ -1,8 +1,6 @@
-import clsx from "clsx";
-
-export function SkypeIcon({ className }: { className: string }) {
+export function SkypeIcon() {
   return (
-    <div className={clsx(className, "")}>
+    <div className="transition-colors hover:text-gray-400">
       <svg
         width="24"
         height="24"

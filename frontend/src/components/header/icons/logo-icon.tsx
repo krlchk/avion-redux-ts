@@ -1,7 +1,7 @@
-export function LogoIcon({ className }: { className: string }) {
+export function LogoIcon() {
   return (
     <svg
-      className={className}
+      className="text-[#22202E]"
       width="64"
       height="18"
       viewBox="0 0 64 18"

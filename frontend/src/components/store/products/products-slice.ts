@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IAvionState, IProduct, IResponse } from "./types";
+import { IProductsState, IProduct, IResponse } from "./products-types";
 import axios from "axios";
 
 export const fetchProducts = createAsyncThunk<IProduct[]>(
@@ -8,20 +8,19 @@ export const fetchProducts = createAsyncThunk<IProduct[]>(
     const response = await axios.get<IResponse>(
       "http://localhost:5001/api/products",
     );
-    console.log(response.data.data);
     return response.data.data;
   },
 );
 
-const initialState: IAvionState = {
+const initialState: IProductsState = {
   products: [],
   filteredProducts: [],
   status: "idle",
   error: null as string | null,
 };
 
-export const avionSlice = createSlice({
-  name: "avion",
+export const productsSlice = createSlice({
+  name: "products",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -40,6 +39,6 @@ export const avionSlice = createSlice({
   },
 });
 
-export const {} = avionSlice.actions;
+export const {} = productsSlice.actions;
 
-export default avionSlice.reducer;
+export default productsSlice.reducer;

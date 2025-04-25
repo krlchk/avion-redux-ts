@@ -1,7 +1,7 @@
-export function IconOne({ className }: { className: string }) {
+export function IconOne() {
   return (
     <svg
-      className={className}
+      className="min-h-[17px] min-w-[16px]"
       width="16"
       height="17"
       viewBox="0 0 16 17"

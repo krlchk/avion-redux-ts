@@ -1,8 +1,6 @@
-import clsx from "clsx";
-
-export function InstagramIcon({ className }: { className: string }) {
+export function InstagramIcon() {
   return (
-    <div className={clsx(className, "")}>
+    <div className="transition-colors hover:text-gray-400">
       <svg
         width="24"
         height="24"
