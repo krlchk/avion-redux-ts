@@ -1,5 +1,7 @@
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAppDispatch } from "../../app/hooks";
+import { resetItemCount } from "../store/products/products-slice";
 
 interface IUnitComponent {
   className: string;
@@ -20,14 +22,12 @@ export function UnitComponent({
   cost,
   unitParamsClassName,
 }: IUnitComponent) {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/products/${id}`);
-  };
+  const dispatch = useAppDispatch();
+  //const state = useAppSelector((state) => state.root.products);
   return (
-    <div
-      onClick={handleClick}
+    <Link
+      to={`/products/${id}`}
+      onClick={() => dispatch(resetItemCount())}
       className={clsx(
         className,
         "cursor-pointer text-xl text-[#2A254B] transition-colors hover:text-[#2A254B]/70",
@@ -47,6 +47,6 @@ export function UnitComponent({
         </p>
         <p className="mt-2 mobile:text-base">£{cost}</p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -7,12 +7,15 @@ export interface IProductsState {
   selectedTypes: number[];
   selectedDesigners: number[];
   selectedPrices: number[];
+  unitProduct: IProduct | null;
   limitForLoadedProducts: number;
   loadedProductIndex: number;
   isLoadMore: boolean;
   status: string;
   error: null | string;
   searchName: string;
+
+  itemCount: number;
 }
 
 export interface IProduct {
@@ -50,7 +53,7 @@ export interface IResponseForType {
   data: IType[];
 }
 
-interface IDimension {
+export interface IDimension {
   depth: string;
   width: string;
   height: string;

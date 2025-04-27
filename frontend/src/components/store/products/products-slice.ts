@@ -50,12 +50,14 @@ const initialState: IProductsState = {
   selectedDesigners: [],
   selectedTypes: [],
   selectedPrices: [],
+  unitProduct: null,
   limitForLoadedProducts: 3,
   loadedProductIndex: 3,
   isLoadMore: true,
   status: "idle",
   error: null as string | null,
   searchName: "",
+  itemCount: 1,
 };
 
 export const productsSlice = createSlice({
@@ -145,6 +147,15 @@ export const productsSlice = createSlice({
       }
       state.loadedProducts = filtered;
     },
+    increaseItemCount(state) {
+      state.itemCount = state.itemCount + 1;
+    },
+    decreaseItemCount(state) {
+      state.itemCount = state.itemCount - 1;
+    },
+    resetItemCount(state) {
+      state.itemCount = initialState.itemCount;
+    },
   },
   extraReducers: (builder) => {
     //products
@@ -189,6 +200,9 @@ export const productsSlice = createSlice({
 });
 
 export const {
+  resetItemCount,
+  increaseItemCount,
+  decreaseItemCount,
   loadMoreProducts,
   filterProducts,
   updateSearchName,
