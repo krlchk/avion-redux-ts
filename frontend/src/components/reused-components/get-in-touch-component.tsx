@@ -1,10 +1,10 @@
-import image from "./staticImages/get-in-touch-image.png";
+import image from "./static-images/get-in-touch-image.png";
 
 interface IGetInTouchConponent {
   onScrollClick: () => void;
 }
 
-export function GetInTouchConponent({ onScrollClick }: IGetInTouchConponent) {
+export function GetInTouchComponent({ onScrollClick }: IGetInTouchConponent) {
   return (
     <section className="pt-16 mobile:pt-0">
       <div className="grid grid-cols-2 font-DMSans text-base font-normal text-[#2A254B] mobile:grid-cols-1">

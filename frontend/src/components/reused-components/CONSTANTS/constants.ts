@@ -70,3 +70,10 @@ export const menu = [
   { name: "All products", to: "/allproducts" },
   { name: "Your basket", to: "/basket-page" },
 ];
+
+//CONSTANTS FOR SORTING
+export const priceOptions = [
+  { id: 1, price: "0 - 100" },
+  { id: 2, price: "101 - 250" },
+  { id: 3, price: "250 - 10000" },
+];

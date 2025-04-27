@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UiButtons } from "../../../UI";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { fetchProducts } from "../../../components/store/products/products-slice";
+import { fetchDesigners, fetchProducts, fetchTypes } from "../../../components/store/products/products-slice";
 
 export const Hero = () => {
   const dispatch = useAppDispatch();
@@ -11,6 +11,8 @@ export const Hero = () => {
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchProducts());
+      dispatch(fetchDesigners());
+      dispatch(fetchTypes());
     }
   }, [dispatch, status]);
 
@@ -39,8 +41,8 @@ export const Hero = () => {
           <div className="h-full w-2/4 mobile:hidden">
             <img
               className="h-full w-full object-cover"
-              src={`http://localhost:5001/${products[0]?.img}`}
-              alt={products[0]?.title || "Product Image"}
+              src={`http://localhost:5001/${products[2]?.img}`}
+              alt={products[2]?.title || "Product Image"}
             />
           </div>
         </div>
