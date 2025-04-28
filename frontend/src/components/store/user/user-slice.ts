@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IEmail, IUser, IUserState } from "./user-types";
+import { IEmail, ILogin, IRegister, IUser, IUserState } from "./user-types";
 import axios from "axios";
 
 export const sendEmail = createAsyncThunk<IEmail, { email: string }>(
@@ -16,9 +16,36 @@ export const sendEmail = createAsyncThunk<IEmail, { email: string }>(
   },
 );
 
+export const loginUser = createAsyncThunk<
+  IUser,
+  { email: string; password: string }
+>("login/loginUser", async ({ email, password }) => {
+  const response = await axios.post<ILogin>(
+    "http://localhost:5001/api/login",
+    { email, password },
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+  return response.data.user;
+});
+
+export const registerUser = createAsyncThunk<
+  IUser,
+  { name: string; email: string; password: string }
+>("register/registerUser", async ({ name, email, password }) => {
+  const response = await axios.post<IRegister>(
+    "http://localhost:5001/api/user",
+    { name, email, password },
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+  return response.data.user;
+});
+
 const initialState: IUserState = {
   user: null,
-  email: "",
   status: "idle",
   error: null as string | null,
 };
@@ -33,15 +60,13 @@ export const userSlice = createSlice({
     logout(state) {
       state.user = null;
     },
-    enterEmail(state, action: PayloadAction<string>) {
-      state.email = action.payload;
-    },
     resetStatus(state) {
       state.status = "idle";
       state.error = null;
     },
   },
   extraReducers: (builder) => {
+    //MESSAGE SENDING
     builder.addCase(sendEmail.pending, (state) => {
       state.status = "loading";
     });
@@ -52,8 +77,32 @@ export const userSlice = createSlice({
       state.status = "failed";
       state.error = action.error?.message || "Failed to send email";
     });
+    //USER LOGIN
+    builder.addCase(loginUser.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.user = action.payload;
+    });
+    builder.addCase(loginUser.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error?.message || "Failed to login";
+    });
+    //USER REGISTER
+    builder.addCase(registerUser.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(registerUser.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.user = action.payload;
+    });
+    builder.addCase(registerUser.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error?.message || "Failed to register";
+    });
   },
 });
 
-export const { setUser, logout, enterEmail,resetStatus } = userSlice.actions;
+export const { setUser, logout, resetStatus } = userSlice.actions;
 export default userSlice.reducer;

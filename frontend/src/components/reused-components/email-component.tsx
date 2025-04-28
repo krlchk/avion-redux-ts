@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { UiButtons } from "../../UI";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { enterEmail, resetStatus, sendEmail } from "../store/user/user-slice";
+import { resetStatus, sendEmail } from "../store/user/user-slice";
 
 export function EmailComponent({
   className,
@@ -14,21 +14,21 @@ export function EmailComponent({
   inputClassName: string;
 }) {
   const dispatch = useAppDispatch();
-  const { email, status, error } = useAppSelector((state) => state.root.user);
+  const { status, error } = useAppSelector((state) => state.root.user);
+  const [email, setEmail] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!email) return;
     dispatch(sendEmail({ email: email }));
-    dispatch(enterEmail(""));
   };
 
   useEffect(() => {
     if (status === "succeeded" || status === "failed") {
       const timer = setTimeout(() => {
         dispatch(resetStatus());
-        return () => clearTimeout(timer);
       }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [dispatch, status]);
 
@@ -46,7 +46,7 @@ export function EmailComponent({
             "w-96 px-6 outline-none placeholder:font-medium tablet:w-52 xs:w-44",
           )}
           value={email}
-          onChange={(e) => dispatch(enterEmail(e.target.value))}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
         />
         <UiButtons type="submit" className="mobile:px-4" color={color}>

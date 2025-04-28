@@ -24,6 +24,7 @@ export const SliderComponent = () => {
     adaptiveHeight: true,
     nextArrow: (
       <NextArrow
+        children=">"
         onClick={function (): void {
           throw new Error("Function not implemented.");
         }}
@@ -31,6 +32,7 @@ export const SliderComponent = () => {
     ),
     prevArrow: (
       <PrevArrow
+        children="<"
         onClick={function (): void {
           throw new Error("Function not implemented.");
         }}
@@ -89,28 +91,29 @@ export const SliderComponent = () => {
 
 interface IArrowProps {
   onClick: () => void;
+  children: string;
 }
 
 const NextArrow = (props: IArrowProps) => {
-  const { onClick } = props;
+  const { onClick, children } = props;
   return (
     <div
-      className="absolute right-[-50px] top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#2A254B] font-bold text-white hover:bg-[#2A254B]/80"
+      className="absolute right-[-50px] top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#2A254B] font-bold text-white transition-colors hover:bg-[#2A254B]/80"
       onClick={onClick}
     >
-      )
+      {children}
     </div>
   );
 };
 
 const PrevArrow = (props: IArrowProps) => {
-  const { onClick } = props;
+  const { onClick, children } = props;
   return (
     <div
-      className="absolute left-[-50px] top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#2A254B] font-bold text-white hover:bg-[#2A254B]/80"
+      className="absolute left-[-50px] top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#2A254B] font-bold text-white transition-colors hover:bg-[#2A254B]/80"
       onClick={onClick}
     >
-      (
+      {children}
     </div>
   );
 };

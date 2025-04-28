@@ -28,6 +28,8 @@ export const AboutProductComponent = () => {
   const { id } = useParams();
 
   const unitComponent = products.find((product) => product.id === Number(id));
+  // const designerId = unitComponent?.designer_id;
+  // const designerName = designers.find((disigner) => disigner.id === designerId);
 
   if (!unitComponent) {
     return (
