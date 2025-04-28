@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { UnitComponent } from "./unit-component";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchProducts } from "../store/products/products-slice";
-import { settings } from "./CONSTANTS/constants";
 
 export const SliderComponent = () => {
   const dispatch = useAppDispatch();
@@ -17,13 +16,57 @@ export const SliderComponent = () => {
     }
   }, [dispatch, status]);
 
+  const settings = {
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    centerMode: false,
+    adaptiveHeight: true,
+    nextArrow: (
+      <NextArrow
+        onClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
+    ),
+    prevArrow: (
+      <PrevArrow
+        onClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
+    ),
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          centerMode: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          centerMode: true,
+        },
+      },
+    ],
+  };
+
   return (
     <section className="container">
       <div className="flex flex-col font-DMSans font-normal text-[#2A254B]">
         <p className="flex justify-start self-start text-3xl">
           Our popular products
         </p>
-        <div className="mt-8">
+        <div className="mt-8 px-10">
           <Slider {...settings}>
             {products.slice(0, 11).map((product) => (
               <UnitComponent
@@ -41,5 +84,33 @@ export const SliderComponent = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+interface IArrowProps {
+  onClick: () => void;
+}
+
+const NextArrow = (props: IArrowProps) => {
+  const { onClick } = props;
+  return (
+    <div
+      className="absolute right-[-50px] top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#2A254B] font-bold text-white hover:bg-[#2A254B]/80"
+      onClick={onClick}
+    >
+      )
+    </div>
+  );
+};
+
+const PrevArrow = (props: IArrowProps) => {
+  const { onClick } = props;
+  return (
+    <div
+      className="absolute left-[-50px] top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#2A254B] font-bold text-white hover:bg-[#2A254B]/80"
+      onClick={onClick}
+    >
+      (
+    </div>
   );
 };

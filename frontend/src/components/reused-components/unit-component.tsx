@@ -25,28 +25,29 @@ export function UnitComponent({
   const dispatch = useAppDispatch();
   //const state = useAppSelector((state) => state.root.products);
   return (
-    <Link
-      to={`/products/${id}`}
+    <div
       onClick={() => dispatch(resetItemCount())}
       className={clsx(
         className,
         "cursor-pointer text-xl text-[#2A254B] transition-colors hover:text-[#2A254B]/70",
       )}
     >
-      <div
-        className={clsx(
-          "h-[400px] w-full overflow-hidden tablet:h-[350px] mobile:h-[300px]",
-          unitImageClassName,
-        )}
-      >
-        <img className="h-full w-full object-cover" src={image} alt="image" />
-      </div>
-      <div>
-        <p className={clsx(unitParamsClassName, "mt-6 mobile:text-base")}>
-          {title}
-        </p>
-        <p className="mt-2 mobile:text-base">£{cost}</p>
-      </div>
-    </Link>
+      <Link to={`/products/${id}`}>
+        <div
+          className={clsx(
+            "h-[400px] w-full overflow-hidden tablet:h-[350px] mobile:h-[300px]",
+            unitImageClassName,
+          )}
+        >
+          <img className="h-full w-full object-cover" src={image} alt="image" />
+        </div>
+        <div>
+          <p className={clsx(unitParamsClassName, "mt-6 mobile:text-base")}>
+            {title}
+          </p>
+          <p className="mt-2 mobile:text-base">£{cost}</p>
+        </div>
+      </Link>
+    </div>
   );
 }

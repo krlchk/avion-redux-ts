@@ -32,37 +32,6 @@ export const cardsData = [
   },
 ];
 
-//SLIDER SETTINGS
-export const settings = {
-  infinite: true,
-  slidesToShow: 4,
-  slidesToScroll: 1,
-  centerMode: false,
-  adaptiveHeight: true,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 3,
-      },
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 2,
-        centerMode: true,
-      },
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 1,
-        centerMode: true,
-      },
-    },
-  ],
-};
-
 //FOOTER LINKS
 export const menu = [
   { name: "Homepage", to: "/" },
