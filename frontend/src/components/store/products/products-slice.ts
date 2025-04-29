@@ -50,6 +50,7 @@ const initialState: IProductsState = {
   selectedDesigners: [],
   selectedTypes: [],
   selectedPrices: [],
+  cartItems: [],
   unitProduct: null,
   limitForLoadedProducts: 3,
   loadedProductIndex: 3,
@@ -58,6 +59,7 @@ const initialState: IProductsState = {
   error: null as string | null,
   searchName: "",
   itemCount: 1,
+  itemToCart: null,
 };
 
 export const productsSlice = createSlice({
@@ -156,6 +158,24 @@ export const productsSlice = createSlice({
     resetItemCount(state) {
       state.itemCount = initialState.itemCount;
     },
+    ////CART functionallity
+    setItemToCart(state, action) {
+      const incomingProduct: IProduct = action.payload;
+      const existingProduct = state.cartItems.find(
+        (item) => item.choosenProduct.id === incomingProduct.id,
+      );
+      if (!existingProduct) {
+        state.cartItems.push({
+          amount: state.itemCount,
+          choosenProduct: incomingProduct,
+        });
+      } else {
+        existingProduct.amount += state.itemCount;
+      }
+    },
+    resetCart(state) {
+      state.cartItems = initialState.cartItems;
+    },
   },
   extraReducers: (builder) => {
     //products
@@ -200,6 +220,7 @@ export const productsSlice = createSlice({
 });
 
 export const {
+  resetCart,
   resetItemCount,
   increaseItemCount,
   decreaseItemCount,
@@ -209,6 +230,7 @@ export const {
   toggleTypeSelection,
   toggleDesignerSelection,
   togglePriceSelection,
+  setItemToCart,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

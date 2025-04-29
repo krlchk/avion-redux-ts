@@ -13,7 +13,7 @@ interface IUnitComponent {
   unitParamsClassName: string;
 }
 
-export function UnitComponent({
+export const UnitComponent = ({
   className,
   unitImageClassName,
   id,
@@ -21,7 +21,7 @@ export function UnitComponent({
   title,
   cost,
   unitParamsClassName,
-}: IUnitComponent) {
+}: IUnitComponent) => {
   const dispatch = useAppDispatch();
   //const state = useAppSelector((state) => state.root.products);
   return (
@@ -50,4 +50,4 @@ export function UnitComponent({
       </Link>
     </div>
   );
-}
+};

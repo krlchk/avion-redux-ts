@@ -14,8 +14,15 @@ export interface IProductsState {
   status: string;
   error: null | string;
   searchName: string;
-
+  //CART functionaluty
   itemCount: number;
+  itemToCart: IProduct | null;
+  cartItems: ICartItem[];
+}
+
+export interface ICartItem {
+  amount: number;
+  choosenProduct: IProduct;
 }
 
 export interface IProduct {

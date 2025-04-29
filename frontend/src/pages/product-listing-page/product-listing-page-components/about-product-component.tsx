@@ -6,6 +6,7 @@ import {
   fetchProducts,
   fetchTypes,
   increaseItemCount,
+  setItemToCart,
 } from "../../../components/store/products/products-slice";
 import { Link, useParams } from "react-router-dom";
 import { UiButtons } from "../../../UI";
@@ -91,7 +92,7 @@ export const AboutProductComponent = () => {
                 </div>
                 <Link to="/basket-page">
                   <UiButtons
-                    //onClick={() => dispatch(addToCart())}
+                    onClick={() => dispatch(setItemToCart(unitComponent))}
                     color="darkBlue"
                     size="md"
                     className="mt-8 self-start"
