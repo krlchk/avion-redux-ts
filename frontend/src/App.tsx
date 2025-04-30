@@ -6,8 +6,9 @@ import { ProductListingPage } from "./pages/product-listing-page";
 import { Login } from "./pages/login-page";
 import { SignUpPage } from "./pages/registration-page";
 import { BasketPage } from "./pages/basket-page";
+import { ProtectedRoute } from "./hooks/protected-route";
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -17,10 +18,17 @@ function App() {
         <Route path="/products/:id" element={<ProductListingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/basket-page" element={<BasketPage />} />
+        <Route
+          path="/basket-page"
+          element={
+            <ProtectedRoute>
+              <BasketPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

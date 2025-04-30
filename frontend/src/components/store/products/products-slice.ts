@@ -7,6 +7,7 @@ import {
   IType,
   IResponseForDesigner,
   IResponseForType,
+  ICartItem,
 } from "./products-types";
 import axios from "axios";
 import { slice } from "lodash";
@@ -40,6 +41,24 @@ export const fetchTypes = createAsyncThunk<IType[]>(
     return response.data.data;
   },
 );
+
+export const createCheckoutSession = createAsyncThunk<
+  { url: string },
+  ICartItem[],
+  { rejectValue: string }
+>("cart/createCheckoutSession", async (cartItems) => {
+  const response = await axios.post<{ url: string }>(
+    "http://localhost:5001/api/create-checkout-session",
+    { products: cartItems },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  return response.data;
+});
 
 const initialState: IProductsState = {
   products: [],
@@ -176,6 +195,29 @@ export const productsSlice = createSlice({
     resetCart(state) {
       state.cartItems = initialState.cartItems;
     },
+    increaseCartItemQuantity(state, action: PayloadAction<number>) {
+      const cartItem = state.cartItems.find(
+        (item) => item.choosenProduct.id === action.payload,
+      );
+
+      if (cartItem) {
+        cartItem.amount += 1;
+      }
+    },
+    decreaseCartItemQuantity(state, action: PayloadAction<number>) {
+      const cartItem = state.cartItems.find(
+        (item) => item.choosenProduct.id === action.payload,
+      );
+
+      if (cartItem && cartItem.amount > 1) {
+        cartItem.amount -= 1;
+      }
+    },
+    removeItemFormCart(state, action: PayloadAction<number>) {
+      state.cartItems = state.cartItems.filter(
+        (item) => item.choosenProduct.id !== action.payload,
+      );
+    },
   },
   extraReducers: (builder) => {
     //products
@@ -220,6 +262,9 @@ export const productsSlice = createSlice({
 });
 
 export const {
+  removeItemFormCart,
+  increaseCartItemQuantity,
+  decreaseCartItemQuantity,
   resetCart,
   resetItemCount,
   increaseItemCount,

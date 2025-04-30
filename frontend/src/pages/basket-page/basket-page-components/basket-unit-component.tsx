@@ -19,7 +19,7 @@ export const BasketUnitComponent = ({
   return (
     <div
       onClick={() => dispatch(resetItemCount())}
-      className="col-span-3 flex h-[230px] w-full text-xl text-[#2A254B] transition-colors hover:text-[#2A254B]/70 mobile:justify-around"
+      className="col-span-2 flex h-[230px] w-full text-xl text-[#2A254B] transition-colors hover:text-[#2A254B]/70 mobile:justify-around"
     >
       <Link to={`/products/${id}`}>
         <div className="h-[190px] w-[140px] cursor-pointer overflow-hidden tablet:h-[140px] mobile:h-[140px]">
