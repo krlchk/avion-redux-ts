@@ -45,7 +45,7 @@ export const UnitComponent = ({
           <p className={clsx(unitParamsClassName, "mt-6 mobile:text-base")}>
             {title}
           </p>
-          <p className="mt-2 mobile:text-base">£{cost}</p>
+          <p className="mt-2 mobile:text-base">${cost}</p>
         </div>
       </Link>
     </div>

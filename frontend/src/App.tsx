@@ -7,6 +7,8 @@ import { Login } from "./pages/login-page";
 import { SignUpPage } from "./pages/registration-page";
 import { BasketPage } from "./pages/basket-page";
 import { ProtectedRoute } from "./hooks/protected-route";
+import { SuccessPage } from "./pages/success-page";
+import { CancelPage } from "./pages/cancel-page";
 
 const App = () => {
   return (
@@ -26,6 +28,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="/cancel" element={<CancelPage />} />
       </Routes>
     </BrowserRouter>
   );

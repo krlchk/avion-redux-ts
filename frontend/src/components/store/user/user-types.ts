@@ -19,6 +19,10 @@ export interface IUser {
 export interface IEmail {
   email: string;
 }
+export interface IEmailOrderConfirm {
+  name: string;
+  email: string;
+}
 export interface ILogin {
   message: string;
   user: IUser;

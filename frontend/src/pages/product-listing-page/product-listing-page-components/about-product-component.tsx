@@ -54,7 +54,7 @@ export const AboutProductComponent = () => {
           <div className="flex flex-col items-center justify-center px-10 py-20">
             <h1 className="self-start text-4xl">{unitComponent.title}</h1>
             <p className="mt-4 self-start text-2xl text-black">
-              £ {unitComponent.cost}
+              $ {unitComponent.cost}
             </p>
             <h3 className="mt-14 self-start text-lg font-medium">
               Description

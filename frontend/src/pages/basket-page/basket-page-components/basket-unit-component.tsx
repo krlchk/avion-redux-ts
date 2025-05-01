@@ -27,7 +27,7 @@ export const BasketUnitComponent = ({
         </div>
         <div>
           <p className="mt-5 mobile:text-base">{title}</p>
-          <p className="mt-2 mobile:text-base">£{cost}</p>
+          <p className="mt-2 mobile:text-base">${cost}</p>
         </div>
       </Link>
     </div>

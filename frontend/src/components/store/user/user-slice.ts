@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IEmail, ILogin, IRegister, IUser, IUserState } from "./user-types";
+import {
+  IEmail,
+  IEmailOrderConfirm,
+  ILogin,
+  IRegister,
+  IUser,
+  IUserState,
+} from "./user-types";
 import axios from "axios";
 
 export const sendEmail = createAsyncThunk<IEmail, { email: string }>(
@@ -15,6 +22,19 @@ export const sendEmail = createAsyncThunk<IEmail, { email: string }>(
     return response.data;
   },
 );
+export const sendEmailConfirmOrder = createAsyncThunk<
+  IEmailOrderConfirm,
+  { name: string; email: string }
+>("email/sendEmailOrderConfirm", async ({ name, email }) => {
+  const response = await axios.post<IEmailOrderConfirm>(
+    "http://localhost:5001/api/send-email-order-confitmation",
+    { name, email },
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+  return response.data;
+});
 
 export const loginUser = createAsyncThunk<
   IUser,

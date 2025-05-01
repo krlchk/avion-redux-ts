@@ -2,7 +2,7 @@ import express from "express";
 import {
   getAllDesigners,
   getDesignerById,
-} from "../controller/designer-controlle";
+} from "../controller/designer-controller";
 
 const router = express.Router();
 

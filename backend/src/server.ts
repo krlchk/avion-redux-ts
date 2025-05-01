@@ -7,8 +7,10 @@ import pool from "./config/db";
 import productRoutes from "./routes/product-routes";
 import userRoutes from "./routes/user-router";
 import emailRoute from "./routes/email-router";
+import orderConfirmationEmailRoute from "./routes/order-confirmation-router";
 import designerRoute from "./routes/designer-router";
 import typeRoute from "./routes/type-router";
+import checkoutRouter from "./routes/checkout-router";
 
 dotenv.config();
 
@@ -23,8 +25,10 @@ app.use(cors());
 app.use("/api", productRoutes);
 app.use("/api", userRoutes);
 app.use("/api", emailRoute);
+app.use("/api", orderConfirmationEmailRoute);
 app.use("/api", designerRoute);
 app.use("/api", typeRoute);
+app.use("/api", checkoutRouter);
 
 // Error handling
 app.use(errorHandling);
