@@ -4,22 +4,22 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-  
-  export const sendMail = async (toEmail: string) => {
-    const mailOptions = {
-      from: `"Avion 🛋️" <${process.env.USER}>`,
-      to: toEmail,
-      subject: "Unlock Exclusive Furniture Deals - Join Our Club Today!",
-      text: `Dear Customer,
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+export const sendMail = async (toEmail: string) => {
+  const mailOptions = {
+    from: `"Avion 🛋️" <${process.env.USER}>`,
+    to: toEmail,
+    subject: "Unlock Exclusive Furniture Deals - Join Our Club Today!",
+    text: `Dear Customer,
     
     We're excited to invite you to join our exclusive club and enjoy special benefits! By signing up for our newsletter, you'll be the first to know about:
     
@@ -33,7 +33,7 @@ const transporter = nodemailer.createTransport({
     
     Best regards,  
     Furniture Club Team`,
-      html: `
+    html: `
           <h2>Unlock Exclusive Furniture Deals - Join Our Club Today!</h2>
           <p>Dear Customer,</p>
           <p>We're excited to invite you to join our <b>exclusive club</b> and enjoy special benefits!</p>
@@ -47,12 +47,12 @@ const transporter = nodemailer.createTransport({
           <p>Best regards,</p>
           <p><b>Furniture Club Team</b></p>
         `,
-    };
-  
-    try {
-      await transporter.sendMail(mailOptions);
-      console.log(`Email has been sent to ${toEmail}!`);
-    } catch (err) {
-      console.error("Error sending email:", err);
-    }
   };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Email has been sent to ${toEmail}!`);
+  } catch (err) {
+    console.error("Error sending email:", err);
+  }
+};

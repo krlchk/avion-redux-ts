@@ -14,7 +14,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendOrderConfirmation = async (toEmail: string, customerName: string) => {
+export const sendOrderConfirmation = async (
+  toEmail: string,
+  customerName: string
+) => {
   const mailOptions = {
     from: `"Avion 🛋️" <${process.env.EMAIL_USER}>`,
     to: toEmail,

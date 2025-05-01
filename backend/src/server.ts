@@ -11,6 +11,8 @@ import orderConfirmationEmailRoute from "./routes/order-confirmation-router";
 import designerRoute from "./routes/designer-router";
 import typeRoute from "./routes/type-router";
 import checkoutRouter from "./routes/checkout-router";
+import orderRouter from "./routes/order-router";
+import uploadRouter from "./routes/upload-router";
 
 dotenv.config();
 
@@ -29,13 +31,11 @@ app.use("/api", orderConfirmationEmailRoute);
 app.use("/api", designerRoute);
 app.use("/api", typeRoute);
 app.use("/api", checkoutRouter);
+app.use("/api", orderRouter);
+app.use("/api/upload", uploadRouter);
 
 // Error handling
 app.use(errorHandling);
-
-// Images
-const imagesPath = path.join(__dirname, "images");
-app.use("/images", express.static(imagesPath));
 
 // Tets postgress connection
 app.get("/", async (req, res) => {

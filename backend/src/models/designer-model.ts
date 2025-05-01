@@ -6,6 +6,8 @@ export const getAllDesignersService = async () => {
 };
 
 export const getDesignerByIdService = async (id: number) => {
-  const result = await pool.query("SELECT * FROM designers WHERE id = $1", [id]);
+  const result = await pool.query("SELECT * FROM designers WHERE id = $1", [
+    id,
+  ]);
   return result.rows[0];
 };

@@ -38,7 +38,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         currency: "usd",
         product_data: {
           name: product.choosenProduct.title,
-        //   images: [`http://localhost:5001/${product.choosenProduct.img}`],
+          images: [product.choosenProduct.img],
         },
         unit_amount: product.choosenProduct.cost * 100,
       },

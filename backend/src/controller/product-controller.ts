@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { handleResponse } from "../utils/response-handler";
-import { getAllProductsService, getProductByIdService } from "../models/product-model";
+import {
+  getAllProductsService,
+  getProductByIdService,
+} from "../models/product-model";
 
 export const getAllProducts = async (
   req: Request,
