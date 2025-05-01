@@ -29,8 +29,6 @@ export const AboutProductComponent = () => {
   const { id } = useParams();
 
   const unitComponent = products.find((product) => product.id === Number(id));
-  // const designerId = unitComponent?.designer_id;
-  // const designerName = designers.find((disigner) => disigner.id === designerId);
 
   if (!unitComponent) {
     return (
@@ -47,7 +45,7 @@ export const AboutProductComponent = () => {
           <div className="max-h-[760px]">
             <img
               className="h-full w-full object-cover"
-              src={`http://localhost:5001/${unitComponent.img}`}
+              src={unitComponent.img}
               alt={unitComponent.title || "Product Image"}
             />
           </div>

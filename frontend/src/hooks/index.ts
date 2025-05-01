@@ -1,1 +1,1 @@
-export {getOptionLabel} from './get-optional-label'
+export { getOptionLabel } from "./get-optional-label";

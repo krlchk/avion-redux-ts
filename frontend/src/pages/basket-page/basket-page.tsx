@@ -7,9 +7,9 @@ export const BasketPage = () => {
   return (
     <div className="mx-auto max-w-[1700px]">
       <PopUpModal />
-      <Header/>
+      <Header />
       <MainBusketComponent />
-      <Footer/>
+      <Footer />
     </div>
   );
 };

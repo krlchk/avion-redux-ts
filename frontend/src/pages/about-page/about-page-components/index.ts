@@ -1,2 +1,2 @@
-export {AboutPageHero} from './about-page-hero'
-export {PostHeaderComponent} from './post-header-component'
+export { AboutPageHero } from "./about-page-hero";
+export { PostHeaderComponent } from "./post-header-component";

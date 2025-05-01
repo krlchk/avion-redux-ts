@@ -8,6 +8,7 @@ import {
   IResponseForDesigner,
   IResponseForType,
   ICartItem,
+  IOrder,
 } from "./products-types";
 import axios from "axios";
 import { slice } from "lodash";
@@ -59,6 +60,31 @@ export const createCheckoutSession = createAsyncThunk<
 
   return response.data;
 });
+
+export const createOrder = createAsyncThunk<
+  IOrder,
+  {
+    name: string | undefined;
+    surname: string;
+    email: string | undefined;
+    phone: number;
+    address: string;
+    comment: string;
+    items: ICartItem[];
+  }
+>(
+  "order/createOrder",
+  async ({ name, surname, email, phone, address, comment, items }) => {
+    const response = await axios.post(
+      "http://localhost:5001/api/create",
+      { name, surname, email, phone, address, comment, items },
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    return response.data.data;
+  },
+);
 
 const initialState: IProductsState = {
   products: [],

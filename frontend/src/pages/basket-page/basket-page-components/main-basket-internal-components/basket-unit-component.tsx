@@ -1,13 +1,7 @@
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../../app/hooks";
-import { resetItemCount } from "../../../components/store/products/products-slice";
-
-interface IBusketUnitComponent {
-  id: number;
-  image: string;
-  title: string;
-  cost: number;
-}
+import { useAppDispatch } from "../../../../app/hooks";
+import { resetItemCount } from "../../../../components/store/products/products-slice";
+import { IBusketUnitComponent } from "./types";
 
 export const BasketUnitComponent = ({
   id,

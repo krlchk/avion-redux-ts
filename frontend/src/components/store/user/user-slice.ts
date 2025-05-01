@@ -24,7 +24,7 @@ export const sendEmail = createAsyncThunk<IEmail, { email: string }>(
 );
 export const sendEmailConfirmOrder = createAsyncThunk<
   IEmailOrderConfirm,
-  { name: string; email: string }
+  { name: string | undefined; email: string | undefined }
 >("email/sendEmailOrderConfirm", async ({ name, email }) => {
   const response = await axios.post<IEmailOrderConfirm>(
     "http://localhost:5001/api/send-email-order-confitmation",

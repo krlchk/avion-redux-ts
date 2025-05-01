@@ -65,3 +65,13 @@ export interface IDimension {
   width: string;
   height: string;
 }
+
+export interface IOrder {
+  name: string;
+  surname: string;
+  email: string;
+  phone: number;
+  address: string;
+  comment: string;
+  items: ICartItem[];
+}

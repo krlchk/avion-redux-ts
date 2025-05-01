@@ -17,7 +17,8 @@ export const LoginValidation = (email: string, password: string) => {
   if (password === "") {
     error.passwordMessage = "Input should not be empty";
   } else if (!password_pattern.test(password)) {
-    error.passwordMessage = "The password must contain (0-9) (a-z) (A-Z) | 8+ symbols";
+    error.passwordMessage =
+      "The password must contain (0-9) (a-z) (A-Z) | 8+ symbols";
   } else {
     error.passwordMessage = "";
   }

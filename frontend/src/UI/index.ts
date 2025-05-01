@@ -1,1 +1,1 @@
-export {UiButtons} from './ui-buttons'
+export { UiButtons } from "./ui-buttons";

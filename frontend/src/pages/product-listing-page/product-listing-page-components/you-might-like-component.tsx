@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export const YouMightLike = () => {
   const dispatch = useAppDispatch();
   const { status, products } = useAppSelector((state) => state.root.products);
-  
+
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchProducts());
@@ -21,14 +21,14 @@ export const YouMightLike = () => {
           You might also like
         </p>
         <div className="mt-8 grid grid-cols-4 gap-5 tablet:gap-4 mobile:grid-cols-2">
-          {products.slice(0, 4).map((product) => (
+          {products.slice(6, 10).map((product) => (
             <UnitComponent
               className=""
               unitImageClassName=""
               unitParamsClassName=""
               key={product.id}
               id={product.id}
-              image={`http://localhost:5001/${product.img}`}
+              image={product.img}
               title={product.title}
               cost={product.cost}
             />

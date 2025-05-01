@@ -77,7 +77,7 @@ export const SliderComponent = () => {
                 className="mx-2"
                 id={product.id}
                 key={product.id}
-                image={`http://localhost:5001/${product.img}`}
+                image={product.img}
                 title={product.title}
                 cost={product.cost}
               />

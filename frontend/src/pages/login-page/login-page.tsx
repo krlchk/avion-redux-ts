@@ -20,16 +20,6 @@ export const Login = () => {
     passwordMessage: "",
   });
 
-  // useEffect(() => {
-  //   if (status === "succeeded") {
-  //     const timer = setTimeout(() => {
-  //       dispatch(resetStatus());
-  //       navigate("/");
-  //     }, 3000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [dispatch, navigate, status]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = LoginValidation(email, password);

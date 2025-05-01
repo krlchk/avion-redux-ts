@@ -28,7 +28,7 @@ export const ProductsCatalogComponent = () => {
             className="mx-2 mobile:mt-3"
             id={product.id}
             key={product.id}
-            image={`http://localhost:5001/${product.img}`}
+            image={product.img}
             title={product.title}
             cost={product.cost}
           />

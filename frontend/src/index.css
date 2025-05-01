@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 @layer utilities {
+  .container {
+    @apply px-80 py-50;
+  }
+  @screen tablet {
     .container {
-      @apply px-80 py-50;
-    }
-    @screen tablet {
-      .container {
-        @apply px-24 py-40;
-      }
+      @apply px-24 py-40;
     }
   }
+}

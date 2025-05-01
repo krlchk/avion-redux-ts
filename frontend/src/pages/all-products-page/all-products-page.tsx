@@ -14,8 +14,7 @@ export const AllProductsPage = () => {
       <Header />
       <AllProductsHeroComponent />
       <div className="container grid grid-cols-4 xs:grid-cols-1">
-        <SortingComponent
-        />
+        <SortingComponent />
         <ProductsCatalogComponent />
       </div>
       <Footer />

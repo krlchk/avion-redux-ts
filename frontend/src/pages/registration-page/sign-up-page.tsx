@@ -11,7 +11,7 @@ import {
 export const SignUpPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { status, error,user } = useAppSelector((state) => state.root.user);
+  const { status, error, user } = useAppSelector((state) => state.root.user);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

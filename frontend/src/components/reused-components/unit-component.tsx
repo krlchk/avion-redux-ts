@@ -23,7 +23,6 @@ export const UnitComponent = ({
   unitParamsClassName,
 }: IUnitComponent) => {
   const dispatch = useAppDispatch();
-  //const state = useAppSelector((state) => state.root.products);
   return (
     <div
       onClick={() => dispatch(resetItemCount())}

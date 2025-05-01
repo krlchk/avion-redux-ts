@@ -1,7 +1,7 @@
 export function BasketIcon() {
   return (
     <svg
-    className="text-[#22202E] transition-colors hover:text-[#22202E]/80" 
+      className="text-[#22202E] transition-colors hover:text-[#22202E]/80"
       width="24"
       height="24"
       viewBox="0 0 16 16"

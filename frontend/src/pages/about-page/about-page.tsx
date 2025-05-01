@@ -1,7 +1,7 @@
 import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
 import {
-    GetInTouchComponent,
+  GetInTouchComponent,
   JoinComponent,
   PopUpModal,
   WhatMakesComponent,

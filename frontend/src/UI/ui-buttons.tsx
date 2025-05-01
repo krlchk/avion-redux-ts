@@ -22,7 +22,7 @@ export function UiButtons({
   onClick,
 }: IUiButtonsProps) {
   const buttonClassName = clsx(
-    "h-14 text-base text-white justify-center transition-colors flex items-center font-normal text-sm leading-snug",
+    "h-14 text-base text-white justify-center xs:w-[100px] transition-colors flex items-center font-normal text-sm leading-snug",
     className,
     {
       md: "w-[170px]",
