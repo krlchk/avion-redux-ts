@@ -23,6 +23,10 @@ const PORT = process.env.PORT || 5001;
 app.use(express.json());
 app.use(cors());
 
+// IMAGES
+const imagesPath = path.join(__dirname, "images");
+app.use("/images", express.static(imagesPath));
+
 // Routes
 app.use("/api", productRoutes);
 app.use("/api", userRoutes);
