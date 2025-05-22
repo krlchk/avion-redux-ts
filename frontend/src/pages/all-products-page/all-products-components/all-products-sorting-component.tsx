@@ -15,6 +15,7 @@ import { showProductModal } from "../../../components/store/ui/ui-slice";
 
 export const SortingComponent = () => {
   const { isAddProductModalOpen } = useAppSelector((state) => state.root.ui);
+  const { user } = useAppSelector((state) => state.root.user);
 
   const dispatch = useAppDispatch();
   const {
@@ -92,12 +93,15 @@ export const SortingComponent = () => {
   return (
     <div className="grid mobile:col-span-2">
       <form className="font-DMSans text-base font-normal text-[#2A254B]">
-        <button
-          onClick={(e) => handleOpenModal(e)}
-          className="mb-5 w-3/4 rounded-md border border-[#2A254B] p-2 transition-colors hover:bg-[#2A254B] hover:text-white xs:w-full"
-        >
-          Add new product
-        </button>
+        {user?.role === "admin" ? (
+          <button
+            onClick={(e) => handleOpenModal(e)}
+            className="mb-5 w-3/4 rounded-md border border-[#2A254B] p-2 transition-colors hover:bg-[#2A254B] hover:text-white xs:w-full"
+          >
+            Add new product
+          </button>
+        ) : null}
+
         <h1 className="mb-3">Find by title:</h1>
         <input
           onChange={(e) => {

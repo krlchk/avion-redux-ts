@@ -19,6 +19,7 @@ export const AboutProductComponent = () => {
   const { status, itemCount, products } = useAppSelector(
     (state) => state.root.products,
   );
+  const { user } = useAppSelector((state) => state.root.user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -114,12 +115,14 @@ export const AboutProductComponent = () => {
                     Add to cart
                   </UiButtons>
                 </Link>
-                <button
-                  onClick={handleDeleteClick}
-                  className="mt-2 w-full bg-red-500 p-3 text-white transition-colors hover:bg-red-400"
-                >
-                  Delete
-                </button>
+                {user?.role === "admin" ? (
+                  <button
+                    onClick={handleDeleteClick}
+                    className="mt-2 w-full bg-red-500 p-3 text-white transition-colors hover:bg-red-400"
+                  >
+                    Delete
+                  </button>
+                ) : null}
               </div>
             </div>
           </div>
