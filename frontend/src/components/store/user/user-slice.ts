@@ -52,11 +52,11 @@ export const loginUser = createAsyncThunk<
 
 export const registerUser = createAsyncThunk<
   IUser,
-  { name: string; email: string; password: string }
->("register/registerUser", async ({ name, email, password }) => {
+  { name: string; email: string; password: string, role: string }
+>("register/registerUser", async ({ name, email, password, role }) => {
   const response = await axios.post<IRegister>(
     "http://localhost:5001/api/user",
-    { name, email, password },
+    { name, email, password, role },
     {
       headers: { "Content-Type": "application/json" },
     },

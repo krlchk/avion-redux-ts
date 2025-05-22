@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { UnitComponent } from "../../../components/reused-components/unit-component";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
@@ -18,21 +18,25 @@ export const ProductsCatalogComponent = () => {
     }
   }, [dispatch, status]);
 
+  const productCards = useMemo(() => {
+    return loadedProducts.map((product) => (
+      <UnitComponent
+        unitImageClassName=""
+        unitParamsClassName=""
+        className="mx-2 mobile:mt-3"
+        id={product.id}
+        key={product.id}
+        image={product.img}
+        title={product.title}
+        cost={product.cost}
+      />
+    ));
+  }, [loadedProducts]);
+
   return (
     <div className="col-span-3 grid mobile:col-span-2 xs:mt-10">
       <div className="grid grid-cols-3 gap-5 mobile:grid-cols-1 mobile:gap-0">
-        {loadedProducts.map((product) => (
-          <UnitComponent
-            unitImageClassName=""
-            unitParamsClassName=""
-            className="mx-2 mobile:mt-3"
-            id={product.id}
-            key={product.id}
-            image={product.img}
-            title={product.title}
-            cost={product.cost}
-          />
-        ))}
+        {productCards}
       </div>
       {isLoadMore && (
         <button

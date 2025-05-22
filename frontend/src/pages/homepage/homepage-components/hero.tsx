@@ -36,6 +36,7 @@ export const Hero = () => {
                 View all
               </UiButtons>
             </Link>
+
             <p className="order-3 mt-48 text-lg leading-normal tablet:mt-32 mobile:order-2 mobile:mt-20">
               A new era in eco friendly furniture with Avelon, the French luxury
               retail brand with nice fonts, tasteful colors and a beautiful way

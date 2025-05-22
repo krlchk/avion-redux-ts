@@ -23,7 +23,7 @@ export const createUser = async (
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await pool.query(
-      "INSERT INTO users (name, email, password) VALUES ($1 ,$2, $3) RETURNING *",
+      "INSERT INTO users (name, email, password, role) VALUES ($1 ,$2, $3, 'customer') RETURNING *",
       [name, email, hashedPassword]
     );
     res.status(201).json({ message: "User registered successfully" });
@@ -61,6 +61,7 @@ export const loginUser = async (
         id: user.rows[0].id,
         name: user.rows[0].name,
         email: user.rows[0].email,
+        role: user.rows[0].role,
       },
     });
   } catch (err) {

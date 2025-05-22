@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { FormEvent, useCallback, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
   fetchDesigners,
@@ -11,8 +11,11 @@ import {
 } from "../../../components/store/products/products-slice";
 import { getOptionLabel } from "../../../hooks";
 import { priceOptions } from "../../../components/reused-components/CONSTANTS/constants";
+import { showProductModal } from "../../../components/store/ui/ui-slice";
 
 export const SortingComponent = () => {
+  const { isAddProductModalOpen } = useAppSelector((state) => state.root.ui);
+
   const dispatch = useAppDispatch();
   const {
     status,
@@ -69,12 +72,32 @@ export const SortingComponent = () => {
     return false;
   };
 
+  const handleOpenModal = (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(showProductModal());
+  };
+
+  useEffect(() => {
+    if (isAddProductModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isAddProductModalOpen]);
+
   return (
     <div className="grid mobile:col-span-2">
-      <form
-        className="font-DMSans text-base font-normal text-[#2A254B]"
-        action=""
-      >
+      <form className="font-DMSans text-base font-normal text-[#2A254B]">
+        <button
+          onClick={(e) => handleOpenModal(e)}
+          className="mb-5 w-3/4 rounded-md border border-[#2A254B] p-2 transition-colors hover:bg-[#2A254B] hover:text-white xs:w-full"
+        >
+          Add new product
+        </button>
         <h1 className="mb-3">Find by title:</h1>
         <input
           onChange={(e) => {

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export function NavigateComponent({ className }: { className: string }) {
+export const NavigateComponent = ({ className }: { className: string }) => {
   return (
     <div className={className}>
       <Link to="/">Homepage</Link>
@@ -8,4 +8,4 @@ export function NavigateComponent({ className }: { className: string }) {
       <Link to="/allproducts">All products</Link>
     </div>
   );
-}
+};

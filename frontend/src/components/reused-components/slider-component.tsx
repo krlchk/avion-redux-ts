@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { UnitComponent } from "./unit-component";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchProducts } from "../store/products/products-slice";
@@ -62,6 +62,23 @@ export const SliderComponent = () => {
     ],
   };
 
+  const sliderProducts = useMemo(() => {
+    return products
+      .slice(0, 11)
+      .map((product) => (
+        <UnitComponent
+          unitImageClassName=""
+          unitParamsClassName=""
+          className="mx-2"
+          id={product.id}
+          key={product.id}
+          image={product.img}
+          title={product.title}
+          cost={product.cost}
+        />
+      ));
+  }, [products]);
+
   return (
     <section className="container">
       <div className="flex flex-col font-DMSans font-normal text-[#2A254B]">
@@ -69,20 +86,7 @@ export const SliderComponent = () => {
           Our popular products
         </p>
         <div className="mt-8 px-10">
-          <Slider {...settings}>
-            {products.slice(0, 11).map((product) => (
-              <UnitComponent
-                unitImageClassName=""
-                unitParamsClassName=""
-                className="mx-2"
-                id={product.id}
-                key={product.id}
-                image={product.img}
-                title={product.title}
-                cost={product.cost}
-              />
-            ))}
-          </Slider>
+          <Slider {...settings}>{sliderProducts}</Slider>
         </div>
       </div>
     </section>

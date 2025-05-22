@@ -86,6 +86,61 @@ export const createOrder = createAsyncThunk<
   },
 );
 
+export const createProduct = createAsyncThunk<
+  IProduct,
+  {
+    title: string;
+    cost: number;
+    description: string;
+    depth: number;
+    width: number;
+    height: number;
+    img: string;
+    designerId: number | null;
+    typeId: number | null;
+  }
+>(
+  "products/craeteProduct",
+  async ({
+    title,
+    cost,
+    description,
+    depth,
+    width,
+    height,
+    img,
+    designerId,
+    typeId,
+  }) => {
+    const dimensions = {
+      depth: `${depth}cm`,
+      width: `${width}cm`,
+      height: `${height}cm`,
+    };
+    const response = await axios.post(
+      "http://localhost:5001/api/create-product",
+      { title, cost, description, dimensions, img, designerId, typeId },
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    return response.data.data;
+  },
+);
+
+export const deleteProduct = createAsyncThunk<IProduct, { id: number }>(
+  "dishes/deleteDish",
+  async ({ id }) => {
+    const response = await axios.delete(
+      `http://localhost:5001/api/delete-product/${id}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    return response.data.data;
+  },
+);
+
 const initialState: IProductsState = {
   products: [],
   filteredProducts: [],

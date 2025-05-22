@@ -14,6 +14,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  role: "customer" | "admin";
 }
 
 export interface IEmail {

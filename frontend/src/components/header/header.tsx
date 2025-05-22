@@ -17,6 +17,7 @@ export const Header = () => {
   const { isBurgerModalOpen, isUserModalOpen } = useAppSelector(
     (state) => state.root.ui,
   );
+  const user = useAppSelector((state) => state.root.user.user);
 
   useEffect(() => {
     const handleResize = () => {
@@ -68,11 +69,14 @@ export const Header = () => {
   return (
     <section className="container">
       <div className="flex justify-between">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex flex-col items-center">
           <LogoIcon />
+          {user?.role === "admin" ? (
+            <div className="font-bold text-red-500">Admin</div>
+          ) : null}
         </Link>
-        <NavigateComponent className="flex gap-11 font-Playfair text-lg font-normal leading-6 text-[#726E8D] mobile:hidden [&>*:hover]:text-[#22202E] [&>*]:transition-colors" />
-        <div className="flex gap-4">
+        <NavigateComponent className="flex items-center gap-11 font-Playfair text-lg font-normal leading-6 text-[#726E8D] mobile:hidden [&>*:hover]:text-[#22202E] [&>*]:transition-colors" />
+        <div className="flex gap-4 items-center">
           <Link to="/basket-page">
             <BasketIcon />
           </Link>

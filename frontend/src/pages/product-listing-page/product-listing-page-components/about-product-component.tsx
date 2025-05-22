@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
   decreaseItemCount,
+  deleteProduct,
   fetchDesigners,
   fetchProducts,
   fetchTypes,
   increaseItemCount,
+  loadMoreProducts,
   setItemToCart,
 } from "../../../components/store/products/products-slice";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { UiButtons } from "../../../UI";
 import { DimensionList } from "./dimensions-list";
 
@@ -17,6 +19,7 @@ export const AboutProductComponent = () => {
   const { status, itemCount, products } = useAppSelector(
     (state) => state.root.products,
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (status === "idle") {
@@ -26,7 +29,8 @@ export const AboutProductComponent = () => {
     }
   }, [dispatch, status]);
 
-  const { id } = useParams();
+  const { id: idParam } = useParams();
+  const id = Number(idParam);
 
   const unitComponent = products.find((product) => product.id === Number(id));
 
@@ -37,6 +41,18 @@ export const AboutProductComponent = () => {
       </section>
     );
   }
+
+  const handleDeleteClick = async () => {
+    const resultThunk = await dispatch(deleteProduct({ id }));
+    if (deleteProduct.fulfilled.match(resultThunk)) {
+      await dispatch(fetchProducts());
+      await dispatch(fetchDesigners());
+      await dispatch(fetchTypes());
+      dispatch(loadMoreProducts());
+    }
+
+    navigate("/allproducts");
+  };
 
   return (
     <section>
@@ -98,6 +114,12 @@ export const AboutProductComponent = () => {
                     Add to cart
                   </UiButtons>
                 </Link>
+                <button
+                  onClick={handleDeleteClick}
+                  className="mt-2 w-full bg-red-500 p-3 text-white transition-colors hover:bg-red-400"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>

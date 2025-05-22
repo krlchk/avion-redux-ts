@@ -5,6 +5,7 @@ const initialState: IUiState = {
   isPopUpOpen: false,
   isBurgerModalOpen: false,
   isUserModalOpen: false,
+  isAddProductModalOpen: false,
 };
 
 export const uiSlice = createSlice({
@@ -29,6 +30,12 @@ export const uiSlice = createSlice({
     hideUserModal(state) {
       state.isUserModalOpen = false;
     },
+    showProductModal(state) {
+      state.isAddProductModalOpen = true;
+    },
+    hideProductModal(state) {
+      state.isAddProductModalOpen = false;
+    },
   },
 });
 
@@ -39,5 +46,7 @@ export const {
   hideBurgerModal,
   showUserModal,
   hideUserModal,
+  showProductModal,
+  hideProductModal,
 } = uiSlice.actions;
 export default uiSlice.reducer;

@@ -38,7 +38,9 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         currency: "usd",
         product_data: {
           name: product.choosenProduct.title,
-          images: [product.choosenProduct.img],
+          images: product.choosenProduct.img
+            ? [product.choosenProduct.img]
+            : ["https://via.placeholder.com/150"],
         },
         unit_amount: product.choosenProduct.cost * 100,
       },
