@@ -57,7 +57,7 @@ export const RegistrationPage = () => {
 
   return (
     <div className="mx-auto flex h-[100vh] items-center justify-center bg-gradient-to-r from-orange-100 to-yellow-600">
-      <div className="flex h-[70vh] w-full max-w-[1700px] items-center justify-center bg-[url(/sign-in.png)] bg-cover bg-center p-3">
+      <div className="flex h-[70vh] w-full max-w-[1700px] items-center justify-center rounded-xl bg-[url(/sign-in.png)] bg-cover bg-center p-3 shadow-2xl">
         {user ? (
           <div className="flex flex-col gap-5 rounded-xl bg-orange-200 p-10 font-DMSans text-2xl font-semibold text-white mobile:p-5 mobile:text-lg xs:p-3">
             <p className="text-center">You are already registered</p>
@@ -77,8 +77,7 @@ export const RegistrationPage = () => {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-2 rounded-xl bg-orange-200 p-10 font-DMSans text-lg font-semibold text-white mobile:p-5 mobile:text-base xs:p-3"
-            action=""
+            className="flex flex-col gap-2 rounded-xl bg-orange-200 p-10 font-DMSans text-lg font-semibold text-white shadow-2xl mobile:p-5 mobile:text-base xs:p-3"
           >
             <h2 className="text-center text-2xl">Sign-Up</h2>
             {error && (

@@ -3,7 +3,7 @@ import { Homepage } from "./pages/Homepage";
 import { AboutPage } from "./pages/AboutPage";
 import { AllProductsPage } from "./pages/AllProductsPage";
 import { ProductListingPage } from "./pages/ProductListingPage";
-import { Login } from "./pages/LoginPage";
+import { LoginPage } from "./pages/LoginPage";
 import { RegistrationPage } from "./pages/RegistrationPage";
 import { BasketPage } from "./pages/BasketPage";
 import { ProtectedRoute } from "./hooks/protected-route";
@@ -18,7 +18,7 @@ const App = () => {
         <Route path="/aboutus" element={<AboutPage />} />
         <Route path="/allproducts" element={<AllProductsPage />} />
         <Route path="/products/:id" element={<ProductListingPage />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<RegistrationPage />} />
         <Route
           path="/basket-page"
