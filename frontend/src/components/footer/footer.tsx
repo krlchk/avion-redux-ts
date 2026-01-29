@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FacebookIcon, InstagramIcon, SkypeIcon } from "./icons";
-import { EmailComponent } from "../reused-components";
-import { menu } from "../reused-components/CONSTANTS/constants";
+import { EmailComponent } from "../ReusedComponents";
+import { menu } from "../ReusedComponents/CONSTANTS/constants";
 
 export const Footer = () => {
   return (

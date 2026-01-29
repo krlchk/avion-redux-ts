@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { NavigateComponent } from "./header-components";
-import { BurgerWindow } from "./header-components";
-import { UserModal } from "./header-components";
+import { NavigateComponent } from "./HeaderComponents";
+import { BurgerWindow } from "./HeaderComponents";
+import { UserModal } from "./HeaderComponents";
 import { BasketIcon, BurgerIcon, LogoIcon, ProfileIcon } from "./icons";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
@@ -10,7 +10,7 @@ import {
   hideUserModal,
   showBurgerModal,
   showUserModal,
-} from "../store/ui/ui-slice";
+} from "../store/ui/uiSlice";
 
 export const Header = () => {
   const dispatch = useAppDispatch();

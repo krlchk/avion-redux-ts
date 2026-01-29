@@ -1,14 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Homepage } from "./pages/homepage";
-import { AboutPage } from "./pages/about-page";
-import { AllProductsPage } from "./pages/all-products-page";
-import { ProductListingPage } from "./pages/product-listing-page";
-import { Login } from "./pages/login-page";
-import { SignUpPage } from "./pages/registration-page";
-import { BasketPage } from "./pages/basket-page";
+import { Homepage } from "./pages/Homepage";
+import { AboutPage } from "./pages/AboutPage";
+import { AllProductsPage } from "./pages/AllProductsPage";
+import { ProductListingPage } from "./pages/ProductListingPage";
+import { Login } from "./pages/LoginPage";
+import { RegistrationPage } from "./pages/RegistrationPage";
+import { BasketPage } from "./pages/BasketPage";
 import { ProtectedRoute } from "./hooks/protected-route";
-import { SuccessPage } from "./pages/success-page";
-import { CancelPage } from "./pages/cancel-page";
+import { SuccessPage } from "./pages/SuccessPage";
+import { CancelPage } from "./pages/CancelPage";
 
 const App = () => {
   return (
@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/allproducts" element={<AllProductsPage />} />
         <Route path="/products/:id" element={<ProductListingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signup" element={<RegistrationPage />} />
         <Route
           path="/basket-page"
           element={

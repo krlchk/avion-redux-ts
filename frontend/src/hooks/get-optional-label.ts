@@ -1,4 +1,4 @@
-import { IDesigner, IType } from "../components/store/products/products-types";
+import { IDesigner, IType } from "../components/store/products/productsTypes";
 
 export const getOptionLabel = (
   option: IType | IDesigner | { id: number; price: string },
