@@ -1,10 +1,21 @@
-export const LoginValidation = (email: string, password: string) => {
+export const signupValidation = (
+  name: string,
+  email: string,
+  password: string,
+) => {
   const error = {
+    nameMessage: "",
     emailMessage: "",
     passwordMessage: "",
   };
   const email_patternt = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const password_pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/;
+
+  if (name === "") {
+    error.nameMessage = "Input should not be empty";
+  } else {
+    error.nameMessage = "";
+  }
 
   if (email === "") {
     error.emailMessage = "Input should not be empty";
@@ -24,5 +35,3 @@ export const LoginValidation = (email: string, password: string) => {
   }
   return error;
 };
-
-export default LoginValidation;

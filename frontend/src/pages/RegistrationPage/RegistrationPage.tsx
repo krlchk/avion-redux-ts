@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useEffect, useState } from "react";
-import SignupValidation from "../../hooks/sign-up-validation";
+import SignupValidation from "../../utils/signupValidation";
 import {
   logout,
   registerUser,

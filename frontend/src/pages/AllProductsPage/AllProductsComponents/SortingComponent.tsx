@@ -9,7 +9,7 @@ import {
   toggleTypeSelection,
   updateSearchName,
 } from "../../../components/store/products/productsSlice";
-import { getOptionLabel } from "../../../hooks";
+import { getOptionLabel } from "../../../utils";
 import { priceOptions } from "../../../components/ReusedComponents/CONSTANTS/constants";
 import { showProductModal } from "../../../components/store/ui/uiSlice";
 

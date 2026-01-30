@@ -6,7 +6,7 @@ import {
   resetStatus,
 } from "../../components/store/user/userSlice";
 import { useState } from "react";
-import LoginValidation from "../../hooks/login-validation";
+import LoginValidation from "../../utils/loginValidation";
 
 export const LoginPage = () => {
   const dispatch = useAppDispatch();

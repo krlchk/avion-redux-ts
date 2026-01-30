@@ -6,7 +6,7 @@ import { ProductListingPage } from "./pages/ProductListingPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegistrationPage } from "./pages/RegistrationPage";
 import { BasketPage } from "./pages/BasketPage";
-import { ProtectedRoute } from "./hooks/protected-route";
+import { ProtectedRoute } from "./utils/protectedRoute";
 import { SuccessPage } from "./pages/SuccessPage";
 import { CancelPage } from "./pages/CancelPage";
 
