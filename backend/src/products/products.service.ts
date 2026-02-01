@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { Product } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
 export class ProductsService {
-  findAll() {
-    return [
-      {
-        title: 'Chair',
-        cost: 150,
-        description: 'Chair desc',
-        dimensions: { depth: 5, height: 5, width: 5 },
-        img: 'imgstring',
-        designerId: 1,
-        typeId: 2,
-      },
-    ];
+  constructor(private readonly prisma: PrismaService) {}
+  findAll(): Promise<Product[]> {
+    return this.prisma.product.findMany();
+  }
+  create(dto: CreateProductDto): Promise<Product> {
+    return this.prisma.product.create({
+      data: dto,
+    });
   }
 }

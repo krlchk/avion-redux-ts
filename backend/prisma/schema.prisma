@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider     = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -21,16 +22,16 @@ model Designer {
 
 model Category {
   id       Int       @id @default(autoincrement())
-  name     String
+  name     String    @unique
   products Product[]
 }
 
 model Product {
   id          Int      @id @default(autoincrement())
   title       String
-  price       Decimal  @db.Decimal(10, 2)
   description String
   img         String
+  price       Decimal  @db.Decimal(10, 2)
   width       Int
   height      Int
   depth       Int
