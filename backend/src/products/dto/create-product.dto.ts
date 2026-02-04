@@ -27,6 +27,11 @@ export class CreateProductDto {
   price: number;
 
   @IsNumber()
+  @Min(0)
+  @Type(() => Number)
+  stock: number;
+
+  @IsNumber()
   @IsOptional()
   @Type(() => Number)
   width: number;
@@ -41,11 +46,11 @@ export class CreateProductDto {
   @Type(() => Number)
   depth: number;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  designerId: number;
+  designerId: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  categoryId: number;
+  categoryId: string;
 }
