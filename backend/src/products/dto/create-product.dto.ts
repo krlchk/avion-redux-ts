@@ -49,5 +49,3 @@ export class CreateProductDto {
   @IsNotEmpty()
   categoryId: number;
 }
-
-export type TUpdateProductDto = Partial<CreateProductDto>;
