@@ -3,13 +3,33 @@ import { Product } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
   // GET ALL PRODUCTS
-  findAll(): Promise<Product[]> {
-    return this.prisma.product.findMany();
+  async findAll(dto: PaginationDto) {
+    const page = dto.page || 1;
+    const limit = dto.limit || 10;
+    const skip = (page - 1) * limit;
+
+    const products = await this.prisma.product.findMany({
+      skip: skip,
+      take: limit,
+      include: { category: true },
+    });
+
+    const total = await this.prisma.product.count();
+
+    return {
+      data: products,
+      meta: {
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      },
+    };
   }
   // GET PRODUCT BY ID
   async getById(id: string): Promise<Product> {
@@ -24,9 +44,13 @@ export class ProductsService {
     return product;
   }
   // CREATE NEW PRODUCT
-  create(dto: CreateProductDto): Promise<Product> {
+  async create(dto: CreateProductDto, userId: string, imgUrl: string) {
     return this.prisma.product.create({
-      data: dto,
+      data: {
+        ...dto,
+        img: imgUrl,
+        designerId: userId,
+      },
     });
   }
   // DELETE PRODUCT
