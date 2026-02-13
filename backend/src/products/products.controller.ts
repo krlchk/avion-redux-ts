@@ -23,6 +23,9 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { FilesService } from 'src/files/files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PaginationDto } from './dto/pagination.dto';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role } from '@prisma/client';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('products')
 export class ProductsController {
@@ -43,7 +46,8 @@ export class ProductsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.DESIGNER)
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   @UseInterceptors(FileInterceptor('img'))
   async create(
@@ -58,19 +62,25 @@ export class ProductsController {
     return this.productsService.create(dto, user.id, imgUrl);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.DESIGNER)
   @Delete(':id')
-  delete(@Param('id', ParseUUIDPipe) id: string) {
-    return this.productsService.delete(id);
+  delete(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.productsService.delete(id, user);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.DESIGNER)
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateProductDto,
+    @CurrentUser() user: UserEntity,
   ) {
-    return this.productsService.update(id, dto);
+    return this.productsService.update(id, dto, user);
   }
 }

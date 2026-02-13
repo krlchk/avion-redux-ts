@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Product } from '@prisma/client';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Product, Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PaginationDto } from './dto/pagination.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -54,20 +59,51 @@ export class ProductsService {
     });
   }
   // DELETE PRODUCT
-  async delete(id: string): Promise<Product> {
-    await this.getById(id);
-    return this.prisma.product.delete({
-      where: {
-        id: id,
-      },
-    });
+  async delete(id: string, user: UserEntity): Promise<Product> {
+    const product = await this.getById(id);
+
+    if (user.role === Role.ADMIN) {
+      return this.prisma.product.delete({
+        where: {
+          id: id,
+        },
+      });
+    }
+
+    if (user.role === Role.DESIGNER && user.id === product.designerId) {
+      return this.prisma.product.delete({
+        where: {
+          id: id,
+        },
+      });
+    }
+
+    throw new ForbiddenException('You are not allowed to delete this product');
   }
   // UPDATE PRODUCT BY ID
-  async update(id: string, dto: UpdateProductDto): Promise<Product> {
-    await this.getById(id);
-    return this.prisma.product.update({
-      where: { id: id },
-      data: dto,
-    });
+  async update(
+    id: string,
+    dto: UpdateProductDto,
+    user: UserEntity,
+  ): Promise<Product> {
+    const product = await this.getById(id);
+
+    if (user.role === Role.ADMIN) {
+      return this.prisma.product.update({
+        where: { id: id },
+        data: dto,
+      });
+    }
+
+    if (user.role === Role.DESIGNER && product.designerId === user.id) {
+      return this.prisma.product.update({
+        where: {
+          id: id,
+        },
+        data: dto,
+      });
+    }
+
+    throw new ForbiddenException('You are not allowed to update this product');
   }
 }
