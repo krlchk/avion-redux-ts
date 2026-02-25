@@ -40,6 +40,19 @@ export class OrdersService {
       include: { items: true },
     });
   }
+  // GET ORDER BY PAYMENT INTENT ID
+  async getOrderByIntentId(intentId: string): Promise<Order> {
+    const order = await this.prisma.order.findUnique({
+      where: { paymentIntentId: intentId },
+    });
+
+    if (!order)
+      throw new NotFoundException(
+        `Order by this intent id ${intentId} not found`,
+      );
+
+    return order;
+  }
   // CREATE ORDER
   async create(dto: CreateOrderDto, userId: string) {
     const ids = dto.items.map((item) => item.productId);
@@ -96,7 +109,7 @@ export class OrdersService {
   async updateStatus(orderId: string, status: OrderStatus) {
     return this.prisma.order.update({
       where: { id: orderId },
-      data: { status: status },
+      data: { status, ...(status === 'PAID' ? { paidAt: new Date() } : {}) },
     });
   }
 }

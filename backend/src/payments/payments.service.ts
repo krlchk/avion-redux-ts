@@ -53,4 +53,46 @@ export class PaymentsService {
       clientSecret: intent.client_secret,
     };
   }
+
+  async handleWebhook(req: Request, signature: string) {
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      throw new BadRequestException('STRIPE_WEBHOOK_SECRET not set');
+    }
+    try {
+      const event = this.stripe.webhooks.constructEvent(
+        req.body as unknown as Buffer,
+        signature,
+        webhookSecret,
+      );
+
+      switch (event.type) {
+        case 'payment_intent.succeeded': {
+          {
+            const paymentIntentId = event.data.object.id;
+            const order =
+              await this.ordersService.getOrderByIntentId(paymentIntentId);
+            if (order.status !== 'PAID') {
+              await this.ordersService.updateStatus(order.id, 'PAID');
+              console.log('Payment succeeded for ', paymentIntentId);
+            }
+            if (order.status === 'CANCELLED') {
+              console.log('Payment succeeded but order is CANCELLED', order.id);
+            }
+          }
+          break;
+        }
+        case 'payment_intent.payment_failed': {
+          console.log('Payment failed');
+          break;
+        }
+
+        default:
+          console.log('Unhandled event type: ', event.type);
+      }
+    } catch (err) {
+      console.log(err);
+      throw new BadRequestException('Invalid stripe signature');
+    }
+  }
 }
