@@ -88,6 +88,8 @@ export class ProductsService {
   ): Promise<Product> {
     const product = await this.getById(id);
 
+    console.log(dto);
+
     if (user.role === Role.ADMIN) {
       return this.prisma.product.update({
         where: { id: id },

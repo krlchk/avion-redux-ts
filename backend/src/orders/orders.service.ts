@@ -11,6 +11,10 @@ import { Order, OrderStatus } from '@prisma/client';
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
+  // GET ALL ORDERS
+  async findAll() {
+    return this.prisma.order.findMany();
+  }
   // GET ORDER BY ID
   async getById(orderId: string, userId: string) {
     const order = await this.prisma.order.findUnique({

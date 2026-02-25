@@ -51,7 +51,6 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
-  // @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))

@@ -76,6 +76,7 @@ export class ProductsController {
   @Roles(Role.ADMIN, Role.DESIGNER)
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+  @UseInterceptors(FileInterceptor('img'))
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateProductDto,
