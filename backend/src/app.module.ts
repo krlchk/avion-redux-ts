@@ -7,6 +7,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { FilesModule } from './files/files.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PaymentsModule } from './payments/payments.module';
     FilesModule,
     OrdersModule,
     PaymentsModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}

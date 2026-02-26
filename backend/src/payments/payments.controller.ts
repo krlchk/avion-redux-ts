@@ -1,16 +1,18 @@
 import {
   Controller,
-  HttpCode,
   Param,
   Post,
-  Req,
   UseGuards,
   Headers,
+  UsePipes,
+  ValidationPipe,
+  Body,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { ConfirmOrderPaymentDto } from './dto/confrim-order-payments.dto';
 
 @Controller('payments')
 export class PaymentsController {
@@ -22,13 +24,17 @@ export class PaymentsController {
     return this.paymentsService.createPaymentIntent(orderId, user.id);
   }
 
-  @Post('stripe/webhook')
-  @HttpCode(200)
-  async handleStripeWebhook(
-    @Req() req: Request,
-    @Headers('stripe-signature') signature: string,
+  @Post('confrim')
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+  confirm(
+    @Body() dto: ConfirmOrderPaymentDto,
+    @CurrentUser() user: UserEntity,
   ) {
-    await this.paymentsService.handleWebhook(req, signature);
-    return { recieved: true };
+    return this.paymentsService.confirmOrderPayment(
+      dto.orderId,
+      dto.paymentIntentId,
+      user.id,
+    );
   }
 }

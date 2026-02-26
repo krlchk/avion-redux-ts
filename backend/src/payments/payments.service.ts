@@ -54,45 +54,42 @@ export class PaymentsService {
     };
   }
 
-  async handleWebhook(req: Request, signature: string) {
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    if (!webhookSecret) {
-      throw new BadRequestException('STRIPE_WEBHOOK_SECRET not set');
+  async confirmOrderPayment(
+    orderId: string,
+    paymentIntentId: string,
+    userId: string,
+  ) {
+    const order = await this.ordersService.getById(orderId, userId);
+    if (order.status === 'PAID') {
+      return { status: 'Ok', message: 'Already paid' };
     }
-    try {
-      const event = this.stripe.webhooks.constructEvent(
-        req.body as unknown as Buffer,
-        signature,
-        webhookSecret,
+    if (order.status !== 'PENDING') {
+      throw new BadRequestException('Order must be payable');
+    }
+    if (!order.paymentIntentId) {
+      throw new BadRequestException('Order has no payment intent id');
+    }
+    if (order.paymentIntentId !== paymentIntentId) {
+      throw new BadRequestException('Payment id does not match this order');
+    }
+
+    const intent = await this.stripe.paymentIntents.retrieve(paymentIntentId);
+    if (intent.status !== 'succeeded') {
+      throw new BadRequestException(
+        `Payment not completed. Stripe status: ${intent.status}`,
       );
-
-      switch (event.type) {
-        case 'payment_intent.succeeded': {
-          {
-            const paymentIntentId = event.data.object.id;
-            const order =
-              await this.ordersService.getOrderByIntentId(paymentIntentId);
-            if (order.status !== 'PAID') {
-              await this.ordersService.updateStatus(order.id, 'PAID');
-              console.log('Payment succeeded for ', paymentIntentId);
-            }
-            if (order.status === 'CANCELLED') {
-              console.log('Payment succeeded but order is CANCELLED', order.id);
-            }
-          }
-          break;
-        }
-        case 'payment_intent.payment_failed': {
-          console.log('Payment failed');
-          break;
-        }
-
-        default:
-          console.log('Unhandled event type: ', event.type);
-      }
-    } catch (err) {
-      console.log(err);
-      throw new BadRequestException('Invalid stripe signature');
     }
+    await this.prismaService.order.update({
+      where: { id: orderId },
+      data: {
+        status: 'PAID',
+        paidAt: new Date(),
+      },
+    });
+
+    return {
+      status: 'Ok',
+      message: `Order with id: ${orderId} has been paid`,
+    };
   }
 }
