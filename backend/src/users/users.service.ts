@@ -3,22 +3,28 @@ import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash, genSalt } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
   // GET ALL USERS
-  findAll() {
-    return this.prisma.user.findMany();
+  async findAll() {
+    const users = await this.prisma.user.findMany();
+    return users.map((user) => new UserEntity(user));
+  }
+  // // GET USER PROFILE
+  async getProfile(email: string) {
+    const user = await this.findByEmail(email);
+    return new UserEntity(user);
   }
   // GET USER BY ID
-  async getById(id: string) {
+  async findById(id: string) {
     const user = await this.prisma.user.findUnique({ where: { id: id } });
     if (!user) {
       throw new NotFoundException(`User with id:${id} not found`);
     }
-    delete (user as any).password;
-    return user;
+    return new UserEntity(user);
   }
   // GET USER BY EMAIL
   async findByEmail(email: string) {
@@ -26,7 +32,14 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User with email:${email} not found`);
     }
-    delete (user as any).password;
+    return new UserEntity(user);
+  }
+  // GET USER BY EMAIL FOR AUTH
+  async findByEmailForAuth(email: string) {
+    const user = await this.prisma.user.findUnique({ where: { email: email } });
+    if (!user) {
+      return null;
+    }
     return user;
   }
   // CREATE USER
@@ -43,8 +56,7 @@ export class UsersService {
       },
     });
 
-    delete (user as any).password;
-    return user;
+    return new UserEntity(user);
   }
   // UPDATE USER
   async update(id: string, dto: UpdateUserDto) {
@@ -54,16 +66,17 @@ export class UsersService {
       },
       data: dto,
     });
-    delete (user as any).password;
-    return user;
+    return new UserEntity(user);
   }
 
   async updatePassword(id: string, newHash: string) {
-    return this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: {
         id: id,
       },
       data: { password: newHash },
     });
+
+    return new UserEntity(updatedUser);
   }
 }
