@@ -69,6 +69,17 @@ export class UsersService {
     });
     return new UserEntity(user);
   }
+  //AFTER OTP PASSWORD CHANGED
+  async resetOtpStatus(id: string) {
+    const user = await this.prisma.user.update({
+      where: { id: id },
+      data: {
+        resetOtpExpiresAt: null,
+        resetOtpHash: null,
+      },
+    });
+    return new UserEntity(user);
+  }
 
   async updatePassword(id: string, newHash: string) {
     const updatedUser = await this.prisma.user.update({

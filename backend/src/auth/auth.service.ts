@@ -9,6 +9,13 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { hash, genSalt, compare } from 'bcrypt';
 import { EmailService } from 'src/email/email.service';
 
+interface PasswordResetPayload {
+  sub: string;
+  type: 'password_reset';
+  iat?: number;
+  exp?: number;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -71,5 +78,24 @@ export class AuthService {
     const resetToken = this.jwtService.sign(payload, signOptions);
     return { resetToken };
   }
-  resetPassword(dto: ResetPasswordDto) {}
+  async resetPassword(dto: ResetPasswordDto) {
+    const { resetToken, newPassword } = dto;
+    let decode: PasswordResetPayload;
+    try {
+      decode = this.jwtService.verify<PasswordResetPayload>(resetToken);
+    } catch {
+      throw new BadRequestException('Invalid or expired token');
+    }
+    if (decode.type !== 'password_reset') {
+      throw new BadRequestException('Invalid token type');
+    }
+    const user = await this.userService.findById(decode.sub);
+
+    const salt = await genSalt();
+    const newPaswordHash = await hash(newPassword, salt);
+
+    await this.userService.updatePassword(user.id, newPaswordHash);
+    await this.userService.resetOtpStatus(user.id);
+    return { message: 'Password successfully reset' };
+  }
 }
