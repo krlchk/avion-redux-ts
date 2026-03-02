@@ -13,4 +13,13 @@ export class AuthController {
   login(@CurrentUser() user: User) {
     return this.authService.login(user);
   }
+
+  @Post('/password/forgot')
+  forgotPassword() {}
+
+  @Post('/password/verify')
+  verifyOtp() {}
+
+  @Post('/password/reset')
+  resetPassword() {}
 }

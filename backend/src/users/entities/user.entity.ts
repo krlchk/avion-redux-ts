@@ -11,6 +11,10 @@ export class UserEntity implements User {
 
   @Exclude()
   password: string;
+  @Exclude()
+  resetOtpHash: string | null;
+  @Exclude()
+  resetOtpExpiresAt: Date | null;
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

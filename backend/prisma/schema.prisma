@@ -58,15 +58,17 @@ model OrderItem {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String
-  role      Role      @default(CUSTOMER)
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  orders    Order[]
+  id                String    @id @default(uuid())
+  name              String
+  email             String    @unique
+  password          String
+  role              Role      @default(CUSTOMER)
+  products          Product[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  orders            Order[]
+  resetOtpHash      String?
+  resetOtpExpiresAt DateTime?
 }
 
 enum Role {

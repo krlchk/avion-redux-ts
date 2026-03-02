@@ -79,4 +79,14 @@ export class UsersService {
 
     return new UserEntity(updatedUser);
   }
+  // SEND OTP
+  async setResetOtp(email: string, expiresAt: Date, codeHash: string) {
+    return this.prisma.user.update({
+      where: { email: email },
+      data: {
+        resetOtpExpiresAt: expiresAt,
+        resetOtpHash: codeHash,
+      },
+    });
+  }
 }
