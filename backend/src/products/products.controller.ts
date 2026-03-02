@@ -22,7 +22,7 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { FilesService } from 'src/files/files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PaginationDto } from './dto/pagination.dto';
+import { ProductsQueryDto } from './dto/products-query.dto';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from '@prisma/client';
 import { Roles } from 'src/auth/decorators/roles.decorator';
@@ -36,8 +36,15 @@ export class ProductsController {
 
   @Get()
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
-  findAll(@Query() query: PaginationDto) {
+  findAll(@Query() query: ProductsQueryDto) {
     return this.productsService.findAll(query);
+  }
+
+  @Get('/myproducts')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.DESIGNER)
+  findMyProducts(@CurrentUser() user: UserEntity) {
+    return this.productsService.findMyProducts(user);
   }
 
   @Get(':id')
