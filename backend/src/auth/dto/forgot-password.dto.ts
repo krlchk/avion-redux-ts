@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class forgotPasswordDto {
+export class ForgotPasswordDto {
   @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   email: string;
 }

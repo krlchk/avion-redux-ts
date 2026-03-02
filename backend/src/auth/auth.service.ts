@@ -1,13 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { compare } from 'bcrypt';
 import { User } from '@prisma/client';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { forgotPasswordDto } from './dto/forgot-password.dto';
-import { verifyOtpDto } from './dto/verify-otp.dto';
-import { resetPasswordDto } from './dto/reset-password.dto';
-import { hash, genSalt } from 'bcrypt';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { hash, genSalt, compare } from 'bcrypt';
 import { EmailService } from 'src/email/email.service';
 
 @Injectable()
@@ -35,9 +34,9 @@ export class AuthService {
       token: this.jwtService.sign(payload),
     };
   }
-  async forgotPassword(dto: forgotPasswordDto) {
-    const email = dto.email;
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const { email } = dto;
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expires = new Date(Date.now() + 10 * 60 * 1000);
 
     const user = await this.userService.findByEmailForAuth(email);
@@ -45,12 +44,32 @@ export class AuthService {
       return { message: 'OTP sent' };
     }
     const salt = await genSalt();
-    const codeHash = await hash(code, salt);
+    const otpHash = await hash(otp, salt);
 
-    await this.userService.setResetOtp(user.id, expires, codeHash);
-    await this.emailService.sendResetOtp(email, code);
+    await this.userService.setResetOtp(user.email, expires, otpHash);
+    await this.emailService.sendResetOtp(email, otp);
     return { message: 'OTP sent' };
   }
-  verifyOtp(dto: verifyOtpDto) {}
-  resetPassword(dto: resetPasswordDto) {}
+  async verifyOtp(dto: VerifyOtpDto) {
+    const { email, otp } = dto;
+    const user = await this.userService.findByEmailForAuth(email);
+    const timeNow = new Date();
+    if (!user || !user.resetOtpExpiresAt || !user.resetOtpHash) {
+      throw new BadRequestException('Invalid Otp');
+    }
+    if (timeNow.getTime() > user.resetOtpExpiresAt.getTime()) {
+      throw new BadRequestException('OTP expired');
+    }
+    const isValid = await compare(otp, user.resetOtpHash);
+    if (!isValid) {
+      throw new BadRequestException('Invalid OTP');
+    }
+    const payload = { sub: user.id, type: 'password_reset' };
+    const signOptions: JwtSignOptions = {
+      expiresIn: '10m',
+    };
+    const resetToken = this.jwtService.sign(payload, signOptions);
+    return { resetToken };
+  }
+  resetPassword(dto: ResetPasswordDto) {}
 }

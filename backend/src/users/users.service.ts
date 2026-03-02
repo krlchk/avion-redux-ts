@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { hash, genSalt } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -35,7 +36,7 @@ export class UsersService {
     return new UserEntity(user);
   }
   // GET USER BY EMAIL FOR AUTH
-  async findByEmailForAuth(email: string) {
+  async findByEmailForAuth(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       return null;
