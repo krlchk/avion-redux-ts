@@ -12,6 +12,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import type { User } from '@prisma/client';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -36,5 +37,8 @@ export class AuthController {
   }
 
   @Post('/password/reset')
-  resetPassword() {}
+  @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+  resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
+  }
 }
