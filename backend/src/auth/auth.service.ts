@@ -91,6 +91,17 @@ export class AuthService {
     }
     const user = await this.userService.findById(decode.sub);
 
+    if (
+      user.resetOtpExpiresAt &&
+      Date.now() > user.resetOtpExpiresAt.getTime()
+    ) {
+      throw new BadRequestException('Reset session expired');
+    }
+
+    if (!user.resetOtpExpiresAt || !user.resetOtpHash) {
+      throw new BadRequestException('Reset session expired');
+    }
+
     const salt = await genSalt();
     const newPaswordHash = await hash(newPassword, salt);
 
