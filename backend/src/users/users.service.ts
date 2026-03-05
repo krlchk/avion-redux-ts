@@ -5,10 +5,14 @@ import { hash, genSalt } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { User } from '@prisma/client';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
   // GET ALL USERS
   async findAll() {
     const users = await this.prisma.user.findMany();
@@ -56,6 +60,8 @@ export class UsersService {
         role: 'CUSTOMER',
       },
     });
+
+    await this.emailService.welcomeRegistration(dto.email, dto.name);
 
     return new UserEntity(user);
   }

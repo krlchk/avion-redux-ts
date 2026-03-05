@@ -55,6 +55,7 @@ export class AuthService {
 
     await this.userService.setResetOtp(user.email, expires, otpHash);
     await this.emailService.sendResetOtp(email, otp);
+    await this.emailService.sendResetOtp(dto.email, otp);
     return { message: 'OTP sent' };
   }
   async verifyOtp(dto: VerifyOtpDto) {
@@ -76,6 +77,9 @@ export class AuthService {
       expiresIn: '10m',
     };
     const resetToken = this.jwtService.sign(payload, signOptions);
+    if (!resetToken) {
+      throw new BadRequestException('Error with reset token');
+    }
     return { resetToken };
   }
   async resetPassword(dto: ResetPasswordDto) {
@@ -91,6 +95,9 @@ export class AuthService {
     }
     const user = await this.userService.findById(decode.sub);
 
+    if (!user.resetOtpExpiresAt || !user.resetOtpHash) {
+      throw new BadRequestException('Reset session expired');
+    }
     if (
       user.resetOtpExpiresAt &&
       Date.now() > user.resetOtpExpiresAt.getTime()
@@ -98,15 +105,12 @@ export class AuthService {
       throw new BadRequestException('Reset session expired');
     }
 
-    if (!user.resetOtpExpiresAt || !user.resetOtpHash) {
-      throw new BadRequestException('Reset session expired');
-    }
-
     const salt = await genSalt();
-    const newPaswordHash = await hash(newPassword, salt);
+    const newPasswordHash = await hash(newPassword, salt);
 
-    await this.userService.updatePassword(user.id, newPaswordHash);
+    await this.userService.updatePassword(user.id, newPasswordHash);
     await this.userService.resetOtpStatus(user.id);
+    await this.emailService.sendPasswordChanged(user.email);
     return { message: 'Password successfully reset' };
   }
 }
