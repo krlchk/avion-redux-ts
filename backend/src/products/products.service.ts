@@ -10,6 +10,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsQueryDto } from './dto/products-query.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Prisma } from '@prisma/client';
+import { DiscountProductDto } from './dto/discount-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -70,12 +71,28 @@ export class ProductsService {
       include: { category: true },
     });
 
+    const now = new Date();
+    const data = products.map((product) => {
+      let finalPrice = Number(product.price);
+      const isDiscountActive =
+        product.discountPercent &&
+        (!product.discountUntil || product.discountUntil > now);
+      if (isDiscountActive && product.discountPercent) {
+        finalPrice =
+          Number(product.price) * (1 - product.discountPercent / 100);
+      }
+      return {
+        ...product,
+        finalPrice: Number(finalPrice.toFixed(2)),
+      };
+    });
+
     const total = await this.prisma.product.count({
       where,
     });
 
     return {
-      data: products,
+      data: data,
       meta: {
         total,
         page,
@@ -84,7 +101,7 @@ export class ProductsService {
     };
   }
   // GET PRODUCT BY ID
-  async getById(id: string): Promise<Product> {
+  async getById(id: string) {
     const product = await this.prisma.product.findUnique({
       where: {
         id: id,
@@ -93,7 +110,19 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException(`Product with id:${id} not found`);
     }
-    return product;
+    const now = new Date();
+    let finalPrice = Number(product.price);
+    const isDiscountActive =
+      product.discountPercent &&
+      (!product.discountUntil || product.discountUntil > now);
+    if (isDiscountActive && product.discountPercent) {
+      finalPrice = Number(product.price) * (1 - product.discountPercent / 100);
+    }
+
+    return {
+      ...product,
+      finalPrice: Number(finalPrice.toFixed(2)),
+    };
   }
   // CREATE NEW PRODUCT
   async create(dto: CreateProductDto, userId: string, imgUrl: string) {
@@ -128,21 +157,59 @@ export class ProductsService {
     throw new ForbiddenException('You are not allowed to delete this product');
   }
   // GET GY DESIGNER ID
-  findByDesignerId(designerId: string): Promise<Product[]> {
+  async findByDesignerId(designerId: string) {
     if (!designerId) {
       throw new ForbiddenException('The designer id must be');
     }
-    return this.prisma.product.findMany({
+    const products = await this.prisma.product.findMany({
       where: { designerId: designerId },
     });
+
+    const now = new Date();
+    const data = products.map((product) => {
+      let finalPrice = Number(product.price);
+      const isDiscountActive =
+        product.discountPercent &&
+        (!product.discountUntil || product.discountUntil > now);
+      if (isDiscountActive && product.discountPercent) {
+        finalPrice =
+          Number(product.price) * (1 - product.discountPercent / 100);
+      }
+      return {
+        ...product,
+        finalPrice: Number(finalPrice.toFixed(2)),
+      };
+    });
+
+    return {
+      data,
+    };
   }
   // GET MY PRODUCTS
-  async findMyProducts(user: UserEntity): Promise<Product[]> {
+  async findMyProducts(user: UserEntity) {
     if (user.role === 'DESIGNER') {
       return this.findByDesignerId(user.id);
     }
     if (user.role === 'ADMIN') {
-      return this.prisma.product.findMany();
+      const products = await this.prisma.product.findMany();
+      const now = new Date();
+      const data = products.map((product) => {
+        let finalPrice = Number(product.price);
+        const isDiscountActive =
+          product.discountPercent &&
+          (!product.discountUntil || product.discountUntil > now);
+        if (isDiscountActive && product.discountPercent) {
+          finalPrice =
+            Number(product.price) * (1 - product.discountPercent / 100);
+        }
+        return {
+          ...product,
+          finalPrice: Number(finalPrice.toFixed(2)),
+        };
+      });
+      return {
+        data,
+      };
     }
 
     throw new ForbiddenException(
@@ -174,5 +241,25 @@ export class ProductsService {
     }
 
     throw new ForbiddenException('You are not allowed to update this product');
+  }
+  // SET DISCOUNT
+  async setDiscount(id: string, dto: DiscountProductDto): Promise<Product> {
+    await this.getById(id);
+    if (!dto.discountPercent || dto.discountPercent === 0) {
+      return this.prisma.product.update({
+        where: { id: id },
+        data: {
+          discountPercent: null,
+          discountUntil: null,
+        },
+      });
+    }
+    return this.prisma.product.update({
+      where: { id: id },
+      data: {
+        discountPercent: dto.discountPercent,
+        discountUntil: dto.discountUntil ? new Date(dto.discountUntil) : null,
+      },
+    });
   }
 }

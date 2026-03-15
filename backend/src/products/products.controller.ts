@@ -26,6 +26,7 @@ import { ProductsQueryDto } from './dto/products-query.dto';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from '@prisma/client';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { DiscountProductDto } from './dto/discount-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -90,5 +91,16 @@ export class ProductsController {
     @CurrentUser() user: UserEntity,
   ) {
     return this.productsService.update(id, dto, user);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @Patch(':id/discount')
+  @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+  setDiscount(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: DiscountProductDto,
+  ) {
+    return this.productsService.setDiscount(id, dto);
   }
 }
