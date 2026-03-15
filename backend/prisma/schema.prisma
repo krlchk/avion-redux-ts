@@ -33,6 +33,20 @@ model Product {
   orderItems      OrderItem[]
   discountPercent Int?
   discountUntil   DateTime?
+  reviews         Review[]
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
 }
 
 model Order {
@@ -71,6 +85,7 @@ model User {
   orders            Order[]
   resetOtpHash      String?
   resetOtpExpiresAt DateTime?
+  reviews           Review[]
 }
 
 enum Role {
