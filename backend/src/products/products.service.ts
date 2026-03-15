@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Product, Role } from '@prisma/client';
+import { Product, Review, Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -15,6 +15,45 @@ import { DiscountProductDto } from './dto/discount-product.dto';
 @Injectable()
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private mapProductMeta(product: Product & { reviews: Review[] }) {
+    const reviewsCount = product.reviews.length;
+    let averageRating = 0;
+    const reviewsRatingSum = product.reviews.reduce((result, review) => {
+      return result + review.rating;
+    }, 0);
+    if (reviewsCount > 0) {
+      averageRating = reviewsRatingSum / reviewsCount;
+    }
+    return {
+      reviewsCount,
+      averageRating: Number(averageRating.toFixed(1)),
+    };
+  }
+
+  private mapProductResponse(
+    product: Product & { reviews: Review[] },
+    now: Date = new Date(),
+  ) {
+    let finalPrice = Number(product.price);
+
+    const { reviewsCount, averageRating } = this.mapProductMeta(product);
+
+    const isDiscountActive =
+      product.discountPercent &&
+      (!product.discountUntil || product.discountUntil > now);
+    if (isDiscountActive && product.discountPercent) {
+      finalPrice = Number(product.price) * (1 - product.discountPercent / 100);
+    }
+
+    return {
+      ...product,
+      finalPrice: Number(finalPrice.toFixed(2)),
+      reviewsCount,
+      averageRating,
+    };
+  }
+
   // GET ALL PRODUCTS
   async findAll(dto: ProductsQueryDto) {
     const page = dto.page || 1;
@@ -68,24 +107,10 @@ export class ProductsService {
       orderBy,
       skip: skip,
       take: limit,
-      include: { category: true },
+      include: { category: true, reviews: true },
     });
 
-    const now = new Date();
-    const data = products.map((product) => {
-      let finalPrice = Number(product.price);
-      const isDiscountActive =
-        product.discountPercent &&
-        (!product.discountUntil || product.discountUntil > now);
-      if (isDiscountActive && product.discountPercent) {
-        finalPrice =
-          Number(product.price) * (1 - product.discountPercent / 100);
-      }
-      return {
-        ...product,
-        finalPrice: Number(finalPrice.toFixed(2)),
-      };
-    });
+    const data = products.map((product) => this.mapProductResponse(product));
 
     const total = await this.prisma.product.count({
       where,
@@ -106,23 +131,13 @@ export class ProductsService {
       where: {
         id: id,
       },
+      include: { reviews: true },
     });
     if (!product) {
       throw new NotFoundException(`Product with id:${id} not found`);
     }
-    const now = new Date();
-    let finalPrice = Number(product.price);
-    const isDiscountActive =
-      product.discountPercent &&
-      (!product.discountUntil || product.discountUntil > now);
-    if (isDiscountActive && product.discountPercent) {
-      finalPrice = Number(product.price) * (1 - product.discountPercent / 100);
-    }
 
-    return {
-      ...product,
-      finalPrice: Number(finalPrice.toFixed(2)),
-    };
+    return this.mapProductResponse(product);
   }
   // CREATE NEW PRODUCT
   async create(dto: CreateProductDto, userId: string, imgUrl: string) {
@@ -163,23 +178,10 @@ export class ProductsService {
     }
     const products = await this.prisma.product.findMany({
       where: { designerId: designerId },
+      include: { reviews: true },
     });
 
-    const now = new Date();
-    const data = products.map((product) => {
-      let finalPrice = Number(product.price);
-      const isDiscountActive =
-        product.discountPercent &&
-        (!product.discountUntil || product.discountUntil > now);
-      if (isDiscountActive && product.discountPercent) {
-        finalPrice =
-          Number(product.price) * (1 - product.discountPercent / 100);
-      }
-      return {
-        ...product,
-        finalPrice: Number(finalPrice.toFixed(2)),
-      };
-    });
+    const data = products.map((product) => this.mapProductResponse(product));
 
     return {
       data,
@@ -191,22 +193,10 @@ export class ProductsService {
       return this.findByDesignerId(user.id);
     }
     if (user.role === 'ADMIN') {
-      const products = await this.prisma.product.findMany();
-      const now = new Date();
-      const data = products.map((product) => {
-        let finalPrice = Number(product.price);
-        const isDiscountActive =
-          product.discountPercent &&
-          (!product.discountUntil || product.discountUntil > now);
-        if (isDiscountActive && product.discountPercent) {
-          finalPrice =
-            Number(product.price) * (1 - product.discountPercent / 100);
-        }
-        return {
-          ...product,
-          finalPrice: Number(finalPrice.toFixed(2)),
-        };
+      const products = await this.prisma.product.findMany({
+        include: { reviews: true },
       });
+      const data = products.map((product) => this.mapProductResponse(product));
       return {
         data,
       };

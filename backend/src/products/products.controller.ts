@@ -94,7 +94,7 @@ export class ProductsController {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  
+  @Roles(Role.ADMIN)
   @Patch(':id/discount')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   setDiscount(
