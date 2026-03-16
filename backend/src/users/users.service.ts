@@ -4,10 +4,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { hash, genSalt } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { User } from '@prisma/client';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
   // GET ALL USERS
   async findAll() {
     const users = await this.prisma.user.findMany();
@@ -35,7 +40,7 @@ export class UsersService {
     return new UserEntity(user);
   }
   // GET USER BY EMAIL FOR AUTH
-  async findByEmailForAuth(email: string) {
+  async findByEmailForAuth(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       return null;
@@ -56,6 +61,8 @@ export class UsersService {
       },
     });
 
+    await this.emailService.welcomeRegistration(dto.email, dto.name);
+
     return new UserEntity(user);
   }
   // UPDATE USER
@@ -65,6 +72,17 @@ export class UsersService {
         id: id,
       },
       data: dto,
+    });
+    return new UserEntity(user);
+  }
+  //AFTER OTP PASSWORD CHANGED
+  async resetOtpStatus(id: string) {
+    const user = await this.prisma.user.update({
+      where: { id: id },
+      data: {
+        resetOtpExpiresAt: null,
+        resetOtpHash: null,
+      },
     });
     return new UserEntity(user);
   }
@@ -78,5 +96,45 @@ export class UsersService {
     });
 
     return new UserEntity(updatedUser);
+  }
+  // SEND OTP
+  async setResetOtp(email: string, expiresAt: Date, codeHash: string) {
+    return this.prisma.user.update({
+      where: { email: email },
+      data: {
+        resetOtpExpiresAt: expiresAt,
+        resetOtpHash: codeHash,
+      },
+    });
+  }
+
+  setTwoFactorEnabled(userId: string, enabled: boolean) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        isTwoFactorEnabled: enabled,
+      },
+    });
+  }
+
+  set2FaOtp(userId: string, expiresAt: Date, codeHash: string) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        loginOtpExpiresAt: expiresAt,
+        loginOtpHash: codeHash,
+      },
+    });
+  }
+
+  async clearTwoFactorOtp(id: string) {
+    const user = await this.prisma.user.update({
+      where: { id: id },
+      data: {
+        loginOtpExpiresAt: null,
+        loginOtpHash: null,
+      },
+    });
+    return new UserEntity(user);
   }
 }

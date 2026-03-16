@@ -74,13 +74,22 @@ export class OrdersService {
         throw new BadRequestException(`Not enough stock for ${product.title}`);
       }
 
-      const price = Number(product.price);
-      totalPrice += price * item.quantity;
+      const now = new Date();
+      let finalPrice = Number(product.price);
+      const isDiscountActive =
+        product.discountPercent &&
+        (!product.discountUntil || product.discountUntil > now);
+      if (isDiscountActive && product.discountPercent) {
+        finalPrice =
+          Number(product.price) * (1 - product.discountPercent / 100);
+      }
+
+      totalPrice += finalPrice * item.quantity;
 
       return {
         productId: item.productId,
         quantity: item.quantity,
-        price: price,
+        price: finalPrice,
       };
     });
 

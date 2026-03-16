@@ -3,17 +3,57 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Product, Role } from '@prisma/client';
+import { Product, Review, Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsQueryDto } from './dto/products-query.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Prisma } from '@prisma/client';
+import { DiscountProductDto } from './dto/discount-product.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private mapProductMeta(product: Product & { reviews: Review[] }) {
+    const reviewsCount = product.reviews.length;
+    let averageRating = 0;
+    const reviewsRatingSum = product.reviews.reduce((result, review) => {
+      return result + review.rating;
+    }, 0);
+    if (reviewsCount > 0) {
+      averageRating = reviewsRatingSum / reviewsCount;
+    }
+    return {
+      reviewsCount,
+      averageRating: Number(averageRating.toFixed(1)),
+    };
+  }
+
+  private mapProductResponse(
+    product: Product & { reviews: Review[] },
+    now: Date = new Date(),
+  ) {
+    let finalPrice = Number(product.price);
+
+    const { reviewsCount, averageRating } = this.mapProductMeta(product);
+
+    const isDiscountActive =
+      product.discountPercent &&
+      (!product.discountUntil || product.discountUntil > now);
+    if (isDiscountActive && product.discountPercent) {
+      finalPrice = Number(product.price) * (1 - product.discountPercent / 100);
+    }
+
+    return {
+      ...product,
+      finalPrice: Number(finalPrice.toFixed(2)),
+      reviewsCount,
+      averageRating,
+    };
+  }
+
   // GET ALL PRODUCTS
   async findAll(dto: ProductsQueryDto) {
     const page = dto.page || 1;
@@ -67,15 +107,17 @@ export class ProductsService {
       orderBy,
       skip: skip,
       take: limit,
-      include: { category: true },
+      include: { category: true, reviews: true },
     });
+
+    const data = products.map((product) => this.mapProductResponse(product));
 
     const total = await this.prisma.product.count({
       where,
     });
 
     return {
-      data: products,
+      data: data,
       meta: {
         total,
         page,
@@ -84,16 +126,18 @@ export class ProductsService {
     };
   }
   // GET PRODUCT BY ID
-  async getById(id: string): Promise<Product> {
+  async getById(id: string) {
     const product = await this.prisma.product.findUnique({
       where: {
         id: id,
       },
+      include: { reviews: true },
     });
     if (!product) {
       throw new NotFoundException(`Product with id:${id} not found`);
     }
-    return product;
+
+    return this.mapProductResponse(product);
   }
   // CREATE NEW PRODUCT
   async create(dto: CreateProductDto, userId: string, imgUrl: string) {
@@ -128,21 +172,34 @@ export class ProductsService {
     throw new ForbiddenException('You are not allowed to delete this product');
   }
   // GET GY DESIGNER ID
-  findByDesignerId(designerId: string): Promise<Product[]> {
+  async findByDesignerId(designerId: string) {
     if (!designerId) {
       throw new ForbiddenException('The designer id must be');
     }
-    return this.prisma.product.findMany({
+    const products = await this.prisma.product.findMany({
       where: { designerId: designerId },
+      include: { reviews: true },
     });
+
+    const data = products.map((product) => this.mapProductResponse(product));
+
+    return {
+      data,
+    };
   }
   // GET MY PRODUCTS
-  async findMyProducts(user: UserEntity): Promise<Product[]> {
+  async findMyProducts(user: UserEntity) {
     if (user.role === 'DESIGNER') {
       return this.findByDesignerId(user.id);
     }
     if (user.role === 'ADMIN') {
-      return this.prisma.product.findMany();
+      const products = await this.prisma.product.findMany({
+        include: { reviews: true },
+      });
+      const data = products.map((product) => this.mapProductResponse(product));
+      return {
+        data,
+      };
     }
 
     throw new ForbiddenException(
@@ -174,5 +231,25 @@ export class ProductsService {
     }
 
     throw new ForbiddenException('You are not allowed to update this product');
+  }
+  // SET DISCOUNT
+  async setDiscount(id: string, dto: DiscountProductDto): Promise<Product> {
+    await this.getById(id);
+    if (!dto.discountPercent || dto.discountPercent === 0) {
+      return this.prisma.product.update({
+        where: { id: id },
+        data: {
+          discountPercent: null,
+          discountUntil: null,
+        },
+      });
+    }
+    return this.prisma.product.update({
+      where: { id: id },
+      data: {
+        discountPercent: dto.discountPercent,
+        discountUntil: dto.discountUntil ? new Date(dto.discountUntil) : null,
+      },
+    });
   }
 }

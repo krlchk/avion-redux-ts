@@ -8,9 +8,18 @@ export class UserEntity implements User {
   role: Role;
   createdAt: Date;
   updatedAt: Date;
+  isTwoFactorEnabled: boolean;
 
   @Exclude()
   password: string;
+  @Exclude()
+  resetOtpHash: string | null;
+  @Exclude()
+  resetOtpExpiresAt: Date | null;
+  @Exclude()
+  loginOtpHash: string | null;
+  @Exclude()
+  loginOtpExpiresAt: Date | null;
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

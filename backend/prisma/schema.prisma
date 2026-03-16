@@ -15,22 +15,38 @@ model Category {
 }
 
 model Product {
-  id          String      @id @default(uuid())
-  title       String
-  description String
-  img         String
-  price       Decimal     @db.Decimal(10, 2)
-  stock       Int         @default(0)
-  width       Int
-  height      Int
-  depth       Int
-  designerId  String
-  designer    User        @relation(fields: [designerId], references: [id])
-  categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  orderItems  OrderItem[]
+  id              String      @id @default(uuid())
+  title           String
+  description     String
+  img             String
+  price           Decimal     @db.Decimal(10, 2)
+  stock           Int         @default(0)
+  width           Int
+  height          Int
+  depth           Int
+  designerId      String
+  designer        User        @relation(fields: [designerId], references: [id])
+  categoryId      String
+  category        Category    @relation(fields: [categoryId], references: [id])
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  orderItems      OrderItem[]
+  discountPercent Int?
+  discountUntil   DateTime?
+  reviews         Review[]
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
 }
 
 model Order {
@@ -58,15 +74,21 @@ model OrderItem {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String
-  role      Role      @default(CUSTOMER)
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  orders    Order[]
+  id                   String    @id @default(uuid())
+  name                 String
+  email                String    @unique
+  password             String
+  role                 Role      @default(CUSTOMER)
+  products             Product[]
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  orders               Order[]
+  resetOtpHash         String?
+  resetOtpExpiresAt    DateTime?
+  reviews              Review[]
+  isTwoFactorEnabled Boolean   @default(false)
+  loginOtpHash         String?
+  loginOtpExpiresAt    DateTime?
 }
 
 enum Role {

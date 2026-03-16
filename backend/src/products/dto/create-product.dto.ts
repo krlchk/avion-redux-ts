@@ -46,10 +46,6 @@ export class CreateProductDto {
   @Type(() => Number)
   depth: number;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // designerId: string;
-
   @IsString()
   @IsNotEmpty()
   categoryId: string;
