@@ -8,10 +8,17 @@ import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { hash, genSalt, compare } from 'bcrypt';
 import { EmailService } from 'src/email/email.service';
+import { Verify2FaOtpDto } from './dto/verify-two-fa.dto';
 
 interface PasswordResetPayload {
   sub: string;
   type: 'password_reset';
+  iat?: number;
+  exp?: number;
+}
+interface TwoFactorPayload {
+  sub: string;
+  type: '2fa_temp';
   iat?: number;
   exp?: number;
 }
@@ -35,12 +42,78 @@ export class AuthService {
     return new UserEntity(user);
   }
 
-  login(user: User) {
-    const payload = { email: user.email, sub: user.id, role: user.role };
+  async toggleTwoFactor(enabled: boolean, userId: string) {
+    await this.userService.findById(userId);
+    return this.userService.setTwoFactorEnabled(userId, enabled);
+  }
+
+  async login(user: User) {
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      role: user.role,
+    };
+    const tempTokenPayload: TwoFactorPayload = {
+      sub: user.id,
+      type: '2fa_temp',
+    };
+
+    if (!user.isTwoFactorEnabled) {
+      return {
+        token: this.jwtService.sign(payload),
+      };
+    }
+    await this.sendTwoFactorOtp(user.id, user.email);
+    return {
+      requiresTwoFactor: true,
+      tempToken: this.jwtService.sign(tempTokenPayload, { expiresIn: '10m' }),
+    };
+  }
+  async sendTwoFactorOtp(userId: string, email: string) {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expires = new Date(Date.now() + 10 * 60 * 1000);
+    const salt = await genSalt();
+    const otpHash = await hash(otp, salt);
+
+    await this.userService.set2FaOtp(userId, expires, otpHash);
+    await this.emailService.send2FaOtp(email, otp);
+  }
+  async verifyTwoFactor(dto: Verify2FaOtpDto) {
+    const { otp, tempToken } = dto;
+    let decode: TwoFactorPayload;
+    try {
+      decode = this.jwtService.verify<TwoFactorPayload>(tempToken);
+    } catch {
+      throw new BadRequestException('Invalid or expired token');
+    }
+    if (decode.type !== '2fa_temp') {
+      throw new BadRequestException('Invalid token type');
+    }
+    const user = await this.userService.findById(decode.sub);
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      role: user.role,
+    };
+    if (!user.loginOtpExpiresAt || !user.loginOtpHash) {
+      throw new BadRequestException('Invalid Otp');
+    }
+    if (
+      user.loginOtpExpiresAt &&
+      Date.now() > user.loginOtpExpiresAt.getTime()
+    ) {
+      throw new BadRequestException('Login session expired');
+    }
+    const isValid = await compare(otp, user.loginOtpHash);
+    if (!isValid) {
+      throw new BadRequestException('Invalid Otp');
+    }
+    await this.userService.clearTwoFactorOtp(user.id);
     return {
       token: this.jwtService.sign(payload),
     };
   }
+
   async forgotPassword(dto: ForgotPasswordDto) {
     const { email } = dto;
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -55,7 +128,6 @@ export class AuthService {
 
     await this.userService.setResetOtp(user.email, expires, otpHash);
     await this.emailService.sendResetOtp(email, otp);
-    await this.emailService.sendResetOtp(dto.email, otp);
     return { message: 'OTP sent' };
   }
   async verifyOtp(dto: VerifyOtpDto) {
@@ -70,7 +142,7 @@ export class AuthService {
     }
     const isValid = await compare(otp, user.resetOtpHash);
     if (!isValid) {
-      throw new BadRequestException('Invalid OTP');
+      throw new BadRequestException('Invalid Otp');
     }
     const payload = { sub: user.id, type: 'password_reset' };
     const signOptions: JwtSignOptions = {

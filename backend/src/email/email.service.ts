@@ -50,4 +50,13 @@ export class EmailService {
       html,
     });
   }
+  async send2FaOtp(email: string, otp: string) {
+    const html = Otp2FaTemplate(otp);
+    await this.transporter.sendMail({
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      to: email,
+      subject: 'Your OTP Code',
+      html,
+    });
+  }
 }

@@ -107,4 +107,34 @@ export class UsersService {
       },
     });
   }
+
+  setTwoFactorEnabled(userId: string, enabled: boolean) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        isTwoFactorEnabled: enabled,
+      },
+    });
+  }
+
+  set2FaOtp(userId: string, expiresAt: Date, codeHash: string) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        loginOtpExpiresAt: expiresAt,
+        loginOtpHash: codeHash,
+      },
+    });
+  }
+
+  async clearTwoFactorOtp(id: string) {
+    const user = await this.prisma.user.update({
+      where: { id: id },
+      data: {
+        loginOtpExpiresAt: null,
+        loginOtpHash: null,
+      },
+    });
+    return new UserEntity(user);
+  }
 }
