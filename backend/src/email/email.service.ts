@@ -3,6 +3,7 @@ import nodemailer, { Transporter } from 'nodemailer';
 import { resetOtpTemplate } from './templates/reset-otp.template';
 import { passwordChangedTemplate } from './templates/password-changed.template';
 import { welcomeTemplate } from './templates/welcome-registration.template';
+import { TwoFactorTemplate } from './templates/two-factor.template';
 
 @Injectable()
 export class EmailService {
@@ -51,7 +52,7 @@ export class EmailService {
     });
   }
   async send2FaOtp(email: string, otp: string) {
-    const html = Otp2FaTemplate(otp);
+    const html = TwoFactorTemplate(otp);
     await this.transporter.sendMail({
       from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
       to: email,
