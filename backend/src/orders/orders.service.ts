@@ -66,6 +66,7 @@ export class OrdersService {
     }
 
     let subtotalPrice = 0;
+    let totalPriceWithoutPromoCodesDiscounts = 0;
     const now = new Date();
 
     const orderItemsData = dto.items.map((item) => {
@@ -76,6 +77,7 @@ export class OrdersService {
       }
 
       let finalPrice = Number(product.price);
+      const finalPriceWithoutPromoCodesDiscounts = Number(product.price);
       const isDiscountActive =
         product.discountPercent &&
         (!product.discountUntil || product.discountUntil > now);
@@ -83,6 +85,9 @@ export class OrdersService {
         finalPrice =
           Number(product.price) * (1 - product.discountPercent / 100);
       }
+
+      totalPriceWithoutPromoCodesDiscounts =
+        finalPriceWithoutPromoCodesDiscounts * item.quantity;
 
       subtotalPrice += finalPrice * item.quantity;
 
@@ -146,6 +151,8 @@ export class OrdersService {
             create: orderItemsData,
           },
           totalPrice: subtotalPrice - promoDiscountAmount,
+          totalPriceWithoutPromoCodesDiscounts:
+            totalPriceWithoutPromoCodesDiscounts,
         },
         include: { items: true },
       });

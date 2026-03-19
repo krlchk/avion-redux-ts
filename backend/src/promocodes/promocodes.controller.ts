@@ -6,6 +6,7 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  Patch,
 } from '@nestjs/common';
 import { PromocodesService } from './promocodes.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -33,7 +34,7 @@ export class PromocodesController {
     return this.promocodesService.create(dto);
   }
 
-  @Post()
+  @Patch('/activate')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN)
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
