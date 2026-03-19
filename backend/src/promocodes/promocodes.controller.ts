@@ -13,6 +13,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 import { CreatePromoCodeDto } from './dto/create-promocode.dto';
+import { ToggleActivatePromoCode } from './dto/toggle-activate-promocode.dto';
 
 @Controller('promocodes')
 export class PromocodesController {
@@ -30,5 +31,13 @@ export class PromocodesController {
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   create(@Body() dto: CreatePromoCodeDto) {
     return this.promocodesService.create(dto);
+  }
+
+  @Post()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+  activatePromoCode(@Body() dto: ToggleActivatePromoCode) {
+    return this.promocodesService.toggleActivatePromoCode(dto);
   }
 }
