@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { Order, OrderStatus } from '@prisma/client';
+import { Order, OrderStatus, PromoCode } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
@@ -65,7 +65,8 @@ export class OrdersService {
       throw new BadRequestException('Some products not found');
     }
 
-    let totalPrice = 0;
+    let subtotalPrice = 0;
+    const now = new Date();
 
     const orderItemsData = dto.items.map((item) => {
       const product = products.find((p) => p.id === item.productId);
@@ -74,7 +75,6 @@ export class OrdersService {
         throw new BadRequestException(`Not enough stock for ${product.title}`);
       }
 
-      const now = new Date();
       let finalPrice = Number(product.price);
       const isDiscountActive =
         product.discountPercent &&
@@ -84,7 +84,7 @@ export class OrdersService {
           Number(product.price) * (1 - product.discountPercent / 100);
       }
 
-      totalPrice += finalPrice * item.quantity;
+      subtotalPrice += finalPrice * item.quantity;
 
       return {
         productId: item.productId,
@@ -94,6 +94,40 @@ export class OrdersService {
     });
 
     return this.prisma.$transaction(async (tx) => {
+      let promoDiscountAmount = 0;
+      let promoCode: PromoCode | null = null;
+      const normalizedPromoCode = dto.promoCode?.toUpperCase();
+      if (dto.promoCode) {
+        promoCode = await tx.promoCode.findUnique({
+          where: { code: normalizedPromoCode },
+        });
+        if (promoCode === null) {
+          throw new NotFoundException('Promo code not found');
+        }
+        if (promoCode?.isActive === false) {
+          throw new BadRequestException('Promo code not active');
+        }
+        if (
+          promoCode.maxUses !== null &&
+          promoCode.maxUses <= promoCode.usedCount
+        ) {
+          throw new BadRequestException('Promo code limit exceeded');
+        }
+        if (promoCode.expiresAt !== null && promoCode.expiresAt < now) {
+          throw new BadRequestException('Promo code expired');
+        }
+        if (promoCode.type === 'PERCENT') {
+          promoDiscountAmount =
+            (subtotalPrice * Number(promoCode?.value)) / 100;
+        }
+        if (promoCode.type === 'FIXED') {
+          promoDiscountAmount = Number(promoCode?.value);
+        }
+        if (promoDiscountAmount > subtotalPrice) {
+          promoDiscountAmount = subtotalPrice;
+        }
+      }
+
       for (const item of orderItemsData) {
         await tx.product.update({
           where: { id: item.productId },
@@ -101,17 +135,29 @@ export class OrdersService {
         });
       }
 
-      return tx.order.create({
+      const order = await tx.order.create({
         data: {
           status: 'PENDING',
           userId: userId,
-          totalPrice: totalPrice,
+          subtotalPrice: subtotalPrice,
+          promoDiscountAmount: promoDiscountAmount,
+          promoCodeId: promoCode?.id,
           items: {
             create: orderItemsData,
           },
+          totalPrice: subtotalPrice - promoDiscountAmount,
         },
         include: { items: true },
       });
+
+      if (promoCode !== null) {
+        await tx.promoCode.update({
+          where: { code: normalizedPromoCode },
+          data: { usedCount: { increment: 1 } },
+        });
+      }
+
+      return order;
     });
   }
   // UPDATE STATUS

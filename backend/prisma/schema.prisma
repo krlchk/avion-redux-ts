@@ -50,17 +50,35 @@ model Review {
 }
 
 model Order {
-  id              String      @id @default(uuid())
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  status          OrderStatus @default(PENDING)
-  user            User?       @relation(fields: [userId], references: [id])
-  userId          String?
-  items           OrderItem[]
-  totalPrice      Decimal     @db.Decimal(10, 2)
-  paymentIntentId String?     @unique
-  currency        String      @default("usd")
-  paidAt          DateTime?
+  id                  String      @id @default(uuid())
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  status              OrderStatus @default(PENDING)
+  user                User?       @relation(fields: [userId], references: [id])
+  userId              String?
+  items               OrderItem[]
+  totalPrice          Decimal     @db.Decimal(10, 2)
+  paymentIntentId     String?     @unique
+  currency            String      @default("usd")
+  paidAt              DateTime?
+  subtotalPrice       Decimal?    @db.Decimal(10, 2)
+  promoDiscountAmount Decimal     @default(0) @db.Decimal(10, 2)
+  promoCode           PromoCode?  @relation(fields: [promoCodeId], references: [id])
+  promoCodeId         String?
+}
+
+model PromoCode {
+  id        String        @id @default(uuid())
+  code      String        @unique
+  title     String?
+  type      PromoCodeType
+  value     Decimal       @db.Decimal(10, 2)
+  isActive  Boolean       @default(true)
+  expiresAt DateTime?
+  maxUses   Int?
+  usedCount Int           @default(0)
+  createdAt DateTime      @default(now())
+  orders    Order[]
 }
 
 model OrderItem {
@@ -74,21 +92,21 @@ model OrderItem {
 }
 
 model User {
-  id                   String    @id @default(uuid())
-  name                 String
-  email                String    @unique
-  password             String
-  role                 Role      @default(CUSTOMER)
-  products             Product[]
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  orders               Order[]
-  resetOtpHash         String?
-  resetOtpExpiresAt    DateTime?
-  reviews              Review[]
+  id                 String    @id @default(uuid())
+  name               String
+  email              String    @unique
+  password           String
+  role               Role      @default(CUSTOMER)
+  products           Product[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  orders             Order[]
+  resetOtpHash       String?
+  resetOtpExpiresAt  DateTime?
+  reviews            Review[]
   isTwoFactorEnabled Boolean   @default(false)
-  loginOtpHash         String?
-  loginOtpExpiresAt    DateTime?
+  loginOtpHash       String?
+  loginOtpExpiresAt  DateTime?
 }
 
 enum Role {
@@ -101,4 +119,9 @@ enum OrderStatus {
   PENDING
   PAID
   CANCELLED
+}
+
+enum PromoCodeType {
+  PERCENT
+  FIXED
 }
