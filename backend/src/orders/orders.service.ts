@@ -12,7 +12,12 @@ import { Order, OrderStatus, PromoCode } from '@prisma/client';
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
   // GET ALL ORDERS
-  async findAll() {
+  async findAll(status?: OrderStatus) {
+    if (status) {
+      return this.prisma.order.findMany({
+        where: { status: status },
+      });
+    }
     return this.prisma.order.findMany();
   }
   // GET ORDER BY ID
@@ -172,6 +177,42 @@ export class OrdersService {
     return this.prisma.order.update({
       where: { id: orderId },
       data: { status, ...(status === 'PAID' ? { paidAt: new Date() } : {}) },
+    });
+  }
+
+  async getByIdForAdmin(orderId: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        items: {
+          include: { product: true },
+        },
+      },
+    });
+    if (!order) throw new NotFoundException('Order not found');
+
+    return order;
+  }
+
+  async cancelOrder(orderId: string) {
+    const order = await this.getByIdForAdmin(orderId);
+    if (order.status !== 'PENDING')
+      throw new BadRequestException('Order must be with status PENDING');
+
+    return this.prisma.$transaction(async (tx) => {
+      for (const item of order.items) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: { stock: { increment: item.quantity } },
+        });
+      }
+      const canceledOrder = await tx.order.update({
+        where: { id: orderId },
+        data: {
+          status: 'CANCELLED',
+        },
+      });
+      return canceledOrder;
     });
   }
 }
