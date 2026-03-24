@@ -24,6 +24,15 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @UseGuards(AuthGuard('jwt'))
+  @Get('my')
+  getMyOrders(
+    @CurrentUser() user: UserEntity,
+    @Query('status') status?: OrderStatus,
+  ) {
+    return this.ordersService.getMyOrders(user.id, status);
+  }
+
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN)
   @Get()

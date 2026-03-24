@@ -16,6 +16,14 @@ export class OrdersService {
     if (status) {
       return this.prisma.order.findMany({
         where: { status: status },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          items: true,
+          user: true,
+          promoCode: true,
+        },
       });
     }
     return this.prisma.order.findMany();
@@ -38,11 +46,19 @@ export class OrdersService {
     return order;
   }
   // GET MY ORDER
-  async getMyOrders(userId: string): Promise<Order[]> {
+  async getMyOrders(userId: string, status?: OrderStatus): Promise<Order[]> {
+    console.log(status);
+    const where: { userId: string; status?: OrderStatus } = {
+      userId,
+    };
+    if (status) {
+      where.status = status;
+    }
+
     return this.prisma.order.findMany({
-      where: { userId: userId },
+      where,
       orderBy: { createdAt: 'desc' },
-      include: { items: true },
+      include: { items: true, promoCode: true },
     });
   }
   // GET ORDER BY PAYMENT INTENT ID
