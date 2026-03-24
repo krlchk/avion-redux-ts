@@ -41,7 +41,7 @@ export class ProductsController {
     return this.productsService.findAll(query);
   }
 
-  @Get('/myproducts')
+  @Get('/my')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.DESIGNER)
   findMyProducts(@CurrentUser() user: UserEntity) {

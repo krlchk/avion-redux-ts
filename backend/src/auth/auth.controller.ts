@@ -40,24 +40,24 @@ export class AuthController {
   @Post('/2fa/verify')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   verifyTwoFactor(@Body() dto: Verify2FaOtpDto) {
-    return this.authService.verifyTwoFactor(dto);
+    return this.authService.verifyTwoFactor(dto.tempToken, dto.otp);
   }
 
   @Post('/password/forgot')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(dto);
+    return this.authService.forgotPassword(dto.email);
   }
 
   @Post('/password/verify')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   verifyOtp(@Body() dto: VerifyOtpDto) {
-    return this.authService.verifyOtp(dto);
+    return this.authService.verifyOtp(dto.email, dto.otp);
   }
 
   @Post('/password/reset')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   resetPassword(@Body() dto: ResetPasswordDto) {
-    return this.authService.resetPassword(dto);
+    return this.authService.resetPassword(dto.resetToken, dto.newPassword);
   }
 }

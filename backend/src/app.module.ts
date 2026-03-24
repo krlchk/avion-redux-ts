@@ -10,6 +10,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailModule } from './email/email.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { PromocodesModule } from './promocodes/promocodes.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     ScheduleModule.forRoot(),
     EmailModule,
     ReviewsModule,
+    PromocodesModule,
   ],
 })
 export class AppModule {}

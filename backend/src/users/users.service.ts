@@ -1,6 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { hash, genSalt } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -16,7 +19,10 @@ export class UsersService {
   // GET ALL USERS
   async findAll() {
     const users = await this.prisma.user.findMany();
-    return users.map((user) => new UserEntity(user));
+    const data = users.map((user) => new UserEntity(user));
+    return {
+      data,
+    };
   }
   // // GET USER PROFILE
   async getProfile(email: string) {
@@ -48,20 +54,31 @@ export class UsersService {
     return user;
   }
   // CREATE USER
-  async create(dto: CreateUserDto) {
+  async create(name: string, email: string, password: string) {
     const salt = await genSalt();
-    const hashedPassword = await hash(dto.password, salt);
+    const hashedPassword = await hash(password, salt);
+    const userExist = await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (userExist) {
+      throw new BadRequestException(
+        `User with email '${email}' already exists`,
+      );
+    }
 
     const user = await this.prisma.user.create({
       data: {
-        name: dto.name,
-        email: dto.email,
+        name: name,
+        email: email,
         password: hashedPassword,
         role: 'CUSTOMER',
       },
     });
 
-    await this.emailService.welcomeRegistration(dto.email, dto.name);
+    await this.emailService.welcomeRegistration(email, name);
 
     return new UserEntity(user);
   }

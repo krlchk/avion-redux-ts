@@ -181,11 +181,7 @@ export class ProductsService {
       include: { reviews: true },
     });
 
-    const data = products.map((product) => this.mapProductResponse(product));
-
-    return {
-      data,
-    };
+    return products.map((product) => this.mapProductResponse(product));
   }
   // GET MY PRODUCTS
   async findMyProducts(user: UserEntity) {
@@ -194,9 +190,10 @@ export class ProductsService {
     }
     if (user.role === 'ADMIN') {
       const products = await this.prisma.product.findMany({
-        include: { reviews: true },
+        include: { reviews: true, designer: true },
       });
       const data = products.map((product) => this.mapProductResponse(product));
+
       return {
         data,
       };
