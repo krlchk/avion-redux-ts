@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePromoCodeDto } from './dto/create-promocode.dto';
 import { ToggleActivatePromoCode } from './dto/toggle-activate-promocode.dto';
@@ -6,8 +10,13 @@ import { ToggleActivatePromoCode } from './dto/toggle-activate-promocode.dto';
 @Injectable()
 export class PromocodesService {
   constructor(private readonly prisma: PrismaService) {}
-  getAll() {
-    return this.prisma.promoCode.findMany({ orderBy: { createdAt: 'desc' } });
+  async getAll() {
+    const data = await this.prisma.promoCode.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return {
+      data,
+    };
   }
   async getById(promoCodeId: string) {
     const promoCode = await this.prisma.promoCode.findUnique({
@@ -47,9 +56,20 @@ export class PromocodesService {
       },
     });
   }
-  create(dto: CreatePromoCodeDto) {
+  async create(dto: CreatePromoCodeDto) {
     const { code } = dto;
     const normalizedCode = code.toUpperCase();
+    const existPromoCode = await this.prisma.promoCode.findUnique({
+      where: {
+        code: normalizedCode,
+      },
+    });
+
+    if (existPromoCode) {
+      throw new BadRequestException(
+        `Promo code '${normalizedCode}' already exists`,
+      );
+    }
 
     return this.prisma.promoCode.create({
       data: {

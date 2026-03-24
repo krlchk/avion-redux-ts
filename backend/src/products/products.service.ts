@@ -192,7 +192,11 @@ export class ProductsService {
       const products = await this.prisma.product.findMany({
         include: { reviews: true, designer: true },
       });
-      return products.map((product) => this.mapProductResponse(product));
+      const data = products.map((product) => this.mapProductResponse(product));
+
+      return {
+        data,
+      };
     }
 
     throw new ForbiddenException(

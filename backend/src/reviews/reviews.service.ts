@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -10,6 +11,12 @@ import { UserEntity } from 'src/users/entities/user.entity';
 @Injectable()
 export class ReviewsService {
   constructor(private readonly prisma: PrismaService) {}
+  async getAllReviews() {
+    const data = await this.prisma.review.findMany();
+    return {
+      data,
+    };
+  }
   //GET PRODUCT REVIEW
   async getReviews(productId: string) {
     const product = await this.prisma.product.findUnique({
@@ -73,6 +80,10 @@ export class ReviewsService {
       throw new ForbiddenException(
         'You cannot leave a review for a product you have not purchased',
       );
+    }
+
+    if (ordersWithProduct.userId === userId) {
+      throw new BadRequestException('You already left review on this product');
     }
 
     return this.prisma.review.create({

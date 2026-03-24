@@ -13,20 +13,23 @@ export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
   // GET ALL ORDERS
   async findAll(status?: OrderStatus) {
+    const where: { status?: OrderStatus } = {};
     if (status) {
-      return this.prisma.order.findMany({
-        where: { status: status },
-        orderBy: {
-          createdAt: 'desc',
-        },
-        include: {
-          items: true,
-          user: true,
-          promoCode: true,
-        },
-      });
+      where.status = status;
     }
-    return this.prisma.order.findMany();
+    const data = await this.prisma.order.findMany({
+      where,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        items: true,
+        user: true,
+        promoCode: true,
+      },
+    });
+
+    return { data };
   }
   // GET ORDER BY ID
   async getById(orderId: string, userId: string) {
@@ -46,20 +49,22 @@ export class OrdersService {
     return order;
   }
   // GET MY ORDER
-  async getMyOrders(userId: string, status?: OrderStatus): Promise<Order[]> {
-    console.log(status);
+  async getMyOrders(userId: string, status?: OrderStatus) {
     const where: { userId: string; status?: OrderStatus } = {
       userId,
     };
+
     if (status) {
       where.status = status;
     }
 
-    return this.prisma.order.findMany({
+    const data = await this.prisma.order.findMany({
       where,
       orderBy: { createdAt: 'desc' },
       include: { items: true, promoCode: true },
     });
+
+    return { data };
   }
   // GET ORDER BY PAYMENT INTENT ID
   async getOrderByIntentId(intentId: string): Promise<Order> {

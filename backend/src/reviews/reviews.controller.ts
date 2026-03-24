@@ -20,7 +20,14 @@ import { AuthGuard } from '@nestjs/passport';
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
+  @Get()
+  @UseGuards(AuthGuard('jwt'))
+  getAllReviews() {
+    return this.reviewsService.getAllReviews();
+  }
+
   @Get('/product/:id')
+  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   getReviews(@Param('id', ParseUUIDPipe) productId: string) {
     return this.reviewsService.getReviews(productId);

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash, genSalt } from 'bcrypt';
@@ -16,7 +20,10 @@ export class UsersService {
   // GET ALL USERS
   async findAll() {
     const users = await this.prisma.user.findMany();
-    return users.map((user) => new UserEntity(user));
+    const data = users.map((user) => new UserEntity(user));
+    return {
+      data,
+    };
   }
   // // GET USER PROFILE
   async getProfile(email: string) {
@@ -51,6 +58,17 @@ export class UsersService {
   async create(dto: CreateUserDto) {
     const salt = await genSalt();
     const hashedPassword = await hash(dto.password, salt);
+    const userExist = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+
+    if (userExist) {
+      throw new BadRequestException(
+        `User with email '${dto.email}' already exists`,
+      );
+    }
 
     const user = await this.prisma.user.create({
       data: {

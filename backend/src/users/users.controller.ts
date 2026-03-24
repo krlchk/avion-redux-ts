@@ -18,6 +18,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UserEntity } from './entities/user.entity';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('users')
 export class UsersController {
@@ -37,7 +40,8 @@ export class UsersController {
     return this.usersService.getProfile(user.email);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.DESIGNER)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
