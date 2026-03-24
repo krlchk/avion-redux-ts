@@ -39,6 +39,9 @@ export class PromocodesController {
   @Roles(Role.ADMIN)
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   activatePromoCode(@Body() dto: ToggleActivatePromoCode) {
-    return this.promocodesService.toggleActivatePromoCode(dto);
+    return this.promocodesService.toggleActivatePromoCode(
+      dto.code,
+      dto.isActive,
+    );
   }
 }

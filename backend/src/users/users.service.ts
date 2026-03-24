@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { hash, genSalt } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -55,31 +54,31 @@ export class UsersService {
     return user;
   }
   // CREATE USER
-  async create(dto: CreateUserDto) {
+  async create(name: string, email: string, password: string) {
     const salt = await genSalt();
-    const hashedPassword = await hash(dto.password, salt);
+    const hashedPassword = await hash(password, salt);
     const userExist = await this.prisma.user.findUnique({
       where: {
-        email: dto.email,
+        email: email,
       },
     });
 
     if (userExist) {
       throw new BadRequestException(
-        `User with email '${dto.email}' already exists`,
+        `User with email '${email}' already exists`,
       );
     }
 
     const user = await this.prisma.user.create({
       data: {
-        name: dto.name,
-        email: dto.email,
+        name: name,
+        email: email,
         password: hashedPassword,
         role: 'CUSTOMER',
       },
     });
 
-    await this.emailService.welcomeRegistration(dto.email, dto.name);
+    await this.emailService.welcomeRegistration(email, name);
 
     return new UserEntity(user);
   }

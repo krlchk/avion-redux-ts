@@ -11,7 +11,6 @@ import { Order, OrderStatus, PromoCode } from '@prisma/client';
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
-  // GET ALL ORDERS
   async findAll(status?: OrderStatus) {
     const where: { status?: OrderStatus } = {};
     if (status) {
@@ -31,7 +30,6 @@ export class OrdersService {
 
     return { data };
   }
-  // GET ORDER BY ID
   async getById(orderId: string, userId: string) {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
@@ -48,7 +46,6 @@ export class OrdersService {
 
     return order;
   }
-  // GET MY ORDER
   async getMyOrders(userId: string, status?: OrderStatus) {
     const where: { userId: string; status?: OrderStatus } = {
       userId,
@@ -66,7 +63,6 @@ export class OrdersService {
 
     return { data };
   }
-  // GET ORDER BY PAYMENT INTENT ID
   async getOrderByIntentId(intentId: string): Promise<Order> {
     const order = await this.prisma.order.findUnique({
       where: { paymentIntentId: intentId },
@@ -79,7 +75,6 @@ export class OrdersService {
 
     return order;
   }
-  // CREATE ORDER
   async create(dto: CreateOrderDto, userId: string) {
     const ids = dto.items.map((item) => item.productId);
 
@@ -193,7 +188,6 @@ export class OrdersService {
       return order;
     });
   }
-  // UPDATE STATUS
   async updateStatus(orderId: string, status: OrderStatus) {
     return this.prisma.order.update({
       where: { id: orderId },

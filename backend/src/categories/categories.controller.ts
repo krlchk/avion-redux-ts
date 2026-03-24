@@ -38,7 +38,7 @@ export class CategoriesController {
   @Roles(Role.ADMIN)
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   create(@Body() dto: CreateCategoryDto) {
-    return this.categoriesService.create(dto);
+    return this.categoriesService.create(dto.name);
   }
 
   @Delete(':id')
@@ -56,6 +56,6 @@ export class CategoriesController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateCategoryDto,
   ) {
-    return this.categoriesService.update(id, dto);
+    return this.categoriesService.update(id, dto.name);
   }
 }

@@ -6,20 +6,16 @@ import {
 } from '@nestjs/common';
 import { Category } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
-  // GET ALL CATEGORIES
   async findAll() {
     const data = await this.prisma.category.findMany();
     return {
       data,
     };
   }
-  // GET CATEGORY BY ID
   async getById(id: string): Promise<Category> {
     const category = await this.prisma.category.findUnique({
       where: { id: id },
@@ -29,25 +25,23 @@ export class CategoriesService {
     }
     return category;
   }
-  // CREATE CATEGORY BY ID
-  async create(dto: CreateCategoryDto): Promise<Category> {
+  async create(name: string): Promise<Category> {
     const existCategory = await this.prisma.category.findUnique({
       where: {
-        name: dto.name,
+        name: name,
       },
     });
 
     if (existCategory) {
-      throw new BadRequestException(`Category '${dto.name}' alreay exists`);
+      throw new BadRequestException(`Category '${name}' alreay exists`);
     }
 
     return this.prisma.category.create({
       data: {
-        ...dto,
+        name: name,
       },
     });
   }
-  // DELET CATEGORY
   async delete(id: string): Promise<Category> {
     await this.getById(id);
     return this.prisma.category.delete({
@@ -56,11 +50,10 @@ export class CategoriesService {
       },
     });
   }
-  // UPDATE CATEGORY BY ID
-  async update(id: string, dto: UpdateCategoryDto): Promise<Category> {
+  async update(id: string, name?: string): Promise<Category> {
     await this.getById(id);
     return this.prisma.category.update({
-      data: dto,
+      data: { name: name },
       where: {
         id: id,
       },

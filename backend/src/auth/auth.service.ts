@@ -3,12 +3,8 @@ import { UsersService } from 'src/users/users.service';
 import { User } from '@prisma/client';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { VerifyOtpDto } from './dto/verify-otp.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
 import { hash, genSalt, compare } from 'bcrypt';
 import { EmailService } from 'src/email/email.service';
-import { Verify2FaOtpDto } from './dto/verify-two-fa.dto';
 
 interface PasswordResetPayload {
   sub: string;
@@ -78,8 +74,7 @@ export class AuthService {
     await this.userService.set2FaOtp(userId, expires, otpHash);
     await this.emailService.send2FaOtp(email, otp);
   }
-  async verifyTwoFactor(dto: Verify2FaOtpDto) {
-    const { otp, tempToken } = dto;
+  async verifyTwoFactor(tempToken: string, otp: string) {
     let decode: TwoFactorPayload;
     try {
       decode = this.jwtService.verify<TwoFactorPayload>(tempToken);
@@ -114,8 +109,7 @@ export class AuthService {
     };
   }
 
-  async forgotPassword(dto: ForgotPasswordDto) {
-    const { email } = dto;
+  async forgotPassword(email: string) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expires = new Date(Date.now() + 10 * 60 * 1000);
 
@@ -130,8 +124,7 @@ export class AuthService {
     await this.emailService.sendResetOtp(email, otp);
     return { message: 'OTP sent' };
   }
-  async verifyOtp(dto: VerifyOtpDto) {
-    const { email, otp } = dto;
+  async verifyOtp(email: string, otp: string) {
     const user = await this.userService.findByEmailForAuth(email);
     const timeNow = new Date();
     if (!user || !user.resetOtpExpiresAt || !user.resetOtpHash) {
@@ -154,8 +147,7 @@ export class AuthService {
     }
     return { resetToken };
   }
-  async resetPassword(dto: ResetPasswordDto) {
-    const { resetToken, newPassword } = dto;
+  async resetPassword(resetToken: string, newPassword: string) {
     let decode: PasswordResetPayload;
     try {
       decode = this.jwtService.verify<PasswordResetPayload>(resetToken);

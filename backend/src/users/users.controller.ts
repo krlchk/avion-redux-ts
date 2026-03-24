@@ -59,7 +59,7 @@ export class UsersController {
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   create(@Body() dto: CreateUserDto) {
-    return this.usersService.create(dto);
+    return this.usersService.create(dto.name, dto.email, dto.password);
   }
 
   @UseGuards(AuthGuard('jwt'))

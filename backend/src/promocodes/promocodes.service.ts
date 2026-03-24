@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePromoCodeDto } from './dto/create-promocode.dto';
-import { ToggleActivatePromoCode } from './dto/toggle-activate-promocode.dto';
 
 @Injectable()
 export class PromocodesService {
@@ -43,8 +42,7 @@ export class PromocodesService {
     }
     return promoCode;
   }
-  async toggleActivatePromoCode(dto: ToggleActivatePromoCode) {
-    const { code, isActive } = dto;
+  async toggleActivatePromoCode(code: string, isActive: boolean) {
     const normalizedCode = code.toUpperCase();
     await this.findByCode(normalizedCode);
     return this.prisma.promoCode.update({
