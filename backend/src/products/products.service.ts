@@ -141,6 +141,16 @@ export class ProductsService {
   }
   // CREATE NEW PRODUCT
   async create(dto: CreateProductDto, userId: string, imgUrl: string) {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id: dto.categoryId,
+      },
+    });
+    if (!category) {
+      throw new NotFoundException(
+        `You can not add this product because category with id:${dto.categoryId} not found`,
+      );
+    }
     return this.prisma.product.create({
       data: {
         ...dto,
@@ -210,6 +220,16 @@ export class ProductsService {
     user: UserEntity,
   ): Promise<Product> {
     const product = await this.getById(id);
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id: dto.categoryId,
+      },
+    });
+    if (!category) {
+      throw new NotFoundException(
+        `You can not update this product because category with id:${dto.categoryId} not found`,
+      );
+    }
 
     if (user.role === Role.ADMIN) {
       return this.prisma.product.update({

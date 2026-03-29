@@ -188,12 +188,6 @@ export class OrdersService {
       return order;
     });
   }
-  async updateStatus(orderId: string, status: OrderStatus) {
-    return this.prisma.order.update({
-      where: { id: orderId },
-      data: { status, ...(status === 'PAID' ? { paidAt: new Date() } : {}) },
-    });
-  }
 
   async getByIdForAdmin(orderId: string) {
     const order = await this.prisma.order.findUnique({
@@ -208,6 +202,19 @@ export class OrdersService {
 
     return order;
   }
+
+  //FUTURE
+
+  // async updateStatus(orderId: string, status: OrderStatus) {
+  //   const order = await this.getByIdForAdmin(orderId);
+  //   if (order.status === 'PAID' || order.status === 'CANCELLED') {
+  //     throw new BadRequestException(`Order has been already ${order.status}`);
+  //   }
+  //   return this.prisma.order.update({
+  //     where: { id: orderId },
+  //     data: { status, ...(status === 'PAID' ? { paidAt: new Date() } : {}) },
+  //   });
+  // }
 
   async cancelOrder(orderId: string) {
     const order = await this.getByIdForAdmin(orderId);
