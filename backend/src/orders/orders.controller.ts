@@ -20,6 +20,9 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { OrderStatus, Role } from '@prisma/client';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 
+//FUTURE
+// import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
+
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
@@ -69,4 +72,16 @@ export class OrdersController {
   cancelOrder(@Param('id', ParseUUIDPipe) orderId: string) {
     return this.ordersService.cancelOrder(orderId);
   }
+
+  //FUTURE
+
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Roles(Role.ADMIN)
+  // @Patch(':id/status')
+  // updateStatus(
+  //   @Param('id', ParseUUIDPipe) orderId: string,
+  //   @Body() dto: UpdateOrderStatusDto,
+  // ) {
+  //   return this.ordersService.updateStatus(orderId, dto.status);
+  // }
 }

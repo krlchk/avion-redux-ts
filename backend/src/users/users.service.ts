@@ -16,7 +16,6 @@ export class UsersService {
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
   ) {}
-  // GET ALL USERS
   async findAll() {
     const users = await this.prisma.user.findMany();
     const data = users.map((user) => new UserEntity(user));
@@ -24,12 +23,10 @@ export class UsersService {
       data,
     };
   }
-  // // GET USER PROFILE
   async getProfile(email: string) {
     const user = await this.findByEmail(email);
     return new UserEntity(user);
   }
-  // GET USER BY ID
   async findById(id: string) {
     const user = await this.prisma.user.findUnique({ where: { id: id } });
     if (!user) {
@@ -37,7 +34,6 @@ export class UsersService {
     }
     return new UserEntity(user);
   }
-  // GET USER BY EMAIL
   async findByEmail(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
@@ -45,7 +41,6 @@ export class UsersService {
     }
     return new UserEntity(user);
   }
-  // GET USER BY EMAIL FOR AUTH
   async findByEmailForAuth(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
@@ -53,7 +48,6 @@ export class UsersService {
     }
     return user;
   }
-  // CREATE USER
   async create(name: string, email: string, password: string) {
     const salt = await genSalt();
     const hashedPassword = await hash(password, salt);
@@ -82,7 +76,6 @@ export class UsersService {
 
     return new UserEntity(user);
   }
-  // UPDATE USER
   async update(id: string, dto: UpdateUserDto) {
     const user = await this.prisma.user.update({
       where: {
@@ -92,7 +85,6 @@ export class UsersService {
     });
     return new UserEntity(user);
   }
-  //AFTER OTP PASSWORD CHANGED
   async resetOtpStatus(id: string) {
     const user = await this.prisma.user.update({
       where: { id: id },
@@ -114,7 +106,6 @@ export class UsersService {
 
     return new UserEntity(updatedUser);
   }
-  // SEND OTP
   async setResetOtp(email: string, expiresAt: Date, codeHash: string) {
     return this.prisma.user.update({
       where: { email: email },
