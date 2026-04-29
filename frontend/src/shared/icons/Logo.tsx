@@ -10,7 +10,7 @@ export const Logo = ({ className, stroke = "black" }: IconProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_1_2123)">
+      <g clipPath="url(#clip0_1_2123)">
         <path
           d="M6.375 21.1875V23.0625"
           stroke={stroke}
