@@ -1,11 +1,18 @@
 import Link from "next/link";
 import { navLinks, navIconLinks } from "../model/constants";
+import { Logo } from "@/shared/icons/Logo";
 
 export const MainHeader = () => {
   return (
     <div className="bg-white">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-10">
-        <p className="text-xl leading-6 font-bold text-black">AVION</p>
+        <div className="flex items-center justify-center gap-2">
+          <Logo />
+          <p className="text-xl leading-6 font-bold text-black uppercase">
+            Avion
+          </p>
+        </div>
+
         <div className="flex gap-8 text-lg leading-6 font-normal text-black">
           {navLinks.map((link) => (
             <Link
