@@ -7,3 +7,8 @@ export interface PaginationMeta {
   page: number;
   lastPage: number;
 }
+
+export interface IconProps {
+  className?: string;
+  stroke?: string;
+}

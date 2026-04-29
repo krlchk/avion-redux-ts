@@ -1,7 +1,9 @@
-import { ProductTest } from "@/features/products/ui/ProductsTest";
-
 const Home = () => {
-  return <ProductTest />;
+  return (
+    <div>
+      <div>Homepage</div>
+    </div>
+  );
 };
 
 export default Home;
