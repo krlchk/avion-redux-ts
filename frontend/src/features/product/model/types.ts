@@ -1,5 +1,5 @@
-import { Review } from "../review/types";
-import { ApiDecimal, PaginationMeta, SortOrder } from "../types/api";
+import { Review } from "@/features/review/model/types";
+import { ApiDecimal, PaginationMeta, SortOrder } from "@/features/types/api";
 
 export interface Product {
   id: string;

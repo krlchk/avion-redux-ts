@@ -9,3 +9,8 @@ export { X } from "./X";
 export { Instagram } from "./Instagram";
 export { Youtube } from "./Youtube";
 export { Payment } from "./Payment";
+export { Armchair } from "./Armchair";
+export { Cabinet } from "./Cabinet";
+export { Chair } from "./Chair";
+export { Decor } from "./Decor";
+export { Sofa } from "./Sofa";

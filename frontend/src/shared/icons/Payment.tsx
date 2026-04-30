@@ -1,4 +1,4 @@
-import { IconProps } from "@/entities/types/api";
+import { IconProps } from "@/features/types/api";
 
 export const Payment = ({ className, fill = "#666666" }: IconProps) => {
   return (
