@@ -4,7 +4,7 @@ import type { Config } from "tailwindcss";
 const config = {
   theme: {
     screens: {
-      tablet: { max: "1279.99px" },
+      tablet: { min: "835px", max: "1279.99px" },
       mobile: { max: "834.99px" },
       xs: { max: "375.99px" },
     },

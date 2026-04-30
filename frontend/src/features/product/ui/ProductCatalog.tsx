@@ -1,23 +1,31 @@
 import { Container } from "@/shared/ui";
-import { categories } from "../model/constants";
+import { ProductCategories } from "./ProductCategories";
+import { benefits } from "../model/constants";
 
 export const ProductCatalog = () => {
   return (
     <section className="bg-[#F9F9F9]">
-      <Container className="flex items-center justify-center py-8">
-        <div className="grid grid-cols-5 gap-24">
-          {categories.map(({ title, count, Icon }) => (
-            <div key={title} className="flex items-center justify-start gap-5">
-              <Icon />
-              <div className="font-bold text-black">
-                <p className="text-xl">{title}</p>
-                <p className="text-sm text-black/60">{count} products</p>
+      <ProductCategories />
+      <div className="bg-[#F9F9F9]">
+        <Container className="grid grid-cols-3 gap-20 py-10 mobile:grid-cols-1 mobile:gap-10">
+          {benefits.map(({ title, desc, Icon }) => (
+            <div
+              key={title}
+              className="flex min-w-0 items-center justify-center gap-6 text-black mobile:justify-start"
+            >
+              <Icon className="shrink-0" />
+              <div className="min-w-0">
+                <p className="text-2xl leading-7 font-bold mobile:text-xl mobile:leading-6">
+                  {title}
+                </p>
+                <p className="text-base font-normal text-black/60 mobile:text-sm">
+                  {desc}
+                </p>
               </div>
             </div>
           ))}
-        </div>
-        c
-      </Container>
+        </Container>
+      </div>
     </section>
   );
 };

@@ -14,3 +14,6 @@ export { Cabinet } from "./Cabinet";
 export { Chair } from "./Chair";
 export { Decor } from "./Decor";
 export { Sofa } from "./Sofa";
+export { PaymentV2 } from "./PaymentV2";
+export { Return } from "./Return";
+export { Support } from "./Support";

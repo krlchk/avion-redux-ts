@@ -3,14 +3,14 @@ import { ArrowDown, Search, Phone } from "@/shared/icons";
 export const TopHeader = () => {
   return (
     <div className="bg-[#F6F4F2]">
-      <div className="mobile:flex-col mobile:items-stretch mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-5 text-sm font-medium text-black">
-        <p className="mobile:text-center">
+      <div className="mobile:flex-col mobile:items-stretch tablet:flex-col tablet:items-stretch xs:text-xs mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-5 text-sm font-medium text-black">
+        <p className="mobile:text-center tablet:text-center">
           60 Fremont Ave. Hamden, CT 06514
         </p>
-        <div className="mobile:order-3 mobile:max-w-none xs:px-4 flex h-10.5 w-full max-w-130 items-center border border-[#D8DEE3] bg-white px-6">
+        <div className="mobile:order-3 mobile:max-w-none tablet:order-3 tablet:max-w-none xs:px-4 flex h-10.5 w-full max-w-130 items-center border border-[#D8DEE3] bg-white px-6">
           <div className="xs:pr-6 relative flex shrink-0 items-center pr-9">
             <select
-              className="xs:max-w-29.5 xs:pr-6 appearance-none bg-transparent pr-8 text-sm font-medium text-black outline-none"
+              className="xs:max-w-29.5 xs:pr-6 xs:text-xs appearance-none bg-transparent pr-8 text-sm font-medium text-black outline-none"
               name="category"
               id="category"
             >
@@ -20,7 +20,7 @@ export const TopHeader = () => {
           </div>
           <span className="h-8 w-px bg-[#D8DEE3]" />
           <input
-            className="xs:px-4 min-w-0 flex-1 bg-transparent px-6 text-sm font-medium text-black outline-none placeholder:text-[#ADB5BD]"
+            className="xs:px-4 xs:text-xs min-w-0 flex-1 bg-transparent px-6 text-sm font-medium text-black outline-none placeholder:text-[#ADB5BD]"
             type="text"
             placeholder="Search product..."
           />
@@ -32,7 +32,7 @@ export const TopHeader = () => {
             <Search />
           </button>
         </div>
-        <div className="mobile:text-center flex items-center justify-center gap-3">
+        <div className="mobile:text-center tablet:text-center flex items-center justify-center gap-3">
           <Phone />
           <p>(097) - 962 - 37 - 22</p>
         </div>

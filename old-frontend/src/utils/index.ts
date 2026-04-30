@@ -1,1 +1,0 @@
-export { getOptionLabel } from "./getOptionLabel";

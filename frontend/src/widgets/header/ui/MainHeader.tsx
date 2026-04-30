@@ -8,12 +8,12 @@ export const MainHeader = () => {
       <div className="mobile:flex-wrap mobile:py-7 mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-4 py-10">
         <div className="flex items-center justify-center gap-2">
           <Logo />
-          <p className="text-xl leading-6 font-bold text-black uppercase">
+          <p className="text-xl leading-6 font-bold text-black uppercase xs:text-lg">
             Avion
           </p>
         </div>
 
-        <div className="mobile:order-3 mobile:w-full mobile:justify-center xs:gap-4 xs:text-base flex gap-8 text-lg leading-6 font-normal text-black">
+        <div className="mobile:order-3 mobile:w-full mobile:justify-center mobile:text-base xs:gap-4 xs:text-sm flex gap-8 text-lg leading-6 font-normal text-black">
           {navLinks.map((link) => (
             <Link
               key={link.href}
