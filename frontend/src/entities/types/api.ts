@@ -11,4 +11,5 @@ export interface PaginationMeta {
 export interface IconProps {
   className?: string;
   stroke?: string;
+  fill?: string;
 }

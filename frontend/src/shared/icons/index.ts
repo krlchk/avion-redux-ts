@@ -4,3 +4,8 @@ export { Like } from "./Like";
 export { Phone } from "./Phone";
 export { Profile } from "./Profile";
 export { Search } from "./Search";
+export { Facebook } from "./Facebook";
+export { X } from "./X";
+export { Instagram } from "./Instagram";
+export { Youtube } from "./Youtube";
+export { Payment } from "./Payment";
