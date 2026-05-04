@@ -1,9 +1,10 @@
 import { ArrowDown, Search, Phone } from "@/shared/icons";
+import { Container } from "@/shared/ui";
 
 export const TopHeader = () => {
   return (
     <div className="bg-[#F6F4F2]">
-      <div className="mobile:flex-col mobile:items-stretch tablet:flex-col tablet:items-stretch xs:text-xs mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-5 text-sm font-medium text-black">
+      <Container className="mobile:flex-col mobile:items-stretch tablet:flex-col tablet:items-stretch xs:text-xs  flex  items-center justify-between gap-4 py-5 text-sm font-medium text-black">
         <p className="mobile:text-center tablet:text-center">
           60 Fremont Ave. Hamden, CT 06514
         </p>
@@ -36,7 +37,7 @@ export const TopHeader = () => {
           <Phone />
           <p>(097) - 962 - 37 - 22</p>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };
