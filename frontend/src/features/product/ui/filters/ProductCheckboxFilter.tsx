@@ -1,15 +1,4 @@
-interface FilterOption {
-  value: string;
-  label: string;
-  count: number;
-}
-
-interface ProductCheckboxFilterProps {
-  title: string;
-  options: FilterOption[];
-  selectedValues: string[];
-  onChange: (values: string[]) => void;
-}
+import { ProductCheckboxFilterProps } from "../../model/types";
 
 export const ProductCheckboxFilter = ({
   title,

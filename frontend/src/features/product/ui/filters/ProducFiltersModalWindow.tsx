@@ -1,10 +1,4 @@
-import type { ReactNode } from "react";
-
-interface ProductFiltersModalWindowProps {
-  onClose: () => void;
-  isClosing: boolean;
-  children: ReactNode;
-}
+import { ProductFiltersModalWindowProps } from "../../model/types";
 
 export const ProductFiltersModalWindow = ({
   onClose,

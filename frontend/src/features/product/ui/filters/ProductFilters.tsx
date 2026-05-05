@@ -2,18 +2,9 @@
 
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { categoryOptions, designerOptions } from "../model/constants";
+import { categoryOptions, designerOptions } from "../../model/constants";
 import { ProductCheckboxFilter } from "./ProductCheckboxFilter";
-
-interface ProductFiltersProps {
-  className?: string;
-  priceRange: [number, number];
-  selectedCategories: string[];
-  selectedDesigners: string[];
-  onPriceRangeChange: (value: [number, number]) => void;
-  onCategoriesChange: (values: string[]) => void;
-  onDesignersChange: (values: string[]) => void;
-}
+import { ProductFiltersProps } from "../../model/types";
 
 export const ProductFilters = ({
   className = "",

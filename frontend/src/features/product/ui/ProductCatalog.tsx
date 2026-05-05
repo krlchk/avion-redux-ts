@@ -1,6 +1,6 @@
 import { ProductCategories } from "./ProductCategories";
 import { ProductBenefits } from "./ProductBenefits";
-import { ProductMainCatalog } from "./ProductMainCatalog";
+import { ProductMainCatalog } from "./catalog/ProductMainCatalog";
 
 export const ProductCatalog = () => {
   return (

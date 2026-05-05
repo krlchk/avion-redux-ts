@@ -9,6 +9,9 @@ import {
   Decor,
 } from "@/shared/icons";
 
+import img from "../ui/Img.png";
+import { ProductCatalogCardProps } from "./types";
+
 export const categories = [
   { title: "Armchairs", count: "1", Icon: Armchair },
   { title: "Cabinets", count: "1", Icon: Cabinet },
@@ -16,6 +19,7 @@ export const categories = [
   { title: "Chairs", count: "1", Icon: Chair },
   { title: "Decor", count: "1", Icon: Decor },
 ];
+
 export const benefits = [
   {
     title: "Secure Payments",
@@ -49,4 +53,48 @@ export const categoryOptions = [
   { value: "sofas", label: "Sofas", count: 10 },
   { value: "decor", label: "Decor", count: 10 },
   { value: "sale", label: "Sale", count: 10 },
+];
+
+export const mockFurnitureProducts: ProductCatalogCardProps[] = [
+  { id: "coffee-table", title: "Coffee Table", price: "150", image: img },
+  {
+    id: "papasan-chair",
+    title: "Papasan Chair",
+    price: "250",
+    image: img,
+    badge: "sale",
+  },
+  { id: "classic-chair", title: "Classic Chair", price: "99", image: img },
+  {
+    id: "modern-armchair",
+    title: "Modern Armchair",
+    price: "250",
+    image: img,
+    badge: "new",
+  },
+  {
+    id: "classic-armchair",
+    title: "Classic Armchair",
+    price: "180",
+    image: img,
+  },
+  { id: "bar-stool", title: "Bar Stool", price: "250", image: img },
+  { id: "nightstand", title: "Nightstand", price: "80", image: img },
+  { id: "white-table", title: "White Table", price: "250", image: img },
+  { id: "egg-chair", title: "Egg Chair", price: "280", image: img },
+  {
+    id: "chaise-lounge",
+    title: "Chaise Lounge",
+    price: "450",
+    image: img,
+    badge: "new",
+  },
+  { id: "modern-bed", title: "Modern Bed", price: "680", image: img },
+  {
+    id: "folding-table",
+    title: "Folding Table",
+    price: "160",
+    image: img,
+    badge: "sale",
+  },
 ];
