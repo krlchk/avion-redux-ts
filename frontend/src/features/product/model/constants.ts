@@ -1,24 +1,11 @@
 import {
-  Armchair,
-  Cabinet,
-  Sofa,
-  Chair,
   PaymentV2,
   Return,
   Support,
-  Decor,
 } from "@/shared/icons";
 
 import img from "../ui/Img.png";
 import { ProductCatalogCardProps } from "./types";
-
-export const categories = [
-  { title: "Armchairs", count: "1", Icon: Armchair },
-  { title: "Cabinets", count: "1", Icon: Cabinet },
-  { title: "Sofas", count: "1", Icon: Sofa },
-  { title: "Chairs", count: "1", Icon: Chair },
-  { title: "Decor", count: "1", Icon: Decor },
-];
 
 export const benefits = [
   {
