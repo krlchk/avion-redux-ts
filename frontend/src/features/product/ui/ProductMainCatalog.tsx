@@ -2,7 +2,7 @@
 
 import { Container } from "@/shared/ui";
 import { useState } from "react";
-import { ProductFiltersModalWindow } from "./filters/ProducFiltersModalWindow";
+import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
 import { ProductFilters } from "./filters/ProductFilters";
 import { mockFurnitureProducts } from "../model/constants";
 import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";

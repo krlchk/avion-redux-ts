@@ -1,15 +1,16 @@
 import Image from "next/image";
 import { ProductCatalogCardProps } from "../../model/types";
+import { Like } from "@/shared/icons";
 
 export const ProductCatalogCard = ({
-  id,
   title,
   image,
   price,
   badge,
+  isDiscount = true,
 }: ProductCatalogCardProps) => {
   return (
-    <div key={id} className="relative flex flex-col gap-6 text-center">
+    <div className="relative flex flex-col gap-6 text-center">
       <div className="relative aspect-306/350 w-full bg-[#F6F4F2]">
         <Image
           alt={title}
@@ -22,7 +23,13 @@ export const ProductCatalogCard = ({
       <div className="flex flex-col">
         <p className="mobile:text-xl text-2xl font-bold text-black">{title}</p>
         <p className="mobile:text-base mt-5 text-xl font-medium text-black/60">
-          ${price}
+          {isDiscount ? (
+            <>
+              ${price} <span className="line-through">${price}</span>
+            </>
+          ) : (
+            <span>${price}</span>
+          )}
         </p>
       </div>
       {badge && (
@@ -34,6 +41,12 @@ export const ProductCatalogCard = ({
           {badge}
         </div>
       )}
+      <div className="group absolute right-2.5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border bg-white">
+        <Like
+          className="group-hover:fill-[#FB5454] group-hover:transition-colors"
+          stroke="#8F909B"
+        />
+      </div>
     </div>
   );
 };

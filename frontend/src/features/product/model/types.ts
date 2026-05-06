@@ -46,11 +46,12 @@ export interface ProductResponse {
 export type ProductSortBy = "createdAt" | "price";
 
 export interface ProductCatalogCardProps {
-  id: string;
+  id?: string;
   title: string;
   image: StaticImageData;
   price: string;
   badge?: "new" | "sale";
+  isDiscount?: boolean;
 }
 
 export interface ProductFiltersModalWindowProps {
