@@ -2,10 +2,10 @@
 
 import { Container } from "@/shared/ui";
 import { useState } from "react";
-import { ProductFiltersModalWindow } from "../filters/ProducFiltersModalWindow";
-import { ProductFilters } from "../filters/ProductFilters";
-import { mockFurnitureProducts } from "../../model/constants";
-import { ProductCatalogGrid } from "./ProductCatalogGrid";
+import { ProductFiltersModalWindow } from "./filters/ProducFiltersModalWindow";
+import { ProductFilters } from "./filters/ProductFilters";
+import { mockFurnitureProducts } from "../model/constants";
+import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
 
 export const ProductMainCatalog = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);

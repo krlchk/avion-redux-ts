@@ -1,6 +1,7 @@
 import { ProductCategories } from "./ProductCategories";
 import { ProductBenefits } from "./ProductBenefits";
-import { ProductMainCatalog } from "./catalog/ProductMainCatalog";
+import { ProductMainCatalog } from "./ProductMainCatalog";
+import { ProductFeature } from "./ProductFeature";
 
 export const ProductCatalog = () => {
   return (
@@ -8,6 +9,7 @@ export const ProductCatalog = () => {
       <ProductCategories />
       <ProductMainCatalog />
       <ProductBenefits />
+      <ProductFeature />
     </section>
   );
 };
