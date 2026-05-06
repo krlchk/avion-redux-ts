@@ -4,7 +4,6 @@ import { Container } from "@/shared/ui";
 import { useState } from "react";
 import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
 import { ProductFilters } from "./filters/ProductFilters";
-import { mockFurnitureProducts } from "../model/constants";
 import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
 
 export const ProductMainCatalog = () => {
@@ -39,7 +38,7 @@ export const ProductMainCatalog = () => {
           onCategoriesChange={setSelectedCategories}
           onDesignersChange={setSelectedDesigners}
         />
-        <ProductCatalogGrid products={mockFurnitureProducts} onOpen={onOpen} />
+        <ProductCatalogGrid onOpen={onOpen} />
       </Container>
 
       {isModalOpen && (

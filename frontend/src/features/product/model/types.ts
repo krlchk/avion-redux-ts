@@ -48,8 +48,9 @@ export type ProductSortBy = "createdAt" | "price";
 export interface ProductCatalogCardProps {
   id?: string;
   title: string;
-  image: StaticImageData;
+  image: string | StaticImageData;
   price: string;
+  oldPrice?: string;
   badge?: "new" | "sale";
   isDiscount?: boolean;
 }
@@ -86,4 +87,8 @@ export interface ProductFiltersProps {
 export interface PriceSliderProps {
   priceRange: [number, number];
   onPriceRangeChange: ([value1, value2]: [number, number]) => void;
+}
+
+export interface ProductCatalogGridProps {
+  onOpen: () => void;
 }

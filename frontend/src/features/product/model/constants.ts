@@ -5,7 +5,40 @@ import {
 } from "@/shared/icons";
 
 import img from "../ui/Img.png";
-import { ProductCatalogCardProps } from "./types";
+import { Product, ProductCatalogCardProps } from "./types";
+
+export const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+
+export const isProductNew = (createdAt: string, now: Date) => {
+  const createdTime = new Date(createdAt).getTime();
+  return now.getTime() - createdTime <= THREE_DAYS_MS;
+};
+
+export const isProductSale = (product: Product, now: Date) => {
+  if (!product.discountPercent || product.discountPercent <= 0) {
+    return false;
+  }
+
+  if (!product.discountUntil) {
+    return true;
+  }
+
+  return new Date(product.discountUntil).getTime() > now.getTime();
+};
+
+export const getProductBadge = (
+  product: Product,
+  now: Date,
+): "new" | "sale" | undefined => {
+  const isSale = isProductSale(product, now);
+  if (isSale) {
+    return "sale";
+  }
+  if (isProductNew(product.createdAt, now)) {
+    return "new";
+  }
+  return undefined;
+};
 
 export const benefits = [
   {
@@ -34,45 +67,27 @@ export const designerOptions = [
 ];
 
 export const mockFurnitureProducts: ProductCatalogCardProps[] = [
-  { id: "coffee-table", title: "Coffee Table", price: "150", image: img },
   {
-    id: "papasan-chair",
-    title: "Papasan Chair",
-    price: "250",
-    image: img,
-    badge: "sale",
-  },
-  { id: "classic-chair", title: "Classic Chair", price: "99", image: img },
-  {
-    id: "modern-armchair",
+    id: "1",
     title: "Modern Armchair",
+    image: img,
     price: "250",
-    image: img,
+    oldPrice: "300",
     badge: "new",
+    isDiscount: true,
   },
   {
-    id: "classic-armchair",
-    title: "Classic Armchair",
-    price: "180",
-    image: img,
-  },
-  { id: "bar-stool", title: "Bar Stool", price: "250", image: img },
-  { id: "nightstand", title: "Nightstand", price: "80", image: img },
-  { id: "white-table", title: "White Table", price: "250", image: img },
-  { id: "egg-chair", title: "Egg Chair", price: "280", image: img },
-  {
-    id: "chaise-lounge",
-    title: "Chaise Lounge",
-    price: "450",
-    image: img,
-    badge: "new",
-  },
-  { id: "modern-bed", title: "Modern Bed", price: "680", image: img },
-  {
-    id: "folding-table",
+    id: "2",
     title: "Folding Table",
-    price: "160",
     image: img,
-    badge: "sale",
+    price: "160",
+    isDiscount: false,
+  },
+  {
+    id: "3",
+    title: "Classic Chair",
+    image: img,
+    price: "99",
+    isDiscount: false,
   },
 ];

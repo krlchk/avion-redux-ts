@@ -1,17 +1,43 @@
 import { ArrowDown } from "@/shared/icons";
 import { ProductCatalogCard } from "./ProductCatalogCard";
-import { ProductCatalogCardProps } from "../../model/types";
-import { SimpleButton } from "@/shared/ui";
+import { ProductCatalogGridProps } from "../../model/types";
+import { Loader, SimpleButton } from "@/shared/ui";
+import { useGetProductsQuery } from "@/store/services/productsApi";
+import { useMemo } from "react";
+import { getProductBadge, isProductSale } from "../../model/constants";
 
-interface ProductCatalogGridProps {
-  products: ProductCatalogCardProps[];
-  onOpen: () => void;
-}
+export const ProductCatalogGrid = ({ onOpen }: ProductCatalogGridProps) => {
+  const { data, isError, isLoading } = useGetProductsQuery();
+  const now = useMemo(() => new Date(), []);
 
-export const ProductCatalogGrid = ({
-  products,
-  onOpen,
-}: ProductCatalogGridProps) => {
+  const gridProducts = useMemo(() => {
+    if (!data) return [];
+
+    return data.data.map((product) => {
+      const isDiscount = isProductSale(product, now);
+
+      return {
+        id: product.id,
+        title: product.title,
+        image: product.img,
+        price: String(product.finalPrice),
+        oldPrice: String(product.price),
+        badge: getProductBadge(product, now),
+        isDiscount,
+      };
+    });
+  }, [data, now]);
+
+  if (isError) {
+    return <div>Failed to load filters</div>;
+  }
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (!data) return null;
+
   return (
     <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-3/4 flex-col py-16">
       <div className="mobile:flex-col mobile:items-stretch flex items-center justify-between gap-4 font-medium text-black/60">
@@ -38,16 +64,19 @@ export const ProductCatalogGrid = ({
         </div>
       </div>
       <section className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 mt-6 grid grid-cols-3 gap-6">
-        {products.map(({ id, title, price, image, badge, isDiscount }) => (
-          <ProductCatalogCard
-            key={id}
-            badge={badge}
-            image={image}
-            price={price}
-            title={title}
-            isDiscount={isDiscount}
-          />
-        ))}
+        {gridProducts.map((product) => {
+          return (
+            <ProductCatalogCard
+              key={product.id}
+              title={product.title}
+              image={product.image}
+              price={product.price}
+              oldPrice={product.oldPrice}
+              badge={product.badge}
+              isDiscount={product.isDiscount}
+            />
+          );
+        })}
       </section>
       <div className="xs:grid-cols-2 mx-auto mt-10 grid w-full grid-cols-3 items-center">
         <div />

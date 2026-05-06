@@ -6,12 +6,13 @@ export const ProductCatalogCard = ({
   title,
   image,
   price,
+  oldPrice,
   badge,
-  isDiscount = true,
+  isDiscount,
 }: ProductCatalogCardProps) => {
   return (
     <div className="relative flex flex-col gap-6 text-center">
-      <div className="relative aspect-306/350 w-full bg-[#F6F4F2]">
+      <div className="relative aspect-[306/350] w-full bg-[#F6F4F2]">
         <Image
           alt={title}
           src={image}
@@ -25,7 +26,8 @@ export const ProductCatalogCard = ({
         <p className="mobile:text-base mt-5 text-xl font-medium text-black/60">
           {isDiscount ? (
             <>
-              ${price} <span className="line-through">${price}</span>
+              ${price}{" "}
+              {oldPrice && <span className="line-through">${oldPrice}</span>}
             </>
           ) : (
             <span>${price}</span>
