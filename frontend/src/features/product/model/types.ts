@@ -82,3 +82,8 @@ export interface ProductFiltersProps {
   onCategoriesChange: (values: string[]) => void;
   onDesignersChange: (values: string[]) => void;
 }
+
+export interface PriceSliderProps {
+  priceRange: [number, number];
+  onPriceRangeChange: ([value1, value2]: [number, number]) => void;
+}

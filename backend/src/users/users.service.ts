@@ -23,6 +23,30 @@ export class UsersService {
       data,
     };
   }
+  async findDesigners() {
+    const designers = await this.prisma.user.findMany({
+      where: {
+        role: 'DESIGNER',
+      },
+      select: {
+        id: true,
+        name: true,
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
+    });
+
+    const data = designers.map((designer) => ({
+      id: designer.id,
+      name: designer.name,
+      productsCount: designer._count.products,
+    }));
+
+    return { data };
+  }
   async getProfile(email: string) {
     const user = await this.findByEmail(email);
     return new UserEntity(user);

@@ -8,7 +8,11 @@ export const ProductCategories = () => {
   const { data, isLoading, isError } = useGetCategoriesQuery();
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <Container className="flex items-center justify-center py-8">
+        <Loader />
+      </Container>
+    );
   }
 
   if (isError)

@@ -33,15 +33,6 @@ export const designerOptions = [
   { value: "charles-eames", label: "Charles Eames", count: 15 },
 ];
 
-export const categoryOptions = [
-  { value: "chairs", label: "Chairs", count: 10 },
-  { value: "beds", label: "Beds", count: 10 },
-  { value: "cabinets", label: "Cabinets", count: 10 },
-  { value: "sofas", label: "Sofas", count: 10 },
-  { value: "decor", label: "Decor", count: 10 },
-  { value: "sale", label: "Sale", count: 10 },
-];
-
 export const mockFurnitureProducts: ProductCatalogCardProps[] = [
   { id: "coffee-table", title: "Coffee Table", price: "150", image: img },
   {
