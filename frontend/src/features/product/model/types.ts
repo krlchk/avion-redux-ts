@@ -48,7 +48,7 @@ export type ProductSortBy = "createdAt" | "price";
 export interface ProductCatalogCardProps {
   id?: string;
   title: string;
-  image: string | StaticImageData;
+  image: string | StaticImageData | null;
   price: string;
   oldPrice?: string;
   badge?: "new" | "sale";
