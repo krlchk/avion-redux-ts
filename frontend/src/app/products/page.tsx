@@ -1,5 +1,5 @@
-import { ProductCatalog } from "@/features/products/ui/ProductCatalog";
+import { ProductCatalog } from "@/features/product/ui/ProductCatalog";
 
-export default function ProductsPage() {
+export default function catalogPage() {
   return <ProductCatalog />;
 }

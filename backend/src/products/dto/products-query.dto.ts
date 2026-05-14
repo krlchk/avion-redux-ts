@@ -1,5 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsEnum,
   IsNumber,
@@ -32,9 +33,15 @@ export class ProductsQueryDto {
   @Type(() => Number)
   limit?: number;
 
+  @Transform(({ value }: { value: string | string[] | undefined }) => {
+    if (value === undefined) return undefined;
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') return [value];
+  })
   @IsOptional()
-  @IsUUID()
-  categoryId: string;
+  @IsArray()
+  @IsUUID('4', { each: true })
+  categoryIds?: string[];
 
   @IsOptional()
   @IsString()
@@ -65,7 +72,13 @@ export class ProductsQueryDto {
   @IsEnum(SortOrder)
   sortOrder: SortOrder;
 
+  @Transform(({ value }: { value: string | string[] | undefined }) => {
+    if (value === undefined) return undefined;
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') return [value];
+  })
   @IsOptional()
-  @IsUUID()
-  designerId: string;
+  @IsArray()
+  @IsUUID('4', { each: true })
+  designerIds: string[];
 }

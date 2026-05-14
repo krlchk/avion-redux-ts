@@ -1,4 +1,4 @@
-import { ProductQuery, ProductResponse } from "@/entities/product/types";
+import { ProductResponse, ProductQuery } from "@/features/product/model/types";
 import { baseApi } from "./baseApi";
 
 export const productsApi = baseApi.injectEndpoints({

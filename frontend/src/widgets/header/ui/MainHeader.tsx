@@ -1,19 +1,20 @@
 import Link from "next/link";
 import { navLinks, navIconLinks } from "../model/constants";
 import { Logo } from "@/shared/icons/Logo";
+import { Container } from "@/shared/ui";
 
 export const MainHeader = () => {
   return (
     <div className="bg-white">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-4 py-10 max-[834.99px]:flex-wrap max-[834.99px]:py-7">
+      <Container className="mobile:flex-wrap mobile:py-7 flex items-center justify-between gap-6 py-10">
         <div className="flex items-center justify-center gap-2">
           <Logo />
-          <p className="text-xl leading-6 font-bold text-black uppercase">
+          <p className="xs:text-lg text-xl leading-6 font-bold text-black uppercase">
             Avion
           </p>
         </div>
 
-        <div className="flex gap-8 text-lg leading-6 font-normal text-black max-[834.99px]:order-3 max-[834.99px]:w-full max-[834.99px]:justify-center max-[375.99px]:gap-4 max-[375.99px]:text-base">
+        <div className="mobile:order-3 mobile:w-full mobile:justify-center mobile:text-base xs:gap-4 xs:text-sm flex gap-8 text-lg leading-6 font-normal text-black">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -24,7 +25,7 @@ export const MainHeader = () => {
             </Link>
           ))}
         </div>
-        <div className="flex gap-5 max-[375.99px]:gap-4">
+        <div className="xs:gap-4 flex gap-5">
           {navIconLinks.map(({ href, label, Icon }) => (
             <Link
               key={href}
@@ -36,7 +37,7 @@ export const MainHeader = () => {
             </Link>
           ))}
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

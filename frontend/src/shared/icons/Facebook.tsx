@@ -1,0 +1,19 @@
+import { IconProps } from "@/features/types/api";
+
+export const Facebook = ({ className, fill = "white" }: IconProps) => {
+  return (
+    <svg
+      className={className}
+      width="7"
+      height="14"
+      viewBox="0 0 7 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4.05078 13.0557V6.5271H5.85297L6.09179 4.2773H4.05078L4.05384 3.15125C4.05384 2.56447 4.10959 2.25006 4.95238 2.25006H6.07904V0H4.27659C2.11157 0 1.34954 1.0914 1.34954 2.92678V4.27756H0V6.52736H1.34954V13.0557H4.05078Z"
+        fill={fill}
+      />
+    </svg>
+  );
+};

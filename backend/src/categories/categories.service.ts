@@ -11,7 +11,22 @@ import { PrismaService } from 'src/prisma.service';
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
   async findAll() {
-    const data = await this.prisma.category.findMany();
+    const categories = await this.prisma.category.findMany({
+      include: {
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
+    });
+
+    const data = categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      productsCount: category._count.products,
+    }));
+
     return {
       data,
     };

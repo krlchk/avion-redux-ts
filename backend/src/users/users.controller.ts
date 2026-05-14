@@ -48,6 +48,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('designers')
+  findDesigners() {
+    return this.usersService.findDesigners();
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
