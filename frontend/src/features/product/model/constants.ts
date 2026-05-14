@@ -1,13 +1,10 @@
-import {
-  PaymentV2,
-  Return,
-  Support,
-} from "@/shared/icons";
+import { PaymentV2, Return, Support } from "@/shared/icons";
 
 import img from "../ui/Img.png";
 import { Product, ProductCatalogCardProps } from "./types";
 
 export const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+export const defaultPriceRange = [99, 9999];
 
 export const isProductNew = (createdAt: string, now: Date) => {
   const createdTime = new Date(createdAt).getTime();

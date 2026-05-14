@@ -28,14 +28,14 @@ export interface Product {
 export interface ProductQuery {
   page?: number;
   limit?: number;
-  categoryId?: string;
+  categoryIds?: string[];
   search?: string;
   minPrice?: number;
   maxPrice?: number;
   inStock?: boolean;
   sortBy?: ProductSortBy;
   sortOrder?: SortOrder;
-  designerId?: string;
+  designerIds?: string[];
 }
 
 export interface ProductResponse {
@@ -89,6 +89,11 @@ export interface PriceSliderProps {
   onPriceRangeChange: ([value1, value2]: [number, number]) => void;
 }
 
+export type SortVariant = "latest" | "price-asc" | "price-desc" | "oldest";
+
 export interface ProductCatalogGridProps {
   onOpen: () => void;
+  params: ProductQuery;
+  onSortChange: (value: SortVariant) => void;
+  selectedSort: SortVariant;
 }

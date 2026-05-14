@@ -1,13 +1,18 @@
 import { ArrowDown } from "@/shared/icons";
 import { ProductCatalogCard } from "./ProductCatalogCard";
-import { ProductCatalogGridProps } from "../../model/types";
-import { Loader, SimpleButton } from "@/shared/ui";
+import { ProductCatalogGridProps, SortVariant } from "../../model/types";
+import { Container, Loader, SimpleButton } from "@/shared/ui";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { useMemo } from "react";
 import { getProductBadge, isProductSale } from "../../model/constants";
 
-export const ProductCatalogGrid = ({ onOpen }: ProductCatalogGridProps) => {
-  const { data, isError, isLoading } = useGetProductsQuery();
+export const ProductCatalogGrid = ({
+  onOpen,
+  params,
+  onSortChange,
+  selectedSort,
+}: ProductCatalogGridProps) => {
+  const { data, isError, isLoading } = useGetProductsQuery(params);
   const now = useMemo(() => new Date(), []);
 
   const gridProducts = useMemo(() => {
@@ -29,7 +34,11 @@ export const ProductCatalogGrid = ({ onOpen }: ProductCatalogGridProps) => {
   }, [data, now]);
 
   if (isError) {
-    return <div>Failed to load filters</div>;
+    return (
+      <Container className="py-5 text-center text-sm text-[#FB5454]">
+        Failed to load filters
+      </Container>
+    );
   }
 
   if (isLoading) {
@@ -42,7 +51,7 @@ export const ProductCatalogGrid = ({ onOpen }: ProductCatalogGridProps) => {
     <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-3/4 flex-col py-16">
       <div className="mobile:flex-col mobile:items-stretch flex items-center justify-between gap-4 font-medium text-black/60">
         <p className="mobile:text-xl xs:text-base text-2xl">
-          Showing 1-12 of 14 results
+          Showing 1-9 of {data?.meta.total} results
         </p>
         <div className="xs:flex-col flex justify-end gap-2">
           <button
@@ -53,11 +62,16 @@ export const ProductCatalogGrid = ({ onOpen }: ProductCatalogGridProps) => {
           </button>
           <div className="xs:w-full xs:pr-6 relative flex shrink-0 items-center border border-[#947458] pr-3 pl-3">
             <select
+              value={selectedSort}
+              onChange={(e) => onSortChange(e.target.value as SortVariant)}
               className="mobile:text-base xs:w-full xs:max-w-none xs:pr-6 xs:text-sm appearance-none bg-transparent pr-3 text-xl font-medium outline-none"
-              name="category"
-              id="category"
+              name="sort"
+              id="sort"
             >
-              <option value="all">Sort by latest</option>
+              <option value="latest">Sort by latest</option>
+              <option value="oldest">Sort by oldest</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
             </select>
             <ArrowDown />
           </div>

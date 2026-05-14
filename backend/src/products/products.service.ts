@@ -57,18 +57,18 @@ export class ProductsService {
   // GET ALL PRODUCTS
   async findAll(dto: ProductsQueryDto) {
     const page = dto.page || 1;
-    const limit = dto.limit || 10;
+    const limit = dto.limit || 9;
     const skip = (page - 1) * limit;
 
     const where: Prisma.ProductWhereInput = {};
     const orderBy: Prisma.ProductOrderByWithRelationInput = {};
 
-    if (dto.designerId) {
-      where.designerId = dto.designerId;
+    if (dto.designerIds && dto.designerIds.length > 0) {
+      where.designerId = { in: dto.designerIds };
     }
 
-    if (dto.categoryId) {
-      where.categoryId = dto.categoryId;
+    if (dto.categoryIds && dto.categoryIds.length > 0) {
+      where.categoryId = { in: dto.categoryIds };
     }
 
     if (dto.search) {
