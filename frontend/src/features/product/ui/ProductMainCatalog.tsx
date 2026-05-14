@@ -1,7 +1,7 @@
 "use client";
 
 import { Container, Loader } from "@/shared/ui";
-import { ChangeEvent, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
 import { ProductFilters } from "./filters/ProductFilters";
 import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
@@ -92,8 +92,8 @@ export const ProductMainCatalog = () => {
     }
   };
 
-  const onSort = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSort(e.target.value as SortVariant);
+  const onSort = (value: SortVariant) => {
+    setSelectedSort(value);
     resetCatalogPage();
   };
 

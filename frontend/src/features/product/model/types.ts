@@ -1,7 +1,7 @@
 import { Review } from "@/features/review/model/types";
 import { ApiDecimal, PaginationMeta, SortOrder } from "@/features/types/api";
 import { StaticImageData } from "next/image";
-import { ChangeEvent, ReactNode } from "react";
+import { ReactNode } from "react";
 
 export interface Product {
   id: string;
@@ -106,7 +106,7 @@ export interface ProductCardItem {
 
 export interface ProductCatalogGridProps {
   onOpen: () => void;
-  onSort: (e: ChangeEvent<HTMLSelectElement>) => void;
+  onSort: (value: SortVariant) => void;
   onPrevPage: () => void;
   onNextPage: () => void;
   selectedSort: SortVariant;

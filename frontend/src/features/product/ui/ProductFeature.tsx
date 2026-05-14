@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Loader, SimpleButton } from "@/shared/ui";
+import { Container, Loader } from "@/shared/ui";
 import { ProductCatalogCard } from "./catalog/ProductCatalogCard";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { useMemo } from "react";

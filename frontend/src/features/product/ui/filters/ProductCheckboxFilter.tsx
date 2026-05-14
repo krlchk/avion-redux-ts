@@ -22,15 +22,15 @@ export const ProductCheckboxFilter = ({
   return (
     <fieldset>
       <legend>{title}</legend>
-      <div className="mt-5 flex flex-col gap-2">
+      <div className="mt-5 flex flex-col gap-2 ">
         {options.map(({ value, label, count }) => (
-          <label key={value} className="flex justify-between">
+          <label key={value} className="flex justify-between cursor-pointer">
             <span className="flex items-center justify-center gap-2 text-xl font-medium">
               <input
                 type="checkbox"
                 checked={selectedValues.includes(value)}
                 onChange={() => handleChange(value)}
-                className="h-4 w-4 rounded-sm border accent-[#9A7B60]"
+                className="h-4 w-4 rounded-sm cursor-pointer border accent-[#9A7B60]"
               />
               {label}
             </span>
