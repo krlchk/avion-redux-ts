@@ -5,6 +5,7 @@ export const ProductCheckboxFilter = ({
   options,
   selectedValues,
   onChange,
+  setCatalogPage,
 }: ProductCheckboxFilterProps) => {
   const handleChange = (value: string) => {
     const isSelected = selectedValues.includes(value);
@@ -12,9 +13,11 @@ export const ProductCheckboxFilter = ({
       onChange(
         selectedValues.filter((selectedValue) => selectedValue !== value),
       );
+      setCatalogPage(1);
       return;
     }
     onChange([...selectedValues, value]);
+    setCatalogPage(1);
   };
   return (
     <fieldset>

@@ -6,13 +6,14 @@ import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
 import { ProductFilters } from "./filters/ProductFilters";
 import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
 import { ProductQuery, SortVariant } from "../model/types";
-import { defaultPriceRange } from "../model/constants";
+import { defaultPriceRange, PRODUCTS_PER_PAGE } from "../model/constants";
 
 export const ProductMainCatalog = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedDesigners, setSelectedDesigners] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<SortVariant>("latest");
+  const [catalogPage, setCatalogPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalClosing, setIsModalClosing] = useState(false);
 
@@ -42,6 +43,8 @@ export const ProductMainCatalog = () => {
     productQuery.sortBy = "price";
     productQuery.sortOrder = "desc";
   }
+  productQuery.page = catalogPage;
+  productQuery.limit = PRODUCTS_PER_PAGE;
 
   const onClose = () => {
     setIsModalClosing(true);
@@ -67,9 +70,15 @@ export const ProductMainCatalog = () => {
           onPriceRangeChange={setPriceRange}
           onCategoriesChange={setSelectedCategories}
           onDesignersChange={setSelectedDesigners}
-          
+          setCatalogPage={setCatalogPage}
         />
-        <ProductCatalogGrid onOpen={onOpen} params={productQuery} onSortChange={setSelectedSort} selectedSort={selectedSort}/>
+        <ProductCatalogGrid
+          onOpen={onOpen}
+          params={productQuery}
+          onSortChange={setSelectedSort}
+          selectedSort={selectedSort}
+          setCatalogPage={setCatalogPage}
+        />
       </Container>
 
       {isModalOpen && (
@@ -82,6 +91,7 @@ export const ProductMainCatalog = () => {
             onPriceRangeChange={setPriceRange}
             onCategoriesChange={setSelectedCategories}
             onDesignersChange={setSelectedDesigners}
+            setCatalogPage={setCatalogPage}
           />
         </ProductFiltersModalWindow>
       )}

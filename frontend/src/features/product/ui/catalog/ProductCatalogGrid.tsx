@@ -4,13 +4,19 @@ import { ProductCatalogGridProps, SortVariant } from "../../model/types";
 import { Container, Loader, SimpleButton } from "@/shared/ui";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { useMemo } from "react";
-import { getProductBadge, isProductSale } from "../../model/constants";
+import {
+  getProductBadge,
+  isProductSale,
+  PRODUCTS_PER_PAGE,
+  sortOptions,
+} from "../../model/constants";
 
 export const ProductCatalogGrid = ({
   onOpen,
   params,
   onSortChange,
   selectedSort,
+  setCatalogPage,
 }: ProductCatalogGridProps) => {
   const { data, isError, isLoading } = useGetProductsQuery(params);
   const now = useMemo(() => new Date(), []);
@@ -47,11 +53,19 @@ export const ProductCatalogGrid = ({
 
   if (!data) return null;
 
+  const totalProducts = data.meta.total;
+  const page = data.meta.page;
+
+  const startProduct =
+    totalProducts === 0 ? 0 : (page - 1) * PRODUCTS_PER_PAGE + 1;
+
+  const endProduct = Math.min(page * PRODUCTS_PER_PAGE, totalProducts);
+
   return (
     <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-3/4 flex-col py-16">
       <div className="mobile:flex-col mobile:items-stretch flex items-center justify-between gap-4 font-medium text-black/60">
         <p className="mobile:text-xl xs:text-base text-2xl">
-          Showing 1-9 of {data?.meta.total} results
+          Showing {startProduct}-{endProduct} of {totalProducts} results
         </p>
         <div className="xs:flex-col flex justify-end gap-2">
           <button
@@ -63,15 +77,19 @@ export const ProductCatalogGrid = ({
           <div className="xs:w-full xs:pr-6 relative flex shrink-0 items-center border border-[#947458] pr-3 pl-3">
             <select
               value={selectedSort}
-              onChange={(e) => onSortChange(e.target.value as SortVariant)}
+              onChange={(e) => {
+                onSortChange(e.target.value as SortVariant);
+                setCatalogPage(1);
+              }}
               className="mobile:text-base xs:w-full xs:max-w-none xs:pr-6 xs:text-sm appearance-none bg-transparent pr-3 text-xl font-medium outline-none"
               name="sort"
               id="sort"
             >
-              <option value="latest">Sort by latest</option>
-              <option value="oldest">Sort by oldest</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
+              {sortOptions.map(({ value, title }) => (
+                <option key={value} value={value}>
+                  {title}
+                </option>
+              ))}
             </select>
             <ArrowDown />
           </div>
@@ -92,18 +110,36 @@ export const ProductCatalogGrid = ({
           );
         })}
       </section>
-      <div className="xs:grid-cols-2 mx-auto mt-10 grid w-full grid-cols-3 items-center">
-        <div />
-        {/* pages */}
-        <div className="xs:justify-start flex justify-center">
-          <div className="mobile:text-base flex h-10 w-10 items-center justify-center border border-[#947458] text-xl font-bold text-black/60 transition-colors hover:bg-[#947458] hover:text-white">
-            1
-          </div>
+      <div className="mt-16 flex justify-between">
+        {page > 1 ? (
+          <SimpleButton
+            onClick={() => {
+              if (page > 1) {
+                setCatalogPage(page - 1);
+              }
+            }}
+            text="Prev"
+          />
+        ) : (
+          <div />
+        )}
+
+        <div className="mobile:text-base flex h-10 w-10 items-center justify-center border border-[#947458] text-xl font-bold text-black/60 transition-colors hover:bg-[#947458] hover:text-white">
+          {page}
         </div>
 
-        <div className="flex justify-end">
-          <SimpleButton text="Next" />
-        </div>
+        {page < data.meta.lastPage ? (
+          <SimpleButton
+            onClick={() => {
+              if (page < data.meta.lastPage) {
+                setCatalogPage(page + 1);
+              }
+            }}
+            text="Next"
+          />
+        ) : (
+          <div />
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,14 @@ import { Product, ProductCatalogCardProps } from "./types";
 
 export const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
 export const defaultPriceRange = [99, 9999];
+export const PRODUCTS_PER_PAGE = 9;
+
+export const sortOptions = [
+  { value: "latest", title: "Sort by latest" },
+  { value: "oldest", title: "Sort by oldest" },
+  { value: "price-asc", title: "Price: Low to High" },
+  { value: "price-desc", title: "Price: High to Low" },
+];
 
 export const isProductNew = (createdAt: string, now: Date) => {
   const createdTime = new Date(createdAt).getTime();
