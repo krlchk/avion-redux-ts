@@ -1,7 +1,7 @@
 import { Review } from "@/features/review/model/types";
 import { ApiDecimal, PaginationMeta, SortOrder } from "@/features/types/api";
 import { StaticImageData } from "next/image";
-import { ReactNode } from "react";
+import { ChangeEvent, ReactNode } from "react";
 
 export interface Product {
   id: string;
@@ -94,13 +94,28 @@ export interface PriceSliderProps {
 
 export type SortVariant = "latest" | "price-asc" | "price-desc" | "oldest";
 
+export interface GridProduct {
+  id: string;
+  title: string;
+  image: string;
+  price: string;
+  oldPrice: string;
+  badge: "new" | "sale" | undefined;
+  isDiscount: boolean;
+}
+
 export interface ProductCatalogGridProps {
   onOpen: () => void;
-  params: ProductQuery;
-  onSortChange: (value: SortVariant) => void;
-  onResetPage: () => void;
+  onSort: (e: ChangeEvent<HTMLSelectElement>) => void;
+  onPrevPage: () => void;
+  onNextPage: () => void;
   selectedSort: SortVariant;
-  setCatalogPage: (value: number) => void;
+  startProduct: number;
+  endProduct: number;
+  totalProducts: number;
+  gridProducts: GridProduct[];
+  page: number;
+  lastPage: number;
 }
 
 export interface BuildProductQueryParams {

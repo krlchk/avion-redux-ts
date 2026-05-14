@@ -1,12 +1,19 @@
 "use client";
 
-import { Container } from "@/shared/ui";
-import { useState } from "react";
+import { Container, Loader } from "@/shared/ui";
+import { ChangeEvent, useMemo, useState } from "react";
 import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
 import { ProductFilters } from "./filters/ProductFilters";
 import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
 import { SortVariant } from "../model/types";
-import { buildProductQuery, sortQueryMap } from "../model/constants";
+
+import { useGetProductsQuery } from "@/store/services/productsApi";
+import { sortQueryMap, PRODUCTS_PER_PAGE } from "../model/catalog.constants";
+import {
+  buildProductQuery,
+  isProductSale,
+  getProductBadge,
+} from "../model/product.utils";
 
 export const ProductMainCatalog = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);
@@ -28,6 +35,51 @@ export const ProductMainCatalog = () => {
     priceRange,
   });
 
+  const { data, isError, isLoading } = useGetProductsQuery(productQuery);
+
+  const now = useMemo(() => new Date(), []);
+
+  const gridProducts = useMemo(() => {
+    if (!data) return [];
+
+    return data.data.map((product) => {
+      const isDiscount = isProductSale(product, now);
+
+      return {
+        id: product.id,
+        title: product.title,
+        image: product.img,
+        price: String(product.finalPrice),
+        oldPrice: String(product.price),
+        badge: getProductBadge(product, now),
+        isDiscount,
+      };
+    });
+  }, [data, now]);
+
+  if (isError) {
+    return (
+      <Container className="py-5 text-center text-sm text-[#FB5454]">
+        Failed to load filters
+      </Container>
+    );
+  }
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (!data) return null;
+
+  const totalProducts = data.meta.total;
+  const page = data.meta.page;
+  const lastPage = data.meta.lastPage;
+
+  const startProduct =
+    totalProducts === 0 ? 0 : (page - 1) * PRODUCTS_PER_PAGE + 1;
+
+  const endProduct = Math.min(page * PRODUCTS_PER_PAGE, totalProducts);
+
   const onClose = () => {
     setIsModalClosing(true);
     setTimeout(() => {
@@ -39,6 +91,23 @@ export const ProductMainCatalog = () => {
   const onOpen = () => {
     setIsModalOpen(true);
     setIsModalClosing(false);
+  };
+
+  const onPrevPage = () => {
+    if (page > 1) {
+      setCatalogPage(page - 1);
+    }
+  };
+
+  const onNextPage = () => {
+    if (page < data.meta.lastPage) {
+      setCatalogPage(page + 1);
+    }
+  };
+
+  const onSort = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSort(e.target.value as SortVariant);
+    resetCatalogPage();
   };
 
   return (
@@ -56,11 +125,16 @@ export const ProductMainCatalog = () => {
         />
         <ProductCatalogGrid
           onOpen={onOpen}
-          params={productQuery}
-          onSortChange={setSelectedSort}
-          onResetPage={resetCatalogPage}
+          onSort={onSort}
+          onPrevPage={onPrevPage}
+          onNextPage={onNextPage}
           selectedSort={selectedSort}
-          setCatalogPage={setCatalogPage}
+          startProduct={startProduct}
+          endProduct={endProduct}
+          totalProducts={totalProducts}
+          gridProducts={gridProducts}
+          page={page}
+          lastPage={lastPage}
         />
       </Container>
 

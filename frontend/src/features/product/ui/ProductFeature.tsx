@@ -1,6 +1,6 @@
 import { Container, SimpleButton } from "@/shared/ui";
 import { ProductCatalogCard } from "./catalog/ProductCatalogCard";
-import { mockFurnitureProducts } from "../model/constants";
+import { mockFurnitureProducts } from "../model/product.mocks";
 
 export const ProductFeature = () => {
   return (

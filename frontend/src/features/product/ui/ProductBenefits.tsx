@@ -1,5 +1,5 @@
 import { Container } from "@/shared/ui";
-import { benefits } from "../model/constants";
+import { benefits } from "../model/product.mocks";
 
 export const ProductBenefits = () => {
   return (
