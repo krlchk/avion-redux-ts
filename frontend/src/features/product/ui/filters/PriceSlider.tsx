@@ -4,7 +4,7 @@ import { PriceSliderProps } from "../../model/types";
 export const PriceSlider = ({
   priceRange,
   onPriceRangeChange,
-  setCatalogPage,
+  onResetPage
 }: PriceSliderProps) => {
   return (
     <Slider
@@ -15,7 +15,7 @@ export const PriceSlider = ({
       onChange={(value) => {
         if (Array.isArray(value) && value.length === 2) {
           onPriceRangeChange([value[0], value[1]]);
-          setCatalogPage(1);
+          onResetPage();
         }
       }}
       allowCross={false}

@@ -17,7 +17,7 @@ export const ProductFilters = ({
   onPriceRangeChange,
   onCategoriesChange,
   onDesignersChange,
-  setCatalogPage
+  onResetPage
 }: ProductFiltersProps) => {
   const {
     data: categoriesData,
@@ -77,7 +77,7 @@ export const ProductFilters = ({
         <PriceSlider
           priceRange={priceRange}
           onPriceRangeChange={onPriceRangeChange}
-          setCatalogPage={setCatalogPage}
+          onResetPage={onResetPage}
         />
         <p className="text-xl">
           <span className="text-black/60">Price:</span> ${priceRange[0]} - $
@@ -107,14 +107,14 @@ export const ProductFilters = ({
               options={categoryFilterOptions}
               selectedValues={selectedCategories}
               onChange={onCategoriesChange}
-              setCatalogPage={setCatalogPage}
+              onResetPage={onResetPage}
             />
             <ProductCheckboxFilter
               title="Filter by Designer"
               options={designerFilterOptions}
               selectedValues={selectedDesigners}
               onChange={onDesignersChange}
-              setCatalogPage={setCatalogPage}
+              onResetPage={onResetPage}
             />
           </>
         )}

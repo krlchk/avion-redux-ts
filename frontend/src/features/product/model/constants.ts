@@ -1,11 +1,39 @@
 import { PaymentV2, Return, Support } from "@/shared/icons";
 
 import img from "../ui/Img.png";
-import { Product, ProductCatalogCardProps } from "./types";
+import { BuildProductQueryParams, Product, ProductCatalogCardProps, ProductQuery, SortQueryMapType } from "./types";
 
 export const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
 export const defaultPriceRange = [99, 9999];
 export const PRODUCTS_PER_PAGE = 9;
+
+export const sortQueryMap: SortQueryMapType = {
+  latest: { sortBy: "createdAt", sortOrder: "desc" },
+  oldest: { sortBy: "createdAt", sortOrder: "asc" },
+  "price-asc": { sortBy: "price", sortOrder: "asc" },
+  "price-desc": { sortBy: "price", sortOrder: "desc" },
+};
+
+export const buildProductQuery = ({
+  selectedSortConfig,
+  catalogPage,
+  selectedCategories,
+  selectedDesigners,
+  priceRange,
+}: BuildProductQueryParams) => {
+  const query: ProductQuery = {};
+
+  query.sortBy = selectedSortConfig.sortBy;
+  query.sortOrder = selectedSortConfig.sortOrder;
+  query.page = catalogPage;
+  query.limit = PRODUCTS_PER_PAGE;
+  if (selectedCategories.length > 0) query.categoryIds = selectedCategories;
+  if (selectedDesigners.length > 0) query.designerIds = selectedDesigners;
+  if (defaultPriceRange[0] !== priceRange[0]) query.minPrice = priceRange[0];
+  if (defaultPriceRange[1] !== priceRange[1]) query.maxPrice = priceRange[1];
+
+  return query;
+};
 
 export const sortOptions = [
   { value: "latest", title: "Sort by latest" },
@@ -61,14 +89,6 @@ export const benefits = [
     desc: "Semper turpis sed maecenas vivamus vel scelerisque",
     Icon: Support,
   },
-];
-
-export const designerOptions = [
-  { value: "albert-hadley", label: "Albert Hadley", count: 8 },
-  { value: "kelly-wearstler", label: "Kelly Wearstler", count: 12 },
-  { value: "philippe-starck", label: "Philippe Starck", count: 6 },
-  { value: "patricia-urquiola", label: "Patricia Urquiola", count: 9 },
-  { value: "charles-eames", label: "Charles Eames", count: 15 },
 ];
 
 export const mockFurnitureProducts: ProductCatalogCardProps[] = [

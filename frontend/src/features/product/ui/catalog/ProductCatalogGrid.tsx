@@ -15,6 +15,7 @@ export const ProductCatalogGrid = ({
   onOpen,
   params,
   onSortChange,
+  onResetPage,
   selectedSort,
   setCatalogPage,
 }: ProductCatalogGridProps) => {
@@ -79,7 +80,7 @@ export const ProductCatalogGrid = ({
               value={selectedSort}
               onChange={(e) => {
                 onSortChange(e.target.value as SortVariant);
-                setCatalogPage(1);
+                onResetPage();
               }}
               className="mobile:text-base xs:w-full xs:max-w-none xs:pr-6 xs:text-sm appearance-none bg-transparent pr-3 text-xl font-medium outline-none"
               name="sort"

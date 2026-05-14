@@ -5,8 +5,8 @@ import { useState } from "react";
 import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
 import { ProductFilters } from "./filters/ProductFilters";
 import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
-import { ProductQuery, SortVariant } from "../model/types";
-import { defaultPriceRange, PRODUCTS_PER_PAGE } from "../model/constants";
+import { SortVariant } from "../model/types";
+import { buildProductQuery, sortQueryMap } from "../model/constants";
 
 export const ProductMainCatalog = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);
@@ -16,35 +16,17 @@ export const ProductMainCatalog = () => {
   const [catalogPage, setCatalogPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalClosing, setIsModalClosing] = useState(false);
+  const resetCatalogPage = () => setCatalogPage(1);
 
-  const productQuery: ProductQuery = {};
+  const selectedSortConfig = sortQueryMap[selectedSort];
 
-  if (selectedCategories.length > 0)
-    productQuery.categoryIds = selectedCategories;
-  if (selectedDesigners.length > 0)
-    productQuery.designerIds = selectedDesigners;
-  if (defaultPriceRange[0] !== priceRange[0])
-    productQuery.minPrice = priceRange[0];
-  if (defaultPriceRange[1] !== priceRange[1])
-    productQuery.maxPrice = priceRange[1];
-  if (selectedSort === "latest") {
-    productQuery.sortBy = "createdAt";
-    productQuery.sortOrder = "desc";
-  }
-  if (selectedSort === "oldest") {
-    productQuery.sortBy = "createdAt";
-    productQuery.sortOrder = "asc";
-  }
-  if (selectedSort === "price-asc") {
-    productQuery.sortBy = "price";
-    productQuery.sortOrder = "asc";
-  }
-  if (selectedSort === "price-desc") {
-    productQuery.sortBy = "price";
-    productQuery.sortOrder = "desc";
-  }
-  productQuery.page = catalogPage;
-  productQuery.limit = PRODUCTS_PER_PAGE;
+  const productQuery = buildProductQuery({
+    selectedSortConfig,
+    catalogPage,
+    selectedCategories,
+    selectedDesigners,
+    priceRange,
+  });
 
   const onClose = () => {
     setIsModalClosing(true);
@@ -70,12 +52,13 @@ export const ProductMainCatalog = () => {
           onPriceRangeChange={setPriceRange}
           onCategoriesChange={setSelectedCategories}
           onDesignersChange={setSelectedDesigners}
-          setCatalogPage={setCatalogPage}
+          onResetPage={resetCatalogPage}
         />
         <ProductCatalogGrid
           onOpen={onOpen}
           params={productQuery}
           onSortChange={setSelectedSort}
+          onResetPage={resetCatalogPage}
           selectedSort={selectedSort}
           setCatalogPage={setCatalogPage}
         />
@@ -91,7 +74,7 @@ export const ProductMainCatalog = () => {
             onPriceRangeChange={setPriceRange}
             onCategoriesChange={setSelectedCategories}
             onDesignersChange={setSelectedDesigners}
-            setCatalogPage={setCatalogPage}
+            onResetPage={resetCatalogPage}
           />
         </ProductFiltersModalWindow>
       )}

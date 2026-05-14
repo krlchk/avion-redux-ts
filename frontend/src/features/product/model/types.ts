@@ -72,7 +72,7 @@ export interface ProductCheckboxFilterProps {
   options: FilterOption[];
   selectedValues: string[];
   onChange: (values: string[]) => void;
-  setCatalogPage: (value: number) => void;
+  onResetPage: () => void;
 }
 
 export interface ProductFiltersProps {
@@ -83,13 +83,13 @@ export interface ProductFiltersProps {
   onPriceRangeChange: (value: [number, number]) => void;
   onCategoriesChange: (values: string[]) => void;
   onDesignersChange: (values: string[]) => void;
-  setCatalogPage: (value: number) => void;
+  onResetPage: () => void;
 }
 
 export interface PriceSliderProps {
   priceRange: [number, number];
   onPriceRangeChange: ([value1, value2]: [number, number]) => void;
-  setCatalogPage: (value: number) => void;
+  onResetPage: () => void;
 }
 
 export type SortVariant = "latest" | "price-asc" | "price-desc" | "oldest";
@@ -98,6 +98,20 @@ export interface ProductCatalogGridProps {
   onOpen: () => void;
   params: ProductQuery;
   onSortChange: (value: SortVariant) => void;
+  onResetPage: () => void;
   selectedSort: SortVariant;
   setCatalogPage: (value: number) => void;
 }
+
+export interface BuildProductQueryParams {
+  selectedSortConfig: { sortBy: ProductSortBy; sortOrder: SortOrder };
+  catalogPage: number;
+  selectedCategories: string[];
+  selectedDesigners: string[];
+  priceRange: [number, number];
+}
+
+export type SortQueryMapType = Record<
+  SortVariant,
+  { sortBy: ProductSortBy; sortOrder: SortOrder }
+>;
