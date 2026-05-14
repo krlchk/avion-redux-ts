@@ -94,7 +94,7 @@ export interface PriceSliderProps {
 
 export type SortVariant = "latest" | "price-asc" | "price-desc" | "oldest";
 
-export interface GridProduct {
+export interface ProductCardItem {
   id: string;
   title: string;
   image: string;
@@ -113,7 +113,7 @@ export interface ProductCatalogGridProps {
   startProduct: number;
   endProduct: number;
   totalProducts: number;
-  gridProducts: GridProduct[];
+  gridProducts: ProductCardItem[];
   page: number;
   lastPage: number;
 }
@@ -130,3 +130,8 @@ export type SortQueryMapType = Record<
   SortVariant,
   { sortBy: ProductSortBy; sortOrder: SortOrder }
 >;
+
+export interface MapProductToCardItemParams {
+  product: Product;
+  now: Date;
+}

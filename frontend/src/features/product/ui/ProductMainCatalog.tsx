@@ -11,8 +11,7 @@ import { useGetProductsQuery } from "@/store/services/productsApi";
 import { sortQueryMap, PRODUCTS_PER_PAGE } from "../model/catalog.constants";
 import {
   buildProductQuery,
-  isProductSale,
-  getProductBadge,
+  mapProductToCardItem,
 } from "../model/product.utils";
 
 export const ProductMainCatalog = () => {
@@ -42,19 +41,7 @@ export const ProductMainCatalog = () => {
   const gridProducts = useMemo(() => {
     if (!data) return [];
 
-    return data.data.map((product) => {
-      const isDiscount = isProductSale(product, now);
-
-      return {
-        id: product.id,
-        title: product.title,
-        image: product.img,
-        price: String(product.finalPrice),
-        oldPrice: String(product.price),
-        badge: getProductBadge(product, now),
-        isDiscount,
-      };
-    });
+    return data.data.map((product) => mapProductToCardItem({ product, now }));
   }, [data, now]);
 
   if (isError) {

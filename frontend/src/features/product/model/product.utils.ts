@@ -1,5 +1,5 @@
 import { defaultPriceRange, PRODUCTS_PER_PAGE } from "./catalog.constants";
-import { BuildProductQueryParams, Product, ProductQuery } from "./types";
+import { BuildProductQueryParams, MapProductToCardItemParams, Product, ProductQuery } from "./types";
 
 export const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
 
@@ -55,4 +55,19 @@ export const getProductBadge = (
   return undefined;
 };
 
+export const mapProductToCardItem = ({
+  product,
+  now,
+}: MapProductToCardItemParams) => {
+  const isDiscount = isProductSale(product, now);
 
+  return {
+    id: product.id,
+    title: product.title,
+    image: product.img,
+    price: String(product.finalPrice),
+    oldPrice: String(product.price),
+    badge: getProductBadge(product, now),
+    isDiscount,
+  };
+};
