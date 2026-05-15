@@ -1,10 +1,10 @@
 "use client";
 
 import { Container, Loader } from "@/shared/ui";
-import { ProductCatalogCard } from "./catalog/ProductCatalogCard";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { useMemo } from "react";
 import { mapProductToCardItem } from "../model/product.utils";
+import { ProductCatalogCard } from "./catalog";
 
 export const ProductFeature = () => {
   const { data, isError, isLoading } = useGetProductsQuery();
@@ -17,8 +17,6 @@ export const ProductFeature = () => {
       .map((product) => mapProductToCardItem({ product, now }))
       .slice(0, 3);
   }, [data, now]);
-
-  console.log(data);
 
   if (isError) {
     return (

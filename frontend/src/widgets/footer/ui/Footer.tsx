@@ -4,16 +4,13 @@ import Link from "next/link";
 import {
   customerLinks,
   deliveryLinks,
-  FooterLink,
   navIconLinks,
   shopLinks,
 } from "../model/constants";
 import { Payment } from "@/shared/icons";
+import { FooterLinksColumnProps } from "../model/types";
 
-interface FooterLinksColumnProps {
-  title: string;
-  links: FooterLink[];
-}
+
 
 export const Footer = () => {
   return (

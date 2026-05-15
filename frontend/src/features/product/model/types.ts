@@ -135,3 +135,20 @@ export interface MapProductToCardItemParams {
   product: Product;
   now: Date;
 }
+
+export interface SortDropdownParams {
+  selectedSort: SortVariant;
+  onSort: (value: SortVariant) => void;
+}
+
+export interface ProductCategoriesProps {
+  onCategorySelect: (id: string) => void;
+}
+
+export interface ProductMainCatalogProps {
+  selectedCategories: string[];
+  setSelectedCategories: (values: string[]) => void;
+  catalogPage: number;
+  setCatalogPage: (value: number) => void;
+  resetCatalogPage: () => void;
+}

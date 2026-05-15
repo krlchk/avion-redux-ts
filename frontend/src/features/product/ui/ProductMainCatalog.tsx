@@ -2,10 +2,7 @@
 
 import { Container, Loader } from "@/shared/ui";
 import { useMemo, useState } from "react";
-import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
-import { ProductFilters } from "./filters/ProductFilters";
-import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
-import { SortVariant } from "../model/types";
+import { ProductMainCatalogProps, SortVariant } from "../model/types";
 
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { sortQueryMap, PRODUCTS_PER_PAGE } from "../model/catalog.constants";
@@ -13,16 +10,21 @@ import {
   buildProductQuery,
   mapProductToCardItem,
 } from "../model/product.utils";
+import { ProductFilters, ProductFiltersModalWindow } from "./filters";
+import { ProductCatalogGrid } from "./catalog";
 
-export const ProductMainCatalog = () => {
+export const ProductMainCatalog = ({
+  selectedCategories,
+  setSelectedCategories,
+  catalogPage,
+  setCatalogPage,
+  resetCatalogPage,
+}: ProductMainCatalogProps) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedDesigners, setSelectedDesigners] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<SortVariant>("latest");
-  const [catalogPage, setCatalogPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalClosing, setIsModalClosing] = useState(false);
-  const resetCatalogPage = () => setCatalogPage(1);
 
   const selectedSortConfig = sortQueryMap[selectedSort];
 

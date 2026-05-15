@@ -3,8 +3,11 @@
 import { Container, Loader } from "@/shared/ui";
 import { useGetCategoriesQuery } from "@/store/services/categoriesApi";
 import { getCategoryIcon } from "@/features/category/model/constants";
+import { ProductCategoriesProps } from "../model/types";
 
-export const ProductCategories = () => {
+export const ProductCategories = ({
+  onCategorySelect,
+}: ProductCategoriesProps) => {
   const { data, isLoading, isError } = useGetCategoriesQuery();
 
   if (isLoading) {
@@ -40,8 +43,9 @@ export const ProductCategories = () => {
         {categories.map(({ id, name, productsCount }) => {
           const Icon = getCategoryIcon(name);
           return (
-            <div
+            <button
               key={id}
+              onClick={() => onCategorySelect(id)}
               className="mobile:justify-start group tablet:justify-start flex min-w-0 cursor-pointer items-center justify-center gap-5"
             >
               <Icon className="shrink-0" />
@@ -53,7 +57,7 @@ export const ProductCategories = () => {
                   {productsCount} products
                 </p>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

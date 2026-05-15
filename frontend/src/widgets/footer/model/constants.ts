@@ -1,9 +1,5 @@
 import { Facebook, Instagram, X, Youtube } from "@/shared/icons";
-
-export interface FooterLink {
-  href: string;
-  label: string;
-}
+import { FooterLink } from "./types";
 
 export const navIconLinks = [
   { href: "https://www.facebook.com/", label: "Facebook", Icon: Facebook },

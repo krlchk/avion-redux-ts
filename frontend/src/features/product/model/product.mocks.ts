@@ -1,6 +1,4 @@
 import { PaymentV2, Return, Support } from "@/shared/icons";
-import img from "../ui/Img.png";
-import { ProductCatalogCardProps } from "./types";
 
 export const benefits = [
   {
@@ -20,28 +18,3 @@ export const benefits = [
   },
 ];
 
-export const mockFurnitureProducts: ProductCatalogCardProps[] = [
-  {
-    id: "1",
-    title: "Modern Armchair",
-    image: img,
-    price: "250",
-    oldPrice: "300",
-    badge: "new",
-    isDiscount: true,
-  },
-  {
-    id: "2",
-    title: "Folding Table",
-    image: img,
-    price: "160",
-    isDiscount: false,
-  },
-  {
-    id: "3",
-    title: "Classic Chair",
-    image: img,
-    price: "99",
-    isDiscount: false,
-  },
-];
