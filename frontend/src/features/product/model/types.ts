@@ -121,6 +121,7 @@ export interface ProductCatalogGridProps {
 export interface BuildProductQueryParams {
   selectedSortConfig: { sortBy: ProductSortBy; sortOrder: SortOrder };
   catalogPage: number;
+  searchTerm: string;
   selectedCategories: string[];
   selectedDesigners: string[];
   priceRange: [number, number];
@@ -150,5 +151,6 @@ export interface ProductMainCatalogProps {
   setSelectedCategories: (values: string[]) => void;
   catalogPage: number;
   setCatalogPage: (value: number) => void;
+  searchTerm: string;
   resetCatalogPage: () => void;
 }

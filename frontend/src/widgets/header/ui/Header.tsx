@@ -5,7 +5,7 @@ import { TopHeader } from "./TopHeader";
 
 export const Header = () => {
   return (
-    <header className="flex w-full flex-col">
+    <header className="flex w-full flex-col bg-white">
       <TopHeader />
       <MainHeader />
     </header>

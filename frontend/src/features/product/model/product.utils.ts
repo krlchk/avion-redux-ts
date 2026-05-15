@@ -6,6 +6,7 @@ export const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
 export const buildProductQuery = ({
   selectedSortConfig,
   catalogPage,
+  searchTerm,
   selectedCategories,
   selectedDesigners,
   priceRange,
@@ -16,6 +17,7 @@ export const buildProductQuery = ({
   query.sortOrder = selectedSortConfig.sortOrder;
   query.page = catalogPage;
   query.limit = PRODUCTS_PER_PAGE;
+  if (searchTerm.trim()) query.search = searchTerm.trim();
   if (selectedCategories.length > 0) query.categoryIds = selectedCategories;
   if (selectedDesigners.length > 0) query.designerIds = selectedDesigners;
   if (defaultPriceRange[0] !== priceRange[0]) query.minPrice = priceRange[0];

@@ -18,6 +18,7 @@ export const ProductMainCatalog = ({
   setSelectedCategories,
   catalogPage,
   setCatalogPage,
+  searchTerm,
   resetCatalogPage,
 }: ProductMainCatalogProps) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);
@@ -31,6 +32,7 @@ export const ProductMainCatalog = ({
   const productQuery = buildProductQuery({
     selectedSortConfig,
     catalogPage,
+    searchTerm,
     selectedCategories,
     selectedDesigners,
     priceRange,

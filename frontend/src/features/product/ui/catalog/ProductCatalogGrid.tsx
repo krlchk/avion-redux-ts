@@ -38,34 +38,46 @@ export const ProductCatalogGrid = ({
           <SortDropdown onSort={onSort} selectedSort={selectedSort} />
         </div>
       </div>
-      <section className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 mt-6 grid grid-cols-3 gap-6">
-        {gridProducts.map((product) => {
-          return (
-            <ProductCatalogCard
-              key={product.id}
-              title={product.title}
-              image={product.image}
-              price={product.price}
-              oldPrice={product.oldPrice}
-              badge={product.badge}
-              isDiscount={product.isDiscount}
-            />
-          );
-        })}
-      </section>
-      <div className="mt-16 flex justify-between">
-        {page > 1 ? <SimpleButton onClick={onPrevPage} text="Prev" /> : <div />}
+      {gridProducts && gridProducts.length > 0 ? (
+        <>
+          <section className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 mt-6 grid grid-cols-3 gap-6">
+            {gridProducts.map((product) => {
+              return (
+                <ProductCatalogCard
+                  key={product.id}
+                  title={product.title}
+                  image={product.image}
+                  price={product.price}
+                  oldPrice={product.oldPrice}
+                  badge={product.badge}
+                  isDiscount={product.isDiscount}
+                />
+              );
+            })}
+          </section>
+          <div className="mt-16 flex justify-between">
+            {page > 1 ? (
+              <SimpleButton onClick={onPrevPage} text="Prev" />
+            ) : (
+              <div />
+            )}
 
-        <div className="mobile:text-base flex h-10 w-10 items-center justify-center border border-[#947458] text-xl font-bold text-black/60 transition-colors hover:bg-[#947458] hover:text-white">
-          {page}
+            <div className="mobile:text-base flex h-10 w-10 items-center justify-center border border-[#947458] text-xl font-bold text-black/60 transition-colors hover:bg-[#947458] hover:text-white">
+              {page}
+            </div>
+
+            {page < lastPage ? (
+              <SimpleButton onClick={onNextPage} text="Next" />
+            ) : (
+              <div />
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="mt-20 h-full text-center text-xl font-medium text-black">
+          Product not found
         </div>
-
-        {page < lastPage ? (
-          <SimpleButton onClick={onNextPage} text="Next" />
-        ) : (
-          <div />
-        )}
-      </div>
+      )}
     </div>
   );
 };

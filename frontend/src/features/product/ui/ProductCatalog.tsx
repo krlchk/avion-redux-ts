@@ -6,8 +6,19 @@ import { ProductMainCatalog } from "./ProductMainCatalog";
 import { ProductFeature } from "./ProductFeature";
 import { useState } from "react";
 
-export const ProductCatalog = () => {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+export interface ProductCatalogProps {
+  initialSearchTerm: string;
+  initialCategoryId: string;
+}
+
+export const ProductCatalog = ({
+  initialCategoryId,
+  initialSearchTerm,
+}: ProductCatalogProps) => {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    initialCategoryId ? [initialCategoryId] : [],
+  );
+  const [searchTerm] = useState(initialSearchTerm);
   const [catalogPage, setCatalogPage] = useState(1);
 
   const resetCatalogPage = () => setCatalogPage(1);
@@ -16,6 +27,7 @@ export const ProductCatalog = () => {
     setSelectedCategories([categoryId]);
     resetCatalogPage();
   };
+
   return (
     <section className="bg-[#F9F9F9]">
       <ProductCategories onCategorySelect={handleCategorySelect} />
@@ -24,6 +36,7 @@ export const ProductCatalog = () => {
         setSelectedCategories={setSelectedCategories}
         catalogPage={catalogPage}
         setCatalogPage={setCatalogPage}
+        searchTerm={searchTerm}
         resetCatalogPage={resetCatalogPage}
       />
       <ProductBenefits />
