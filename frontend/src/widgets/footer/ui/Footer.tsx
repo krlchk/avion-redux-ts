@@ -1,5 +1,7 @@
+"use client";
+
 import { Logo } from "@/shared/icons/Logo";
-import { Container } from "@/shared/ui";
+import { Container, Loader } from "@/shared/ui";
 import Link from "next/link";
 import {
   customerLinks,
@@ -8,11 +10,40 @@ import {
   shopLinks,
 } from "../model/constants";
 import { Payment } from "@/shared/icons";
-import { FooterLinksColumnProps } from "../model/types";
-
+import { FooterLinksColumnProps, FormSubmitHandler } from "../model/types";
+import { useState } from "react";
+import { useSubscribeNewsletterMutation } from "@/store/services/emailApi";
 
 
 export const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [subscribeNewsletter, { isLoading, isSuccess, isError, reset }] =
+    useSubscribeNewsletterMutation();
+
+  const trimmedEmail = email.trim();
+  const isSubmitDisabled = isLoading || trimmedEmail.length === 0;
+
+  const handleSubmit: FormSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    if (!trimmedEmail) return;
+
+    try {
+      await subscribeNewsletter({ email: trimmedEmail }).unwrap();
+      setEmail("");
+    } catch {
+      console.log("Form Error");
+    }
+  };
+
+  const handleEmailChange = (value: string) => {
+    if (isSuccess || isError) {
+      reset();
+    }
+
+    setEmail(value);
+  };
+
   return (
     <footer className="mobile:gap-12 flex w-full flex-col gap-20 bg-[#F6F4F2] pt-14 pb-5 text-black">
       <Container className="mobile:flex-col mobile:items-start flex items-center justify-between gap-12">
@@ -22,15 +53,39 @@ export const Footer = () => {
             Don’t miss latest news & promotions
           </p>
         </div>
-        <form className="mobile:w-full xs:flex-col flex w-1/2 gap-2">
-          <input
-            className="mobile:text-lg xs:text-base w-full border border-[#DEE2E6] bg-white px-4 py-2 text-xl font-medium text-black placeholder:text-[#DEE2E6]"
-            type="email"
-            placeholder="Enter your email"
-          />
-          <button className="mobile:text-lg xs:w-full xs:px-4 xs:text-base bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-white">
-            Subscribe
-          </button>
+        <form onSubmit={handleSubmit} className="mobile:w-full w-1/2">
+          <div className="xs:flex-col flex gap-2">
+            <input
+              value={email}
+              onChange={(e) => handleEmailChange(e.target.value)}
+              className="mobile:text-lg xs:text-base w-full border border-[#DEE2E6] bg-white px-4 py-2 text-xl font-medium text-black outline-[#947458] placeholder:text-[#DEE2E6]"
+              type="email"
+              placeholder="Enter your email"
+              disabled={isLoading}
+              required
+            />
+            <button
+              type="submit"
+              disabled={isSubmitDisabled}
+              className="mobile:text-lg xs:w-full xs:px-4 xs:text-base flex items-center justify-center bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isLoading ? (
+                <Loader styles="h-6 w-6 border-2 border-white/40 border-t-white" />
+              ) : (
+                "Subscribe"
+              )}
+            </button>
+          </div>
+          {isSuccess && (
+            <p className="mt-2 text-sm font-medium text-[#947458]">
+              You are subscribed! Please check your inbox.
+            </p>
+          )}
+          {isError && (
+            <p className="mt-2 text-sm font-medium text-[#FB5454]">
+              Failed to subscribe. Please try again.
+            </p>
+          )}
         </form>
       </Container>
       <Container className="tablet:grid-cols-2 mobile:grid-cols-2 mobile:gap-y-10 xs:grid-cols-1 grid grid-cols-4 gap-10">

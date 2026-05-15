@@ -4,6 +4,7 @@ import { resetOtpTemplate } from './templates/reset-otp.template';
 import { passwordChangedTemplate } from './templates/password-changed.template';
 import { welcomeTemplate } from './templates/welcome-registration.template';
 import { TwoFactorTemplate } from './templates/two-factor.template';
+import { newsletterSubscriptionTemplate } from './templates/newsletter-subscription.template';
 
 @Injectable()
 export class EmailService {
@@ -57,6 +58,15 @@ export class EmailService {
       from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
       to: email,
       subject: 'Your OTP Code',
+      html,
+    });
+  }
+  async sendNewsletterSubscription(email: string) {
+    const html = newsletterSubscriptionTemplate();
+    await this.transporter.sendMail({
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      to: email,
+      subject: 'Welcome to the Avion newsletter',
       html,
     });
   }

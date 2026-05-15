@@ -7,3 +7,7 @@ export interface SimpleButtonProps {
   text: string;
   onClick?: () => void;
 }
+
+export interface LoaderProps {
+  styles?: string;
+}
