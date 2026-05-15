@@ -38,7 +38,12 @@ export const ProductMainCatalog = ({
     priceRange,
   });
 
-  const { data, isError, isLoading } = useGetProductsQuery(productQuery);
+  const {
+    currentData: data,
+    isError,
+    isFetching,
+    isLoading,
+  } = useGetProductsQuery(productQuery);
 
   const now = useMemo(() => new Date(), []);
 
@@ -56,21 +61,6 @@ export const ProductMainCatalog = ({
     );
   }
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (!data) return null;
-
-  const totalProducts = data.meta.total;
-  const page = data.meta.page;
-  const lastPage = data.meta.lastPage;
-
-  const startProduct =
-    totalProducts === 0 ? 0 : (page - 1) * PRODUCTS_PER_PAGE + 1;
-
-  const endProduct = Math.min(page * PRODUCTS_PER_PAGE, totalProducts);
-
   const onClose = () => {
     setIsModalClosing(true);
     setTimeout(() => {
@@ -84,6 +74,16 @@ export const ProductMainCatalog = ({
     setIsModalClosing(false);
   };
 
+  const isProductsLoading = isLoading || isFetching || !data;
+  const totalProducts = data?.meta.total ?? 0;
+  const page = data?.meta.page ?? catalogPage;
+  const lastPage = data?.meta.lastPage ?? 1;
+
+  const startProduct =
+    totalProducts === 0 ? 0 : (page - 1) * PRODUCTS_PER_PAGE + 1;
+
+  const endProduct = Math.min(page * PRODUCTS_PER_PAGE, totalProducts);
+
   const onPrevPage = () => {
     if (page > 1) {
       setCatalogPage(page - 1);
@@ -91,7 +91,7 @@ export const ProductMainCatalog = ({
   };
 
   const onNextPage = () => {
-    if (page < data.meta.lastPage) {
+    if (page < lastPage) {
       setCatalogPage(page + 1);
     }
   };
@@ -114,19 +114,25 @@ export const ProductMainCatalog = ({
           onDesignersChange={setSelectedDesigners}
           onResetPage={resetCatalogPage}
         />
-        <ProductCatalogGrid
-          onOpen={onOpen}
-          onSort={onSort}
-          onPrevPage={onPrevPage}
-          onNextPage={onNextPage}
-          selectedSort={selectedSort}
-          startProduct={startProduct}
-          endProduct={endProduct}
-          totalProducts={totalProducts}
-          gridProducts={gridProducts}
-          page={page}
-          lastPage={lastPage}
-        />
+        {isProductsLoading ? (
+          <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-3/4 items-center justify-center py-16">
+            <Loader />
+          </div>
+        ) : (
+          <ProductCatalogGrid
+            onOpen={onOpen}
+            onSort={onSort}
+            onPrevPage={onPrevPage}
+            onNextPage={onNextPage}
+            selectedSort={selectedSort}
+            startProduct={startProduct}
+            endProduct={endProduct}
+            totalProducts={totalProducts}
+            gridProducts={gridProducts}
+            page={page}
+            lastPage={lastPage}
+          />
+        )}
       </Container>
 
       {isModalOpen && (
