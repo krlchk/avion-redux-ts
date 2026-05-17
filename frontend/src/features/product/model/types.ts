@@ -1,6 +1,5 @@
 import { Review } from "@/features/review/model/types";
 import { ApiDecimal, PaginationMeta, SortOrder } from "@/features/types/api";
-import { StaticImageData } from "next/image";
 import { ReactNode } from "react";
 
 export interface Product {
@@ -44,16 +43,6 @@ export interface ProductResponse {
 }
 
 export type ProductSortBy = "createdAt" | "price";
-
-export interface ProductCatalogCardProps {
-  id?: string;
-  title: string;
-  image: string | StaticImageData | null;
-  price: string;
-  oldPrice?: string;
-  badge?: "new" | "sale";
-  isDiscount?: boolean;
-}
 
 export interface ProductFiltersModalWindowProps {
   onClose: () => void;

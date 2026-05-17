@@ -19,7 +19,7 @@ export const MainHeader = () => {
             <Link
               key={link.href}
               href={link.href}
-              className="transition-all hover:underline hover:text-shadow-[0_0_0_#000]"
+              className="border-b border-transparent transition-colors duration-300 hover:border-b hover:border-[#947458]"
             >
               {link.label}
             </Link>
@@ -31,7 +31,7 @@ export const MainHeader = () => {
               key={href}
               href={href}
               aria-label={label}
-              className="transition-all hover:underline hover:text-shadow-[0_0_0_#000]"
+              className="border-b border-transparent transition-colors duration-300 hover:border-b hover:border-[#947458]"
             >
               <Icon />
             </Link>

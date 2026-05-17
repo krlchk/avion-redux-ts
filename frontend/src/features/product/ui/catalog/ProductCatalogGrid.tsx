@@ -1,5 +1,4 @@
 import { ArrowDown } from "@/shared/icons";
-import { ProductCatalogCard } from "./ProductCatalogCard";
 import {
   ProductCatalogGridProps,
   SortDropdownParams,
@@ -8,6 +7,7 @@ import {
 import { SimpleButton } from "@/shared/ui";
 import { sortOptions } from "../../model/catalog.constants";
 import { useEffect, useRef, useState } from "react";
+import { ProductCard } from "@/shared/ui/ProductCard";
 
 export const ProductCatalogGrid = ({
   onOpen,
@@ -43,7 +43,7 @@ export const ProductCatalogGrid = ({
           <section className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 mt-6 grid grid-cols-3 gap-6">
             {gridProducts.map((product) => {
               return (
-                <ProductCatalogCard
+                <ProductCard
                   key={product.id}
                   title={product.title}
                   image={product.image}

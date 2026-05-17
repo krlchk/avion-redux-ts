@@ -4,7 +4,7 @@ import { Container, Loader } from "@/shared/ui";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { useMemo } from "react";
 import { mapProductToCardItem } from "../model/product.utils";
-import { ProductCatalogCard } from "./catalog";
+import { ProductCard } from "@/shared/ui/ProductCard";
 
 export const ProductFeature = () => {
   const { data, isError, isLoading } = useGetProductsQuery();
@@ -42,7 +42,7 @@ export const ProductFeature = () => {
         </div>
         <div className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 grid grid-cols-3 gap-6">
           {featuredProducts.map((product) => (
-            <ProductCatalogCard
+            <ProductCard
               key={product.id}
               title={product.title}
               image={product.image}
