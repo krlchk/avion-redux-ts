@@ -9,7 +9,7 @@ export const HomeCategories = ({
   isCategoriesError,
 }: HomeCategoriesProps) => {
   return (
-    <Container className="tablet:my-24 mobile:my-16 my-30">
+    <Container className="tablet:py-24 mobile:py-16 py-30">
       <div className="mobile:flex-col mobile:items-start mobile:gap-5 flex items-center justify-between gap-6">
         <h2 className="tablet:text-4xl mobile:text-4xl xs:text-3xl text-5xl font-bold text-black">
           Shop by Categories

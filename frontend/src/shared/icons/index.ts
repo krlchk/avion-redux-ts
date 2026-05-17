@@ -17,3 +17,5 @@ export { Sofa } from "./Sofa";
 export { PaymentV2 } from "./PaymentV2";
 export { Return } from "./Return";
 export { Support } from "./Support";
+export { ArrowLeft } from "./ArrowLeft";
+export { ArrowRight } from "./ArrowRight";

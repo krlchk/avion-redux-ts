@@ -11,7 +11,7 @@ export const ProductCard = ({
   isDiscount,
 }: ProductCardProps) => {
   return (
-    <div className="group relative flex flex-col gap-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(0,0,0,0.08)]">
+    <div className="group relative flex flex-col gap-6 text-center transition-all duration-300 hover:-translate-y-1">
       <div className="relative aspect-306/350 w-full overflow-hidden bg-[#F6F4F2]">
         {image ? (
           <Image
