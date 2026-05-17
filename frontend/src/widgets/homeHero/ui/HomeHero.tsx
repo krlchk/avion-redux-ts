@@ -1,6 +1,7 @@
 import { Container, Loader } from "@/shared/ui";
 import { HomeHeroProductCard } from "./HomeHeroProductCard";
 import { HomeHeroProps } from "../model/types";
+import Link from "next/link";
 
 export const HomeHero = ({
   heroProducts,
@@ -8,7 +9,7 @@ export const HomeHero = ({
   isHeroProductsError,
 }: HomeHeroProps) => {
   return (
-    <div className="bg-[url('/images/home/albero-furniture-bratislava-MfhmKuuQOBk-unsplash.jpg')] bg-cover bg-center">
+    <div className="bg-[url('/images/home/heroImage.jpg')] bg-cover bg-center">
       <Container className="grid grid-cols-2 gap-32 py-36 text-white">
         <section className="flex flex-col gap-10">
           <div className="w-fit bg-white/10 px-4 py-3 text-base font-bold">
@@ -22,12 +23,18 @@ export const HomeHero = ({
             cursus pharetra tellus tincidunt.
           </p>
           <div className="mt-10 flex gap-3 text-lg font-bold">
-            <button className="w-1/2 cursor-pointer bg-[#947458] py-6 transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0">
+            <Link
+              href={"/products"}
+              className="flex w-1/2 cursor-pointer items-center justify-center bg-[#947458] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0"
+            >
               Shop now
-            </button>
-            <button className="w-1/2 cursor-pointer border border-white/80 py-6 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 hover:shadow-lg active:translate-y-0">
+            </Link>
+            <Link
+              className="flex w-1/2 cursor-pointer items-center justify-center border border-white/80 p-6 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 hover:shadow-lg active:translate-y-0"
+              href={""}
+            >
               Learn more
-            </button>
+            </Link>
           </div>
         </section>
         <section className="grid grid-cols-2 justify-center gap-6">
