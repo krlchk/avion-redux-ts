@@ -1,8 +1,21 @@
+"use client";
+
+import { useGetProductsQuery } from "@/store/services/productsApi";
+import { HomeHero } from "@/widgets/homeHero";
+
 const Home = () => {
+  const { data, isError, isFetching, isLoading } = useGetProductsQuery();
+  const isHeroProductsLoading = isLoading || isFetching || !data;
+  const heroProducts = data?.data.slice(0, 4) ?? [];
+
   return (
-    <div>
-      <div>Homepage</div>
-    </div>
+    <section className="bg-[#F9F9F9]">
+      <HomeHero
+        heroProducts={heroProducts}
+        isHeroProductsLoading={isHeroProductsLoading}
+        isHeroProductsError={isError}
+      />
+    </section>
   );
 };
 
