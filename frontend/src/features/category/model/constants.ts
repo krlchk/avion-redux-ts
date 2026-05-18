@@ -1,11 +1,11 @@
-import { Armchair, Cabinet, Chair, Decor, Sofa } from "@/shared/icons";
+import { Armchair, Chair, Decor, Sofa, Table } from "@/shared/icons";
 
 export const categoryIcons = {
   Armchairs: Armchair,
-  Cabinets: Cabinet,
   Sofas: Sofa,
   Chairs: Chair,
   Decor: Decor,
+  Tables: Table,
 } as const;
 
 export const getCategoryIcon = (name: string) => {

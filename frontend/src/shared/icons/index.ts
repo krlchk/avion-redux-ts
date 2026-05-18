@@ -21,3 +21,4 @@ export { ArrowLeft } from "./ArrowLeft";
 export { ArrowRight } from "./ArrowRight";
 export { Avatar } from "./Avatar";
 export { Star } from "./Star";
+export { Table } from "./Table";
