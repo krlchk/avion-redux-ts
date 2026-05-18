@@ -2,23 +2,27 @@
 
 import { useGetCategoriesQuery } from "@/store/services/categoriesApi";
 import { useGetProductsQuery } from "@/store/services/productsApi";
-import { HomeAboutUs } from "@/widgets/home/homeAboutUs";
 import {
-  getHomeCategoryImage,
+  HomeAboutUs,
+  HomeBestsellers,
   HomeCategories,
-} from "@/widgets/home/homeCategories";
-import { HomeHero } from "@/widgets/home/homeHero";
-import { HomeProducts } from "@/widgets/home/homeProducts";
+  HomeHero,
+  HomeProducts,
+} from "@/widgets/home";
+import { getHomeCategoryImage } from "@/widgets/home/homeCategories";
 
 const Home = () => {
   const { data, isError, isFetching, isLoading } = useGetProductsQuery();
+
   const {
     data: categoriesData,
     isLoading: categoriesIsLoading,
     isError: categoriesIsError,
   } = useGetCategoriesQuery();
+  
   const isHeroProductsLoading = isLoading || isFetching || !data;
   const heroProducts = data?.data.slice(0, 4) ?? [];
+
   const homeCategories =
     categoriesData?.data.map((category) => ({
       ...category,
@@ -40,6 +44,7 @@ const Home = () => {
 
       <HomeProducts categories={homeCategories} />
       <HomeAboutUs />
+      <HomeBestsellers />
     </section>
   );
 };
