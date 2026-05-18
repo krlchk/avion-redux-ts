@@ -9,8 +9,8 @@ export const PriceSlider = ({
   return (
     <Slider
       range
-      min={99}
-      max={9999}
+      min={100}
+      max={2000}
       value={priceRange}
       onChange={(value) => {
         if (Array.isArray(value) && value.length === 2) {

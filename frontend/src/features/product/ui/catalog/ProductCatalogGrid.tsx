@@ -31,7 +31,7 @@ export const ProductCatalogGrid = ({
         <div className="xs:flex-col flex justify-end gap-2">
           <button
             onClick={onOpen}
-            className="tablet:block mobile:block mobile:text-base xs:w-full xs:px-4 hidden self-end bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-white"
+            className="tablet:block mobile:block mobile:text-base xs:w-full xs:px-4 hidden self-end bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-[#f5f5f5]"
           >
             Filters
           </button>
@@ -62,7 +62,7 @@ export const ProductCatalogGrid = ({
               <div />
             )}
 
-            <div className="mobile:text-base flex h-10 w-10 items-center justify-center border border-[#947458] text-xl font-bold text-black/60 transition-colors hover:bg-[#947458] hover:text-white">
+            <div className="mobile:text-base flex h-10 w-10 items-center justify-center border border-[#947458] text-xl font-bold text-black/60 transition-colors hover:bg-[#947458] hover:text-[#f5f5f5]">
               {page}
             </div>
 
@@ -118,7 +118,7 @@ const SortDropdown = ({ selectedSort, onSort }: SortDropdownParams) => {
         aria-haspopup="listbox"
         aria-expanded={isSortOpen}
         onClick={() => setIsSortOpen((previousValue) => !previousValue)}
-        className="mobile:text-base xs:w-full flex w-full cursor-pointer items-center justify-between border border-[#947458] bg-white px-4 py-2 text-xl font-medium text-black/70 transition-colors hover:border-[#7f6249]"
+        className="mobile:text-base xs:w-full flex w-full cursor-pointer items-center justify-between border border-[#947458] bg-[#f5f5f5] px-4 py-2 text-xl font-medium text-black/70 transition-colors hover:border-[#7f6249]"
       >
         <span className="truncate">
           {selectedSortOption?.title ?? "Sort by latest"}
@@ -132,7 +132,7 @@ const SortDropdown = ({ selectedSort, onSort }: SortDropdownParams) => {
       </button>
 
       {isSortOpen && (
-        <div className="absolute top-full right-0 z-20 mt-2 w-full overflow-hidden border border-[#947458] bg-white p-2">
+        <div className="absolute top-full right-0 z-20 mt-2 w-full overflow-hidden border border-[#947458] bg-[#f5f5f5] p-2">
           <ul role="listbox" className="flex flex-col gap-1">
             {sortOptions.map(({ value, title }) => {
               const isSelected = value === selectedSort;
@@ -144,7 +144,7 @@ const SortDropdown = ({ selectedSort, onSort }: SortDropdownParams) => {
                     onClick={() => handleSortSelect(value as SortVariant)}
                     className={`mobile:text-base flex w-full items-center rounded-xl px-4 py-3 text-left text-xl font-medium transition-colors ${
                       isSelected
-                        ? "bg-[#947458] text-white"
+                        ? "bg-[#947458] text-[#f5f5f5]"
                         : "text-black/70 hover:bg-[#eeedec]"
                     }`}
                   >

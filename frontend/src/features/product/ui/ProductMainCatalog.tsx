@@ -21,7 +21,7 @@ export const ProductMainCatalog = ({
   searchTerm,
   resetCatalogPage,
 }: ProductMainCatalogProps) => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([100, 2000]);
   const [selectedDesigners, setSelectedDesigners] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<SortVariant>("latest");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,7 +102,7 @@ export const ProductMainCatalog = ({
   };
 
   return (
-    <div className={`bg-white ${isModalOpen && "overflow-hidden"}`}>
+    <div className={`bg-[#f5f5f5] ${isModalOpen && "overflow-hidden"}`}>
       <Container className="flex gap-6">
         <ProductFilters
           className="tablet:hidden mobile:hidden w-1/4 py-16"

@@ -4,14 +4,14 @@ export const HomeAboutUs = () => {
   return (
     <div className="tablet:flex-col mobile:flex-col flex w-full">
       <div className="tablet:w-full tablet:min-h-150 mobile:w-full mobile:min-h-125 flex w-1/2 flex-col items-center justify-center overflow-hidden bg-[url('/images/home/heroFourth.jpg')] bg-cover bg-center text-center">
-        <div className="mobile:mx-4 mobile:p-6 flex w-full max-w-140 flex-col items-center border border-white/20 bg-black/30 p-8 text-white backdrop-blur-sm">
-          <p className="mobile:text-sm mobile:leading-6 text-base leading-7 text-white/90">
+        <div className="mobile:mx-4 mobile:p-6 flex w-full max-w-140 flex-col items-center border border-[#f5f5f5]/20 bg-black/30 p-8 text-[#f5f5f5] backdrop-blur-sm">
+          <p className="mobile:text-sm mobile:leading-6 text-base leading-7 text-[#f5f5f5]/90">
             Create a home that feels calm, considered, and truly yours. Avion
             brings together timeless silhouettes, comfortable materials, and
             thoughtful details for everyday living.
           </p>
           <Link
-            className="mobile:mt-6 mobile:w-full mt-8 flex w-1/2 cursor-pointer items-center justify-center border border-white/80 p-5 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 hover:shadow-lg active:translate-y-0"
+            className="mobile:mt-6 mobile:w-full mt-8 flex w-1/2 cursor-pointer items-center justify-center border border-[#f5f5f5]/80 p-5 text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5]/10 hover:shadow-lg active:translate-y-0"
             href={"/aboutus"}
           >
             Learn more about us

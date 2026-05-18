@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { navLinks, navIconLinks } from "../model/constants";
-import { Logo } from "@/shared/icons/Logo";
 import { Container } from "@/shared/ui";
 
 export const MainHeader = () => {
@@ -8,7 +7,6 @@ export const MainHeader = () => {
     <div className="bg-[#f5f5f5]">
       <Container className="mobile:flex-wrap mobile:py-7 flex items-center justify-between gap-6 py-10">
         <div className="flex items-center justify-center gap-2">
-          <Logo />
           <p className="xs:text-lg text-xl leading-6 font-bold text-black uppercase">
             Avion
           </p>

@@ -58,7 +58,7 @@ export const Footer = () => {
             <input
               value={email}
               onChange={(e) => handleEmailChange(e.target.value)}
-              className="mobile:text-lg xs:text-base w-full border border-[#DEE2E6] bg-white px-4 py-2 text-xl font-medium text-black outline-[#947458] placeholder:text-[#DEE2E6]"
+              className="mobile:text-lg xs:text-base w-full border border-[#DEE2E6] bg-[#f5f5f5] px-4 py-2 text-xl font-medium text-black outline-[#947458] placeholder:text-[#DEE2E6]"
               type="email"
               placeholder="Enter your email"
               disabled={isLoading}
@@ -67,10 +67,10 @@ export const Footer = () => {
             <button
               type="submit"
               disabled={isSubmitDisabled}
-              className="mobile:text-lg xs:w-full xs:px-4 xs:text-base flex items-center justify-center bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
+              className="mobile:text-lg xs:w-full xs:px-4 xs:text-base flex items-center justify-center bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-[#f5f5f5] transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? (
-                <Loader styles="h-6 w-6 border-2 border-white/40 border-t-white" />
+                <Loader styles="h-6 w-6 border-2 border-[#f5f5f5]/40 border-t-[#f5f5f5]" />
               ) : (
                 "Subscribe"
               )}

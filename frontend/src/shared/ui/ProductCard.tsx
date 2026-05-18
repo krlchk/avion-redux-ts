@@ -43,14 +43,14 @@ export const ProductCard = ({
       </div>
       {badge && (
         <div
-          className={`absolute top-6 left-6 px-5 py-2 text-xl font-normal text-white uppercase ${
+          className={`absolute top-6 left-6 px-5 py-2 text-xl font-normal text-[#f5f5f5] uppercase ${
             badge === "new" ? "bg-black" : "bg-[#FB5454]"
           }`}
         >
           {badge}
         </div>
       )}
-      <div className="absolute right-2.5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border bg-white transition-all duration-300 group-hover:border-[#947458] group-hover:shadow-md">
+      <div className="absolute right-2.5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border bg-[#f5f5f5] transition-all duration-300 group-hover:border-[#947458] group-hover:shadow-md">
         <Like
           className="hover:fill-[#FB5454] hover:transition-colors"
           stroke="#8F909B"

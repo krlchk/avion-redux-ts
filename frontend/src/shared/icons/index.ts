@@ -19,3 +19,5 @@ export { Return } from "./Return";
 export { Support } from "./Support";
 export { ArrowLeft } from "./ArrowLeft";
 export { ArrowRight } from "./ArrowRight";
+export { Avatar } from "./Avatar";
+export { Star } from "./Star";

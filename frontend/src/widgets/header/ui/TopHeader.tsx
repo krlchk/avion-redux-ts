@@ -74,7 +74,7 @@ export const TopHeader = () => {
         <p className="mobile:text-center tablet:text-center">
           60 Fremont Ave. Hamden, CT 06514
         </p>
-        <div className="mobile:order-3 mobile:max-w-none tablet:order-3 tablet:max-w-none xs:px-4 flex h-10.5 w-full max-w-130 items-center border border-[#D8DEE3] bg-white px-6">
+        <div className="mobile:order-3 mobile:max-w-none tablet:order-3 tablet:max-w-none xs:px-4 flex h-10.5 w-full max-w-130 items-center border border-[#D8DEE3] bg-[#f5f5f5] px-6">
           <CategoryDropdown
             selectedCategoryId={selectedCategoryId}
             onSelect={setSelectedCategoryId}
@@ -176,7 +176,7 @@ const CategoryDropdown = ({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 z-20 mt-2 min-w-full overflow-hidden border border-[#D8DEE3] bg-white p-2 shadow-sm">
+        <div className="absolute top-full left-0 z-20 mt-2 min-w-full overflow-hidden border border-[#D8DEE3] bg-[#f5f5f5] p-2 shadow-sm">
           <ul role="listbox" className="flex flex-col gap-1">
             {options.map(({ value, label }) => {
               const isSelected = value === selectedCategoryId;
@@ -188,7 +188,7 @@ const CategoryDropdown = ({
                     onClick={() => handleSelect(value)}
                     className={`xs:text-xs flex w-full items-center rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors ${
                       isSelected
-                        ? "bg-[#947458] text-white"
+                        ? "bg-[#947458] text-[#f5f5f5]"
                         : "text-black/70 hover:bg-[#eeedec]"
                     }`}
                   >
