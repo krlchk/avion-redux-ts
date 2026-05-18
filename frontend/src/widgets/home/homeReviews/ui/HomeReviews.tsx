@@ -1,28 +1,46 @@
-import { ArrowLeft, ArrowRight, Avatar, Star } from "@/shared/icons";
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { ArrowLeft, ArrowRight } from "@/shared/icons";
+import { useCallback, useEffect, useState } from "react";
 import { homeReviews } from "../modes/constants";
+import { HomeReviewsSlider } from "./HomeReviewsSlider";
 
 export const HomeReviews = () => {
   const [reviewSlideDirection, setReviewSlideDirection] = useState<
     "next" | "prev"
   >("next");
   const [activeReviewIndex, setActiveReviewIndex] = useState(0);
+  const [isSliderPaused, setIsSliderPaused] = useState(false);
 
   const activeReview = homeReviews[activeReviewIndex];
-  const onNextReview = () => {
+  const onNextReview = useCallback(() => {
+    if (homeReviews.length === 0) return;
+
     setReviewSlideDirection("next");
     setActiveReviewIndex((reviewIndex) =>
       reviewIndex === homeReviews.length - 1 ? 0 : reviewIndex + 1,
     );
-  };
+  }, []);
 
-  const onPrevReview = () => {
+  const onPrevReview = useCallback(() => {
+    if (homeReviews.length === 0) return;
+
     setReviewSlideDirection("prev");
     setActiveReviewIndex((reviewIndex) =>
       reviewIndex === 0 ? homeReviews.length - 1 : reviewIndex - 1,
     );
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isSliderPaused) return;
+
+    const interval = window.setInterval(() => {
+      onNextReview();
+    }, 4000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [isSliderPaused, onNextReview]);
+
   return (
     <div className="tablet:flex-col mobile:flex-col flex w-full">
       <div className="tablet:w-full mobile:w-full w-1/2 overflow-hidden bg-[#eeedec]">
@@ -30,41 +48,14 @@ export const HomeReviews = () => {
           <h2 className="mobile:text-3xl mobile:leading-10 text-4xl leading-13 font-bold">
             Customer Reviews
           </h2>
-          <div className="overflow-hidden">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={activeReview.id}
-                initial={{
-                  opacity: 0,
-                  x: reviewSlideDirection === "next" ? 48 : -48,
-                }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{
-                  opacity: 0,
-                  x: reviewSlideDirection === "next" ? -48 : 48,
-                }}
-                transition={{ duration: 0.36, ease: "easeOut" }}
-              >
-                <div className="mt-10 flex gap-1">
-                  {Array.from({ length: activeReview.starsCount }).map(
-                    (_, index) => (
-                      <Star key={index} />
-                    ),
-                  )}
-                </div>
-                <p className="mt-6 text-base leading-6.5 font-normal text-black/70">
-                  {activeReview.text}
-                </p>
-                <div className="mt-10 flex w-fit items-center justify-between gap-5 rounded-xl py-2">
-                  <Avatar className="size-16 fill-black/70" />
-                  <div>
-                    <p className="text-base font-bold">{activeReview.name}</p>
-                    <p className="text-sm font-normal">{activeReview.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          {activeReview && (
+            <HomeReviewsSlider
+              review={activeReview}
+              slideDirection={reviewSlideDirection}
+              onMouseEnter={() => setIsSliderPaused(true)}
+              onMouseLeave={() => setIsSliderPaused(false)}
+            />
+          )}
           <div className="mt-12 flex items-center justify-center gap-3">
             <button
               onClick={onPrevReview}

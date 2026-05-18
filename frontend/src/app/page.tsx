@@ -8,9 +8,9 @@ import {
   HomeCategories,
   HomeHero,
   HomeProducts,
+  HomeReviews,
 } from "@/widgets/home";
 import { getHomeCategoryImage } from "@/widgets/home/homeCategories";
-import { HomeReviews } from "@/widgets/home/homeReviews/ui/HomeReviews";
 
 const Home = () => {
   const { data, isError, isFetching, isLoading } = useGetProductsQuery();

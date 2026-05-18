@@ -1,36 +1,19 @@
 import { mapProductToCardItem } from "@/features/product/model/product.utils";
 import { ArrowLeft, ArrowRight } from "@/shared/icons";
-import { Container, Loader } from "@/shared/ui";
-import { ProductCard } from "@/shared/ui/ProductCard";
+import { Container } from "@/shared/ui";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { AnimatePresence, motion } from "motion/react";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { HomeProductsProps } from "../model/types";
+import { HomeProductsSlider } from "./HomeProductsSlider";
 
 export const HomeProducts = ({ categories }: HomeProductsProps) => {
-  const now = useMemo(() => new Date(), []);
-
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState<"next" | "prev">("next");
+  const [isSliderPaused, setIsSliderPaused] = useState(false);
+  const now = useMemo(() => new Date(), []);
+
   const activeCategory = categories[activeCategoryIndex];
-
-  const onNext = () => {
-    if (categories.length === 0) return;
-    setSlideDirection("next");
-    setActiveCategoryIndex((categoryIndex) =>
-      categoryIndex === categories.length - 1 ? 0 : categoryIndex + 1,
-    );
-  };
-
-  const onPrev = () => {
-    if (categories.length === 0) return;
-    setSlideDirection("prev");
-    setActiveCategoryIndex((categoryIndex) =>
-      categoryIndex === 0 ? categories.length - 1 : categoryIndex - 1,
-    );
-  };
-
   const activeCategoryProductsQuery = activeCategory
     ? {
         categoryIds: [activeCategory.id],
@@ -51,6 +34,35 @@ export const HomeProducts = ({ categories }: HomeProductsProps) => {
       mapProductToCardItem({ product, now }),
     );
   }, [activeCategoryProductsData, now]);
+
+  const onNext = useCallback(() => {
+    if (categories.length === 0) return;
+    setSlideDirection("next");
+    setActiveCategoryIndex((categoryIndex) =>
+      categoryIndex === categories.length - 1 ? 0 : categoryIndex + 1,
+    );
+  }, [categories.length]);
+
+  const onPrev = useCallback(() => {
+    if (categories.length === 0) return;
+    setSlideDirection("prev");
+    setActiveCategoryIndex((categoryIndex) =>
+      categoryIndex === 0 ? categories.length - 1 : categoryIndex - 1,
+    );
+  }, [categories.length]);
+
+  useEffect(() => {
+    if (isSliderPaused) return;
+
+    const interval = window.setInterval(() => {
+      onNext();
+    }, 4000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [isSliderPaused, onNext]);
+
   return (
     <Container className="tablet:py-24 mobile:py-16 py-30 text-black">
       <h2 className="tablet:text-4xl mobile:text-4xl xs:text-3xl text-center text-5xl font-bold">
@@ -91,51 +103,15 @@ export const HomeProducts = ({ categories }: HomeProductsProps) => {
           <ArrowRight className="size-7 transition-colors group-hover:stroke-[#947458]" />
         </button>
       </div>
-
-      <div className="overflow-hidden">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={activeCategory?.id ?? "empty-category"}
-            initial={{
-              opacity: 0,
-              x: slideDirection === "next" ? 64 : -64,
-            }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{
-              opacity: 0,
-              x: slideDirection === "next" ? -64 : 64,
-            }}
-            transition={{ duration: 0.36, ease: "easeOut" }}
-            className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 grid grid-cols-3 gap-6"
-          >
-            {isActiveCategoryProductsLoading ? (
-              <div className="tablet:col-span-2 mobile:col-span-2 xs:col-span-1 col-span-3 flex min-h-52 items-center justify-center">
-                <Loader />
-              </div>
-            ) : isActiveCategoryProductsError ? (
-              <div className="tablet:col-span-2 mobile:col-span-2 xs:col-span-1 col-span-3 flex min-h-52 items-center justify-center text-center text-sm font-medium text-[#FB5454]">
-                Failed to load products
-              </div>
-            ) : activeCategoryProducts.length === 0 ? (
-              <div className="tablet:col-span-2 mobile:col-span-2 xs:col-span-1 col-span-3 flex min-h-52 items-center justify-center text-center text-sm font-medium text-black/60">
-                No products available
-              </div>
-            ) : (
-              activeCategoryProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  title={product.title}
-                  image={product.image}
-                  price={product.price}
-                  oldPrice={product.oldPrice}
-                  badge={product.badge}
-                  isDiscount={product.isDiscount}
-                />
-              ))
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <HomeProductsSlider
+        activeCategoryId={activeCategory?.id}
+        products={activeCategoryProducts}
+        isLoading={isActiveCategoryProductsLoading}
+        isError={isActiveCategoryProductsError}
+        onMouseEnter={() => setIsSliderPaused(true)}
+        onMouseLeave={() => setIsSliderPaused(false)}
+        slideDirection={slideDirection}
+      />
     </Container>
   );
 };

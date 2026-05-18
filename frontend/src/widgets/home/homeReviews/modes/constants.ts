@@ -1,4 +1,6 @@
-export const homeReviews = [
+import { HomeReview } from "../model/types";
+
+export const homeReviews: HomeReview[] = [
   {
     id: "devon-simpson",
     name: "Devon Simpson",
