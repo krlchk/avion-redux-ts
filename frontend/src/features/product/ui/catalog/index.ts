@@ -1,0 +1,1 @@
+export { ProductCatalogGrid } from "./ProductCatalogGrid";

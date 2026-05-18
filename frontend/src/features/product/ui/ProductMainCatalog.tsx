@@ -2,10 +2,7 @@
 
 import { Container, Loader } from "@/shared/ui";
 import { useMemo, useState } from "react";
-import { ProductFiltersModalWindow } from "./filters/ProductFiltersModalWindow";
-import { ProductFilters } from "./filters/ProductFilters";
-import { ProductCatalogGrid } from "./catalog/ProductCatalogGrid";
-import { SortVariant } from "../model/types";
+import { ProductMainCatalogProps, SortVariant } from "../model/types";
 
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { sortQueryMap, PRODUCTS_PER_PAGE } from "../model/catalog.constants";
@@ -13,28 +10,40 @@ import {
   buildProductQuery,
   mapProductToCardItem,
 } from "../model/product.utils";
+import { ProductFilters, ProductFiltersModalWindow } from "./filters";
+import { ProductCatalogGrid } from "./catalog";
 
-export const ProductMainCatalog = () => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([99, 9999]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+export const ProductMainCatalog = ({
+  selectedCategories,
+  setSelectedCategories,
+  catalogPage,
+  setCatalogPage,
+  searchTerm,
+  resetCatalogPage,
+}: ProductMainCatalogProps) => {
+  const [priceRange, setPriceRange] = useState<[number, number]>([100, 2000]);
   const [selectedDesigners, setSelectedDesigners] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<SortVariant>("latest");
-  const [catalogPage, setCatalogPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalClosing, setIsModalClosing] = useState(false);
-  const resetCatalogPage = () => setCatalogPage(1);
 
   const selectedSortConfig = sortQueryMap[selectedSort];
 
   const productQuery = buildProductQuery({
     selectedSortConfig,
     catalogPage,
+    searchTerm,
     selectedCategories,
     selectedDesigners,
     priceRange,
   });
 
-  const { data, isError, isLoading } = useGetProductsQuery(productQuery);
+  const {
+    currentData: data,
+    isError,
+    isFetching,
+    isLoading,
+  } = useGetProductsQuery(productQuery);
 
   const now = useMemo(() => new Date(), []);
 
@@ -52,21 +61,6 @@ export const ProductMainCatalog = () => {
     );
   }
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (!data) return null;
-
-  const totalProducts = data.meta.total;
-  const page = data.meta.page;
-  const lastPage = data.meta.lastPage;
-
-  const startProduct =
-    totalProducts === 0 ? 0 : (page - 1) * PRODUCTS_PER_PAGE + 1;
-
-  const endProduct = Math.min(page * PRODUCTS_PER_PAGE, totalProducts);
-
   const onClose = () => {
     setIsModalClosing(true);
     setTimeout(() => {
@@ -80,6 +74,16 @@ export const ProductMainCatalog = () => {
     setIsModalClosing(false);
   };
 
+  const isProductsLoading = isLoading || isFetching || !data;
+  const totalProducts = data?.meta.total ?? 0;
+  const page = data?.meta.page ?? catalogPage;
+  const lastPage = data?.meta.lastPage ?? 1;
+
+  const startProduct =
+    totalProducts === 0 ? 0 : (page - 1) * PRODUCTS_PER_PAGE + 1;
+
+  const endProduct = Math.min(page * PRODUCTS_PER_PAGE, totalProducts);
+
   const onPrevPage = () => {
     if (page > 1) {
       setCatalogPage(page - 1);
@@ -87,7 +91,7 @@ export const ProductMainCatalog = () => {
   };
 
   const onNextPage = () => {
-    if (page < data.meta.lastPage) {
+    if (page < lastPage) {
       setCatalogPage(page + 1);
     }
   };
@@ -98,7 +102,7 @@ export const ProductMainCatalog = () => {
   };
 
   return (
-    <div className={`bg-white ${isModalOpen && "overflow-hidden"}`}>
+    <div className={`bg-[#f5f5f5] ${isModalOpen && "overflow-hidden"}`}>
       <Container className="flex gap-6">
         <ProductFilters
           className="tablet:hidden mobile:hidden w-1/4 py-16"
@@ -110,19 +114,25 @@ export const ProductMainCatalog = () => {
           onDesignersChange={setSelectedDesigners}
           onResetPage={resetCatalogPage}
         />
-        <ProductCatalogGrid
-          onOpen={onOpen}
-          onSort={onSort}
-          onPrevPage={onPrevPage}
-          onNextPage={onNextPage}
-          selectedSort={selectedSort}
-          startProduct={startProduct}
-          endProduct={endProduct}
-          totalProducts={totalProducts}
-          gridProducts={gridProducts}
-          page={page}
-          lastPage={lastPage}
-        />
+        {isProductsLoading ? (
+          <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-3/4 items-center justify-center py-16">
+            <Loader />
+          </div>
+        ) : (
+          <ProductCatalogGrid
+            onOpen={onOpen}
+            onSort={onSort}
+            onPrevPage={onPrevPage}
+            onNextPage={onNextPage}
+            selectedSort={selectedSort}
+            startProduct={startProduct}
+            endProduct={endProduct}
+            totalProducts={totalProducts}
+            gridProducts={gridProducts}
+            page={page}
+            lastPage={lastPage}
+          />
+        )}
       </Container>
 
       {isModalOpen && (

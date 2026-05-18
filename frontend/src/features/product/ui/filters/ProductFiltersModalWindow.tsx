@@ -9,7 +9,7 @@ export const ProductFiltersModalWindow = ({
     <div onClick={onClose} className="fixed inset-0 z-10 bg-black/5">
       <section
         onClick={(e) => e.stopPropagation()}
-        className={`h-full w-1/2 overflow-y-auto border-r border-[#9A7B60] bg-white mobile:w-[80%] xs:w-full ${
+        className={`h-full w-1/2 overflow-y-auto border-r border-[#9A7B60] bg-[#f5f5f5] mobile:w-[80%] xs:w-full ${
           isClosing
             ? "animate-[slide-out-left_300ms_ease-in_forwards]"
             : "animate-[slide-in-left_300ms_ease-out]"

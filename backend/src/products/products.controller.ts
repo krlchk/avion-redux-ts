@@ -67,7 +67,7 @@ export class ProductsController {
     if (image) {
       imgUrl = await this.filesService.uploadFile(image);
     }
-    return this.productsService.create(dto, user.id, imgUrl);
+    return this.productsService.create(dto, user.id, imgUrl || dto.img || '');
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)

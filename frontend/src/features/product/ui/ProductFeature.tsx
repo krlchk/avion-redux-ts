@@ -1,10 +1,10 @@
 "use client";
 
 import { Container, Loader } from "@/shared/ui";
-import { ProductCatalogCard } from "./catalog/ProductCatalogCard";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { useMemo } from "react";
 import { mapProductToCardItem } from "../model/product.utils";
+import { ProductCard } from "@/shared/ui/ProductCard";
 
 export const ProductFeature = () => {
   const { data, isError, isLoading } = useGetProductsQuery();
@@ -17,8 +17,6 @@ export const ProductFeature = () => {
       .map((product) => mapProductToCardItem({ product, now }))
       .slice(0, 3);
   }, [data, now]);
-
-  console.log(data);
 
   if (isError) {
     return (
@@ -35,7 +33,7 @@ export const ProductFeature = () => {
   if (!data) return null;
 
   return (
-    <div className="tablet:px-0 mobile:px-0 bg-white px-32">
+    <div className="tablet:px-0 mobile:px-0 bg-[#f5f5f5] px-32">
       <Container className="tablet:py-20 mobile:gap-8 mobile:py-14 flex flex-col gap-12 py-28">
         <div className="mobile:flex-col mobile:items-start flex items-center justify-between gap-4">
           <p className="tablet:text-4xl mobile:text-3xl xs:text-2xl text-5xl font-bold text-black">
@@ -44,7 +42,7 @@ export const ProductFeature = () => {
         </div>
         <div className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 grid grid-cols-3 gap-6">
           {featuredProducts.map((product) => (
-            <ProductCatalogCard
+            <ProductCard
               key={product.id}
               title={product.title}
               image={product.image}

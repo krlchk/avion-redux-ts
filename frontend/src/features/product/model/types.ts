@@ -1,6 +1,5 @@
 import { Review } from "@/features/review/model/types";
 import { ApiDecimal, PaginationMeta, SortOrder } from "@/features/types/api";
-import { StaticImageData } from "next/image";
 import { ReactNode } from "react";
 
 export interface Product {
@@ -44,16 +43,6 @@ export interface ProductResponse {
 }
 
 export type ProductSortBy = "createdAt" | "price";
-
-export interface ProductCatalogCardProps {
-  id?: string;
-  title: string;
-  image: string | StaticImageData | null;
-  price: string;
-  oldPrice?: string;
-  badge?: "new" | "sale";
-  isDiscount?: boolean;
-}
 
 export interface ProductFiltersModalWindowProps {
   onClose: () => void;
@@ -121,6 +110,7 @@ export interface ProductCatalogGridProps {
 export interface BuildProductQueryParams {
   selectedSortConfig: { sortBy: ProductSortBy; sortOrder: SortOrder };
   catalogPage: number;
+  searchTerm: string;
   selectedCategories: string[];
   selectedDesigners: string[];
   priceRange: [number, number];
@@ -134,4 +124,22 @@ export type SortQueryMapType = Record<
 export interface MapProductToCardItemParams {
   product: Product;
   now: Date;
+}
+
+export interface SortDropdownParams {
+  selectedSort: SortVariant;
+  onSort: (value: SortVariant) => void;
+}
+
+export interface ProductCategoriesProps {
+  onCategorySelect: (id: string) => void;
+}
+
+export interface ProductMainCatalogProps {
+  selectedCategories: string[];
+  setSelectedCategories: (values: string[]) => void;
+  catalogPage: number;
+  setCatalogPage: (value: number) => void;
+  searchTerm: string;
+  resetCatalogPage: () => void;
 }
