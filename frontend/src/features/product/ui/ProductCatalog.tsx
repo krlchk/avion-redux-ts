@@ -29,7 +29,7 @@ export const ProductCatalog = ({
   };
 
   return (
-    <section className="bg-[#F9F9F9]">
+    <section className="bg-[#f5f5f5]">
       <ProductCategories onCategorySelect={handleCategorySelect} />
       <ProductMainCatalog
         selectedCategories={selectedCategories}

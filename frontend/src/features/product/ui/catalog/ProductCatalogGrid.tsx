@@ -145,7 +145,7 @@ const SortDropdown = ({ selectedSort, onSort }: SortDropdownParams) => {
                     className={`mobile:text-base flex w-full items-center rounded-xl px-4 py-3 text-left text-xl font-medium transition-colors ${
                       isSelected
                         ? "bg-[#947458] text-white"
-                        : "text-black/70 hover:bg-[#F6F4F2]"
+                        : "text-black/70 hover:bg-[#eeedec]"
                     }`}
                   >
                     {title}

@@ -18,7 +18,7 @@ export const HomeAboutUs = () => {
           </Link>
         </div>
       </div>
-      <section className="tablet:w-full tablet:px-16 tablet:py-28 mobile:w-full mobile:gap-8 mobile:px-6 mobile:py-16 flex w-1/2 flex-col gap-16 bg-[#F6F4F2] px-32 py-52 text-black">
+      <section className="tablet:w-full tablet:px-16 tablet:py-28 mobile:w-full mobile:gap-8 mobile:px-6 mobile:py-16 flex w-1/2 flex-col gap-16 bg-[#eeedec] px-32 py-52 text-black">
         <h2 className="mobile:text-3xl mobile:leading-10 text-4xl leading-13 font-bold">
           Affordable furniture for every home
         </h2>

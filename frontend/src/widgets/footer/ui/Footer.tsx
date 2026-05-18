@@ -45,7 +45,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="mobile:gap-12 flex w-full flex-col gap-20 bg-[#F6F4F2] pt-14 pb-5 text-black">
+    <footer className="mobile:gap-12 flex w-full flex-col gap-20 bg-[#eeedec] pt-14 pb-5 text-black">
       <Container className="mobile:flex-col mobile:items-start flex items-center justify-between gap-12">
         <div className="mobile:w-full w-1/2">
           <p className="mobile:text-xl mobile:leading-7 xs:text-lg xs:leading-6 text-2xl leading-9 font-bold">

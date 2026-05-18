@@ -12,7 +12,7 @@ export const ProductCard = ({
 }: ProductCardProps) => {
   return (
     <div className="group relative flex flex-col gap-6 text-center transition-all duration-300 hover:-translate-y-1">
-      <div className="relative aspect-306/350 w-full overflow-hidden bg-[#F6F4F2]">
+      <div className="relative aspect-306/350 w-full overflow-hidden bg-[#eeedec]">
         {image ? (
           <Image
             alt={title}

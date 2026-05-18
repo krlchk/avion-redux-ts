@@ -9,20 +9,20 @@ export const HomeHero = ({
   isHeroProductsError,
 }: HomeHeroProps) => {
   return (
-    <div className="bg-[url('/images/home/heroImage.jpg')] bg-cover bg-center">
+    <div className="bg-[url('/images/home/heroHero.jpg')] bg-cover bg-center">
       <Container className="tablet:grid-cols-1 tablet:gap-16 tablet:py-24 mobile:grid-cols-1 mobile:gap-12 mobile:py-16 grid grid-cols-2 gap-32 py-36 text-white">
-        <section className="mobile:gap-7 flex flex-col gap-10">
-          <div className="mobile:text-sm w-fit bg-white/10 px-4 py-3 text-base font-bold">
+        <section className="mobile:p-6 flex max-w-175 flex-col gap-8 border border-white/20 bg-black/28 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur-sm">
+          <div className="mobile:text-sm w-fit border border-white/15 px-4 py-3 text-base font-bold shadow-sm">
             Furniture
           </div>
           <h1 className="tablet:max-w-190 tablet:text-6xl tablet:leading-17 mobile:max-w-160 mobile:text-5xl mobile:leading-14 xs:text-4xl xs:leading-11 text-7xl leading-20 font-bold">
             Where Traditional Meets Modern
           </h1>
-          <p className="tablet:max-w-150 mobile:max-w-130 mobile:text-sm mobile:leading-6 text-base leading-7 font-normal text-white/80">
+          <p className="tablet:max-w-150 mobile:max-w-130 mobile:text-sm mobile:leading-6 max-w-135 text-base leading-7 font-normal text-white/88">
             Discover furniture made for modern living, where clean design meets
             everyday comfort and lasting quality.
           </p>
-          <div className="mobile:mt-4 mobile:text-base xs:flex-col mt-10 flex gap-3 text-lg font-bold">
+          <div className="mobile:text-base xs:flex-col mt-4 flex gap-3 text-lg font-bold">
             <Link
               href={"/products"}
               className="xs:w-full flex w-1/2 cursor-pointer items-center justify-center bg-[#947458] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0"

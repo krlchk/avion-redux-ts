@@ -21,7 +21,7 @@ export const HomeHeroProductCard = ({
           {stock > 0 ? `${stock} in stock` : "Out of stock"}
         </p>
       </div>
-      <p className="mobile:text-base absolute top-3 left-3 bg-white/95 px-3 py-1 text-xl font-bold text-[#947458] transition-colors duration-300 group-hover:bg-[#947458] group-hover:text-white">
+      <p className="mobile:text-base absolute top-3 left-3 bg-[#f5f5f5] px-3 py-1 text-xl font-bold text-[#947458] transition-colors duration-300 group-hover:bg-[#947458] group-hover:text-white">
         ${price}
       </p>
     </div>

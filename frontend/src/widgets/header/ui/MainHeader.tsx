@@ -5,7 +5,7 @@ import { Container } from "@/shared/ui";
 
 export const MainHeader = () => {
   return (
-    <div className="bg-white">
+    <div className="bg-[#f5f5f5]">
       <Container className="mobile:flex-wrap mobile:py-7 flex items-center justify-between gap-6 py-10">
         <div className="flex items-center justify-center gap-2">
           <Logo />

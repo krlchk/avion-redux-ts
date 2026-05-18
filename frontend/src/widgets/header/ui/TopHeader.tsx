@@ -69,7 +69,7 @@ export const TopHeader = () => {
   };
 
   return (
-    <div className="bg-[#F6F4F2]">
+    <div className="bg-[#eeedec]">
       <Container className="mobile:flex-col mobile:items-stretch tablet:flex-col tablet:items-stretch xs:text-xs flex items-center justify-between gap-4 py-5 text-sm font-medium text-black">
         <p className="mobile:text-center tablet:text-center">
           60 Fremont Ave. Hamden, CT 06514
@@ -189,7 +189,7 @@ const CategoryDropdown = ({
                     className={`xs:text-xs flex w-full items-center rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors ${
                       isSelected
                         ? "bg-[#947458] text-white"
-                        : "text-black/70 hover:bg-[#F6F4F2]"
+                        : "text-black/70 hover:bg-[#eeedec]"
                     }`}
                   >
                     {label}
