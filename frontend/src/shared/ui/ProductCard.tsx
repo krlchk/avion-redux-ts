@@ -1,6 +1,10 @@
+"use client";
+
 import { Like } from "../icons";
 import { ProductCardProps } from "../model/types";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Loader } from "./Loader";
 
 export const ProductCard = ({
   title,
@@ -10,18 +14,35 @@ export const ProductCard = ({
   badge,
   isDiscount,
 }: ProductCardProps) => {
+  const [isImageLoading, setIsImageLoading] = useState(Boolean(image));
+
+  useEffect(() => {
+    setIsImageLoading(Boolean(image));
+  }, [image]);
+
   return (
     <div className="group relative flex flex-col gap-6 text-center transition-all duration-300 hover:-translate-y-1">
       <div className="relative aspect-306/350 w-full overflow-hidden bg-[#eeedec]">
         {image ? (
-          <Image
-            alt={title}
-            src={image}
-            fill
-            unoptimized
-            sizes="(max-width: 834px) 100vw, (max-width: 1279px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          <>
+            {isImageLoading && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#eeedec]">
+                <Loader styles="h-8 w-8 border-3 border-[#947458]/20 border-t-[#947458]" />
+              </div>
+            )}
+            <Image
+              alt={title}
+              src={image}
+              fill
+              unoptimized
+              sizes="(max-width: 834px) 100vw, (max-width: 1279px) 50vw, 33vw"
+              onLoad={() => setIsImageLoading(false)}
+              onError={() => setIsImageLoading(false)}
+              className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+                isImageLoading ? "opacity-0" : "opacity-100"
+              }`}
+            />
+          </>
         ) : (
           <div className="flex h-full w-full items-center justify-center font-bold text-[#c0bebd]">
             Image not provided
