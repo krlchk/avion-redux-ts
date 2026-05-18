@@ -2,6 +2,7 @@
 
 import { useGetCategoriesQuery } from "@/store/services/categoriesApi";
 import { useGetProductsQuery } from "@/store/services/productsApi";
+import { HomeAboutUs } from "@/widgets/home/homeAboutUs";
 import {
   getHomeCategoryImage,
   HomeCategories,
@@ -38,6 +39,7 @@ const Home = () => {
       />
 
       <HomeProducts categories={homeCategories} />
+      <HomeAboutUs />
     </section>
   );
 };

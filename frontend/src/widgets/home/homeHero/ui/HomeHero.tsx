@@ -19,8 +19,8 @@ export const HomeHero = ({
             Where Traditional Meets Modern
           </h1>
           <p className="tablet:max-w-150 mobile:max-w-130 mobile:text-sm mobile:leading-6 text-base leading-7 font-normal text-white/80">
-            Mi tristique est nunc sapien orci tortor ac. Suspendisse leo et
-            cursus pharetra tellus tincidunt.
+            Discover furniture made for modern living, where clean design meets
+            everyday comfort and lasting quality.
           </p>
           <div className="mobile:mt-4 mobile:text-base xs:flex-col mt-10 flex gap-3 text-lg font-bold">
             <Link
