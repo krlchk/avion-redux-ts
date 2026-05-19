@@ -9,7 +9,7 @@ export const HomeFeaturedCollectionCard = ({
   return (
     <section className="group flex flex-col gap-6 text-black">
       <div
-        className="tablet:min-h-90 mobile:min-h-72 min-h-104 overflow-hidden bg-cover bg-center transition-transform duration-500 group-hover:-translate-y-1"
+        className=" min-h-156 overflow-hidden bg-cover bg-center transition-transform duration-500 group-hover:-translate-y-1"
         style={{ backgroundImage: `url(${image})` }}
       />
       <div className="flex flex-col gap-4">

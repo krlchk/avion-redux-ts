@@ -22,3 +22,6 @@ export { ArrowRight } from "./ArrowRight";
 export { Avatar } from "./Avatar";
 export { Star } from "./Star";
 export { Table } from "./Table";
+export { Location } from "./Location";
+export { PhoneContact } from "./PhoneContact";
+export { Mail } from "./Mail";

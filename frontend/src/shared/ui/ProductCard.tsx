@@ -71,10 +71,10 @@ export const ProductCard = ({
           {badge}
         </div>
       )}
-      <div className="absolute right-2.5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border bg-[#f5f5f5] transition-all duration-300 group-hover:border-[#947458] group-hover:shadow-md">
+      <div className="group/like absolute right-2.5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#947458]/35 bg-[#f5f5f5] transition-all duration-300 hover:border-[#947458] hover:shadow-md">
         <Like
-          className="hover:fill-[#FB5454] hover:transition-colors"
-          stroke="#8F909B"
+          className="text-[#947458] transition-colors duration-300 group-hover/like:fill-[#947458]"
+          stroke="currentColor"
         />
       </div>
     </div>
