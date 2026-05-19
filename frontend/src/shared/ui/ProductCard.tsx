@@ -3,7 +3,7 @@
 import { Like } from "../icons";
 import { ProductCardProps } from "../model/types";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Loader } from "./Loader";
 
 export const ProductCard = ({
@@ -14,39 +14,15 @@ export const ProductCard = ({
   badge,
   isDiscount,
 }: ProductCardProps) => {
-  const [isImageLoading, setIsImageLoading] = useState(Boolean(image));
-
-  useEffect(() => {
-    setIsImageLoading(Boolean(image));
-  }, [image]);
+  const imageKey = typeof image === "string" ? image : image?.src;
 
   return (
     <div className="group relative flex flex-col gap-6 text-center transition-all duration-300 hover:-translate-y-1">
       <div className="relative aspect-306/350 w-full overflow-hidden bg-[#eeedec]">
         {image ? (
-          <>
-            {isImageLoading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#eeedec]">
-                <Loader styles="h-8 w-8 border-3 border-[#947458]/20 border-t-[#947458]" />
-              </div>
-            )}
-            <Image
-              alt={title}
-              src={image}
-              fill
-              unoptimized
-              sizes="(max-width: 834px) 100vw, (max-width: 1279px) 50vw, 33vw"
-              onLoad={() => setIsImageLoading(false)}
-              onError={() => setIsImageLoading(false)}
-              className={`object-cover transition-all duration-500 group-hover:scale-105 ${
-                isImageLoading ? "opacity-0" : "opacity-100"
-              }`}
-            />
-          </>
+          <ProductCardImage key={imageKey} image={image} title={title} />
         ) : (
-          <div className="flex h-full w-full items-center justify-center font-bold text-[#c0bebd]">
-            Image not provided
-          </div>
+          <ProductCardImageFallback />
         )}
       </div>
       <div className="flex flex-col">
@@ -77,6 +53,92 @@ export const ProductCard = ({
           stroke="currentColor"
         />
       </div>
+    </div>
+  );
+};
+
+const ProductCardImage = ({
+  image,
+  title,
+}: Pick<ProductCardProps, "image" | "title">) => {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const timeoutRef = useRef<number | null>(null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isImageFailed, setIsImageFailed] = useState(false);
+
+  const clearImageTimeout = () => {
+    if (!timeoutRef.current) return;
+
+    window.clearTimeout(timeoutRef.current);
+    timeoutRef.current = null;
+  };
+
+  const handleImageLoad = () => {
+    clearImageTimeout();
+    setIsImageLoading(false);
+    setIsImageFailed(false);
+  };
+
+  const handleImageError = () => {
+    clearImageTimeout();
+    setIsImageLoading(false);
+    setIsImageFailed(true);
+  };
+
+  useEffect(() => {
+    const loadedImage = imageRef.current;
+
+    const animationFrameId = window.requestAnimationFrame(() => {
+      if (loadedImage?.complete) {
+        clearImageTimeout();
+        setIsImageLoading(false);
+        setIsImageFailed(loadedImage.naturalWidth === 0);
+      }
+    });
+
+    timeoutRef.current = window.setTimeout(() => {
+      setIsImageLoading(false);
+      setIsImageFailed(true);
+    }, 15000);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+      clearImageTimeout();
+    };
+  }, []);
+
+  if (!image || isImageFailed) {
+    return <ProductCardImageFallback />;
+  }
+
+  return (
+    <>
+      {isImageLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#eeedec]">
+          <Loader styles="h-8 w-8 border-3 border-[#947458]/20 border-t-[#947458]" />
+        </div>
+      )}
+      <Image
+        ref={imageRef}
+        alt={title}
+        src={image}
+        fill
+        unoptimized
+        sizes="(max-width: 834px) 100vw, (max-width: 1279px) 50vw, 33vw"
+        onLoad={handleImageLoad}
+        onError={handleImageError}
+        className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+          isImageLoading ? "opacity-0" : "opacity-100"
+        }`}
+      />
+    </>
+  );
+};
+
+const ProductCardImageFallback = () => {
+  return (
+    <div className="flex h-full w-full items-center justify-center font-bold text-[#c0bebd]">
+      Image not provided
     </div>
   );
 };

@@ -7,8 +7,8 @@ export const FooterLinksColumn = ({ title, links }: FooterLinksColumnProps) => {
       <h2 className="mobile:text-lg mb-2 text-xl leading-6 font-bold text-black">
         {title}
       </h2>
-      {links.map(({ href, label }) => (
-        <Link key={href} href={href} aria-label={label}>
+      {links.map(({ href, label }, index) => (
+        <Link key={`${index}/${label}`} href={href} aria-label={label}>
           {label}
         </Link>
       ))}
