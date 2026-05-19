@@ -31,7 +31,7 @@ export const HomeHero = ({
             </Link>
             <Link
               className="xs:w-full flex w-1/2 cursor-pointer items-center justify-center border border-[#f5f5f5]/80 p-6 text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5]/10 hover:shadow-lg active:translate-y-0"
-              href={"/aboutus"}
+              href={"/about_us"}
             >
               Learn more
             </Link>

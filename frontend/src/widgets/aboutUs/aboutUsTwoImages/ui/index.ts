@@ -1,0 +1,1 @@
+export { AboutUsTwoImages } from "./AboutUsTwoImages";
