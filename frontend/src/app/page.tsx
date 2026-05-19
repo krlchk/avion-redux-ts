@@ -6,6 +6,7 @@ import {
   HomeAboutUs,
   HomeBestsellers,
   HomeCategories,
+  HomeFeaturedCollections,
   HomeHero,
   HomeProducts,
   HomeReviews,
@@ -46,6 +47,7 @@ const Home = () => {
       <HomeAboutUs />
       <HomeBestsellers />
       <HomeReviews />
+      <HomeFeaturedCollections />
     </section>
   );
 };
