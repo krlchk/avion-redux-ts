@@ -10,6 +10,7 @@ import { useGetDesignerByIdQuery } from "@/store/services/usersApi";
 import { ProductReviews } from "./ProductReviews";
 import { useGetReviewByProductIdQuery } from "@/store/services/reviewsApi";
 import { mapProductReviewsToItems } from "../model/productPage.utils";
+import { ProductReviewForm } from "./ProductReviewForm";
 
 export const ProductDetails = ({ productId }: ProductDetailsProps) => {
   const {
@@ -162,6 +163,7 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
         </div>
       </section>
       <ProductReviews reviews={reviews} />
+      <ProductReviewForm productId={product.id} />
     </Container>
   );
 };

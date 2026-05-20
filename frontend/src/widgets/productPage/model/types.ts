@@ -9,3 +9,12 @@ export interface ProductReviewItem {
   comment: string;
   createdAt: string;
 }
+
+export interface ProductReviewFormProps {
+  productId: string;
+}
+
+export interface ProductReviewFormErrors {
+  rating?: string;
+  comment?: string;
+}

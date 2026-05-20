@@ -1,5 +1,9 @@
 import { baseApi } from "./baseApi";
-import { ReviewResponse } from "@/features/review/model/types";
+import {
+  CreateReviewRequest,
+  Review,
+  ReviewResponse,
+} from "@/features/review/model/types";
 
 export const reviewsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -7,7 +11,16 @@ export const reviewsApi = baseApi.injectEndpoints({
       query: (id) => `/reviews/product/${id}`,
       providesTags: ["Reviews"],
     }),
+    createReview: build.mutation<Review, CreateReviewRequest>({
+      query: (body) => ({
+        url: "/reviews",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Reviews"],
+    }),
   }),
 });
 
-export const { useGetReviewByProductIdQuery } = reviewsApi;
+export const { useGetReviewByProductIdQuery, useCreateReviewMutation } =
+  reviewsApi;

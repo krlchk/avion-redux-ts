@@ -2,7 +2,7 @@ import { Review } from "@/features/review/model/types";
 
 export const mapProductReviewToItem = (review: Review) => ({
   id: review.id,
-  author: review.user.name,
+  author: review.user?.name ?? "Customer",
   rating: review.rating,
   comment: review.comment ?? "No comment provided.",
   createdAt: review.createdAt,

@@ -1,13 +1,16 @@
+import Link from "next/link";
 import { HomeHeroProductCardProps } from "../model/types";
 
 export const HomeHeroProductCard = ({
+  id,
   img,
   title,
   stock,
   price,
 }: HomeHeroProductCardProps) => {
   return (
-    <div
+    <Link
+      href={`/products/${id}`}
       className="group tablet:min-h-96 mobile:min-h-64 xs:min-h-60 relative min-h-52 cursor-pointer overflow-hidden border border-[#f5f5f5]/10 bg-cover bg-center shadow-[0_24px_60px_rgba(0,0,0,0.24)] transition-all duration-500 hover:-translate-y-2 hover:border-[#f5f5f5]/40 hover:shadow-[0_34px_90px_rgba(0,0,0,0.46)]"
       style={{ backgroundImage: `url(${img})` }}
     >
@@ -24,6 +27,6 @@ export const HomeHeroProductCard = ({
       <p className="mobile:text-base absolute top-3 left-3 bg-[#f5f5f5] px-3 py-1 text-xl font-bold text-[#947458] transition-colors duration-300 group-hover:bg-[#947458] group-hover:text-[#f5f5f5]">
         ${price}
       </p>
-    </div>
+    </Link>
   );
 };
