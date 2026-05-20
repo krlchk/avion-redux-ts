@@ -23,6 +23,7 @@ export const TopFooter = () => {
       console.log("Form Error");
     }
   };
+
   const handleEmailChange = (value: string) => {
     if (isSuccess || isError) {
       reset();
