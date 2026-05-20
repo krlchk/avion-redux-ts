@@ -8,7 +8,12 @@ export const FooterLinksColumn = ({ title, links }: FooterLinksColumnProps) => {
         {title}
       </h2>
       {links.map(({ href, label }, index) => (
-        <Link key={`${index}/${label}`} href={href} aria-label={label}>
+        <Link
+          className="transition-colors duration-300 hover:text-[#947458]"
+          key={`${index}/${label}`}
+          href={href}
+          aria-label={label}
+        >
           {label}
         </Link>
       ))}
