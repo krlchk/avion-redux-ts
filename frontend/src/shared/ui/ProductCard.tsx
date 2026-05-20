@@ -5,8 +5,10 @@ import { ProductCardProps } from "../model/types";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "./Loader";
+import Link from "next/link";
 
 export const ProductCard = ({
+  id,
   title,
   image,
   price,
@@ -17,7 +19,10 @@ export const ProductCard = ({
   const imageKey = typeof image === "string" ? image : image?.src;
 
   return (
-    <div className="group relative flex flex-col gap-6 text-center transition-all duration-300 hover:-translate-y-1">
+    <Link
+      href={`/products/${id}`}
+      className="group relative flex cursor-pointer flex-col gap-6 text-center transition-all duration-300 hover:-translate-y-1"
+    >
       <div className="relative aspect-306/350 w-full overflow-hidden bg-[#eeedec]">
         {image ? (
           <ProductCardImage key={imageKey} image={image} title={title} />
@@ -53,7 +58,7 @@ export const ProductCard = ({
           stroke="currentColor"
         />
       </div>
-    </div>
+    </Link>
   );
 };
 

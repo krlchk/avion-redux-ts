@@ -1,4 +1,9 @@
-import { DesignerResponse, UserResponse } from "@/features/user/model/types";
+import {
+  DesignerResponse,
+  Designer,
+  User,
+  UserResponse,
+} from "@/features/user/model/types";
 import { baseApi } from "./baseApi";
 
 export const usersApi = baseApi.injectEndpoints({
@@ -18,7 +23,22 @@ export const usersApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Users"],
     }),
+
+    getDesignerById: build.query<Designer, string>({
+      query: (id) => `/users/designers/${id}`,
+      providesTags: ["Users"],
+    }),
+
+    getUserById: build.query<User, string>({
+      query: (id) => `/users/${id}`,
+      providesTags: ["Users"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useGetDesignersQuery } = usersApi;
+export const {
+  useGetUsersQuery,
+  useGetDesignersQuery,
+  useGetDesignerByIdQuery,
+  useGetUserByIdQuery,
+} = usersApi;

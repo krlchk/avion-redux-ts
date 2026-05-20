@@ -22,7 +22,7 @@ export interface IconProps {
 }
 
 export interface ProductCardProps {
-  id?: string;
+  id: string;
   title: string;
   image: string | StaticImageData | null;
   price: string;

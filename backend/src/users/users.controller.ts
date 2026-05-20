@@ -53,6 +53,11 @@ export class UsersController {
     return this.usersService.findDesigners();
   }
 
+  @Get('designers/:id')
+  findDesignerById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.findDesignerById(id);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')

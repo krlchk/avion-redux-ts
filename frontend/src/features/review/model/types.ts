@@ -5,4 +5,18 @@ export interface Review {
   userId: string;
   productId: string;
   createdAt: string;
+  user: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface ReviewResponse {
+  data: Review[];
+  meta: ReviewsMeta;
+}
+
+export interface ReviewsMeta {
+  averageRating: number;
+  reviewsCount: number;
 }

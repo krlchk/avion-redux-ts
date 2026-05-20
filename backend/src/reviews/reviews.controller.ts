@@ -27,7 +27,6 @@ export class ReviewsController {
   }
 
   @Get('/product/:id')
-  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   getReviews(@Param('id', ParseUUIDPipe) productId: string) {
     return this.reviewsService.getReviews(productId);

@@ -53,6 +53,7 @@ export const ProductCatalogGrid = ({
             {gridProducts.map((product) => {
               return (
                 <ProductCard
+                  id={product.id}
                   key={product.id}
                   title={product.title}
                   image={product.image}
