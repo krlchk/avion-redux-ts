@@ -1,5 +1,4 @@
-import { Loader } from "@/shared/ui";
-import { ProductCard } from "@/shared/ui/ProductCard";
+import { Loader, ProductCard } from "@/shared/ui";
 import { AnimatePresence, motion } from "motion/react";
 import { HomeProductsSliderProps } from "../model/types";
 

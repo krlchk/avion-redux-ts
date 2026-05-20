@@ -1,6 +1,5 @@
 import { mapProductToCardItem } from "@/features/product/model/product.utils";
-import { Container, Loader, SimpleButton } from "@/shared/ui";
-import { ProductCard } from "@/shared/ui/ProductCard";
+import { Container, Loader, ProductCard, SimpleButton } from "@/shared/ui";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import Link from "next/link";
 import { useMemo } from "react";

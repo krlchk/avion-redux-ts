@@ -1,5 +1,5 @@
-import { Footer } from "@/widgets/footer/ui/Footer";
-import { Header } from "@/widgets/header/ui/Header";
+import { Footer } from "@/widgets/footer";
+import { Header } from "@/widgets/header";
 
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (

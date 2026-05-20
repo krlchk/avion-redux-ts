@@ -2,7 +2,7 @@
 
 import { Container } from "@/shared/ui";
 import { Location, PhoneContact, Mail } from "@/shared/icons";
-import { ContactUsForm } from "@/widgets/contactUs/ContactUsForm/ui/ContactUsForm";
+import { ContactUsForm } from "@/widgets/contactUs";
 
 const ContactUs = () => {
   return (
@@ -60,7 +60,6 @@ const ContactUs = () => {
 };
 
 export default ContactUs;
-
 
 
 

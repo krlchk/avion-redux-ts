@@ -1,8 +1,13 @@
+import { useState } from "react";
+
+import { FormSubmitHandler } from "@/shared/model/types";
 import { Loader } from "@/shared/ui";
 import { useSendContactMessageMutation } from "@/store/services/emailApi";
-import { FormSubmitHandler } from "@/widgets/footer/model/types";
-import { useState } from "react";
-import { trimContactUsFormValues, validateContactUsForm } from "../model/constants";
+
+import {
+  trimContactUsFormValues,
+  validateContactUsForm,
+} from "../model/constants";
 import { ContactUsFormErrors, ContactUsFormValues } from "../model/types";
 
 export const ContactUsForm = () => {

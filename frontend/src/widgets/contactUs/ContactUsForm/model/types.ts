@@ -5,4 +5,6 @@ export interface ContactUsFormValues {
   message: string;
 }
 
-export type ContactUsFormErrors = Partial<Record<keyof ContactUsFormValues, string>>;
+export type ContactUsFormErrors = Partial<
+  Record<keyof ContactUsFormValues, string>
+>;

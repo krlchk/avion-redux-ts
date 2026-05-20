@@ -1,4 +1,4 @@
-import { ApiDecimal } from "@/features/types/api";
+import { ApiDecimal } from "@/shared/api/types";
 
 export interface OrderItem {
   id: string;

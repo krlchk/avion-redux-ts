@@ -1,4 +1,4 @@
-import { IconProps } from "@/features/types/api";
+import { IconProps } from "@/shared/model/types";
 
 export const Cabinet = ({ className, fill = "#947458" }: IconProps) => {
   return (

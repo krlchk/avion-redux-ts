@@ -1,10 +1,9 @@
 "use client";
 
-import { Container, Loader } from "@/shared/ui";
+import { Container, Loader, ProductCard } from "@/shared/ui";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { useMemo } from "react";
 import { mapProductToCardItem } from "../model/product.utils";
-import { ProductCard } from "@/shared/ui/ProductCard";
 
 export const ProductFeature = () => {
   const { data, isError, isLoading } = useGetProductsQuery();

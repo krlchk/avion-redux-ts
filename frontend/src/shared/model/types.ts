@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { type ComponentProps } from "react";
 
 export interface ContainerProps {
   className?: string;
@@ -14,6 +15,12 @@ export interface LoaderProps {
   styles?: string;
 }
 
+export interface IconProps {
+  className?: string;
+  stroke?: string;
+  fill?: string;
+}
+
 export interface ProductCardProps {
   id?: string;
   title: string;
@@ -23,3 +30,5 @@ export interface ProductCardProps {
   badge?: "new" | "sale";
   isDiscount?: boolean;
 }
+
+export type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;

@@ -1,4 +1,4 @@
-import { IconProps } from "@/features/types/api";
+import { IconProps } from "@/shared/model/types";
 
 export const Facebook = ({ className, fill = "white" }: IconProps) => {
   return (

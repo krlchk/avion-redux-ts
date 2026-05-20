@@ -4,10 +4,9 @@ import {
   SortDropdownParams,
   SortVariant,
 } from "../../model/types";
-import { SimpleButton } from "@/shared/ui";
+import { ProductCard, SimpleButton } from "@/shared/ui";
 import { sortOptions } from "../../model/catalog.constants";
 import { useEffect, useRef, useState } from "react";
-import { ProductCard } from "@/shared/ui/ProductCard";
 
 export const ProductCatalogGrid = ({
   onOpen,

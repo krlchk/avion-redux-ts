@@ -10,8 +10,8 @@ import {
   HomeHero,
   HomeProducts,
   HomeReviews,
+  getHomeCategoryImage,
 } from "@/widgets/home";
-import { getHomeCategoryImage } from "@/widgets/home/homeCategories";
 
 const Home = () => {
   const { data, isError, isFetching, isLoading } = useGetProductsQuery();

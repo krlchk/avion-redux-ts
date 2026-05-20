@@ -1,6 +1,6 @@
 import { useSubscribeNewsletterMutation } from "@/store/services/emailApi";
 import { useState } from "react";
-import { FormSubmitHandler } from "../model/types";
+import { FormSubmitHandler } from "@/shared/model/types";
 import { Container, Loader } from "@/shared/ui";
 
 export const TopFooter = () => {

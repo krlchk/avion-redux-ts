@@ -1,4 +1,4 @@
-import { ContactUsFormValues, ContactUsFormErrors } from "./types";
+import { ContactUsFormErrors, ContactUsFormValues } from "./types";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phonePattern = /^[+()\-\s\d]{7,20}$/;
@@ -8,14 +8,12 @@ export const trimContactUsFormValues = ({
   name,
   phone,
   message,
-}: ContactUsFormValues) => {
-  return {
-    email: email.trim(),
-    name: name.trim(),
-    phone: phone.trim(),
-    message: message.trim(),
-  };
-};
+}: ContactUsFormValues) => ({
+  email: email.trim(),
+  name: name.trim(),
+  phone: phone.trim(),
+  message: message.trim(),
+});
 
 export const validateContactUsForm = ({
   email,

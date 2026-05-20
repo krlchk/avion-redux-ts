@@ -1,5 +1,5 @@
 import { Review } from "@/features/review/model/types";
-import { ApiDecimal, PaginationMeta, SortOrder } from "@/features/types/api";
+import { ApiDecimal, PaginationMeta, SortOrder } from "@/shared/api/types";
 import { ReactNode } from "react";
 
 export interface Product {
