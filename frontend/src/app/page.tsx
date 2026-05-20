@@ -6,11 +6,12 @@ import {
   HomeAboutUs,
   HomeBestsellers,
   HomeCategories,
+  HomeFeaturedCollections,
   HomeHero,
   HomeProducts,
   HomeReviews,
+  getHomeCategoryImage,
 } from "@/widgets/home";
-import { getHomeCategoryImage } from "@/widgets/home/homeCategories";
 
 const Home = () => {
   const { data, isError, isFetching, isLoading } = useGetProductsQuery();
@@ -46,6 +47,7 @@ const Home = () => {
       <HomeAboutUs />
       <HomeBestsellers />
       <HomeReviews />
+      <HomeFeaturedCollections />
     </section>
   );
 };

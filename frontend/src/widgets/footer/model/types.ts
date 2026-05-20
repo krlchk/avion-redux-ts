@@ -1,4 +1,4 @@
-import { type ComponentProps } from "react";
+import { Category } from "@/features/category/model/types";
 
 export interface FooterLink {
   href: string;
@@ -10,4 +10,7 @@ export interface FooterLinksColumnProps {
   links: FooterLink[];
 }
 
-export type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;
+export interface FooterCategoryLinkColumnProps {
+  title: string;
+  categories: Category[];
+}

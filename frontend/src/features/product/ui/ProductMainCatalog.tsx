@@ -5,7 +5,11 @@ import { useMemo, useState } from "react";
 import { ProductMainCatalogProps, SortVariant } from "../model/types";
 
 import { useGetProductsQuery } from "@/store/services/productsApi";
-import { sortQueryMap, PRODUCTS_PER_PAGE } from "../model/catalog.constants";
+import {
+  defaultPriceRange,
+  sortQueryMap,
+  PRODUCTS_PER_PAGE,
+} from "../model/catalog.constants";
 import {
   buildProductQuery,
   mapProductToCardItem,
@@ -21,7 +25,8 @@ export const ProductMainCatalog = ({
   searchTerm,
   resetCatalogPage,
 }: ProductMainCatalogProps) => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([100, 2000]);
+  const [priceRange, setPriceRange] =
+    useState<[number, number]>(defaultPriceRange);
   const [selectedDesigners, setSelectedDesigners] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<SortVariant>("latest");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +44,7 @@ export const ProductMainCatalog = ({
   });
 
   const {
-    currentData: data,
+    data,
     isError,
     isFetching,
     isLoading,
@@ -74,7 +79,8 @@ export const ProductMainCatalog = ({
     setIsModalClosing(false);
   };
 
-  const isProductsLoading = isLoading || isFetching || !data;
+  const isInitialProductsLoading = isLoading && !data;
+  const isProductsLoading = isFetching;
   const totalProducts = data?.meta.total ?? 0;
   const page = data?.meta.page ?? catalogPage;
   const lastPage = data?.meta.lastPage ?? 1;
@@ -83,6 +89,13 @@ export const ProductMainCatalog = ({
     totalProducts === 0 ? 0 : (page - 1) * PRODUCTS_PER_PAGE + 1;
 
   const endProduct = Math.min(page * PRODUCTS_PER_PAGE, totalProducts);
+  const isPriceRangeChanged =
+    priceRange[0] !== defaultPriceRange[0] ||
+    priceRange[1] !== defaultPriceRange[1];
+  const totalFilters =
+    selectedCategories.length +
+    selectedDesigners.length +
+    (isPriceRangeChanged ? 1 : 0);
 
   const onPrevPage = () => {
     if (page > 1) {
@@ -96,6 +109,10 @@ export const ProductMainCatalog = ({
     }
   };
 
+  const onPageChange = (selectedPage: number) => {
+    setCatalogPage(selectedPage);
+  };
+
   const onSort = (value: SortVariant) => {
     setSelectedSort(value);
     resetCatalogPage();
@@ -104,18 +121,8 @@ export const ProductMainCatalog = ({
   return (
     <div className={`bg-[#f5f5f5] ${isModalOpen && "overflow-hidden"}`}>
       <Container className="flex gap-6">
-        <ProductFilters
-          className="tablet:hidden mobile:hidden w-1/4 py-16"
-          priceRange={priceRange}
-          selectedCategories={selectedCategories}
-          selectedDesigners={selectedDesigners}
-          onPriceRangeChange={setPriceRange}
-          onCategoriesChange={setSelectedCategories}
-          onDesignersChange={setSelectedDesigners}
-          onResetPage={resetCatalogPage}
-        />
-        {isProductsLoading ? (
-          <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-3/4 items-center justify-center py-16">
+        {isInitialProductsLoading ? (
+          <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-full items-center justify-center py-16">
             <Loader />
           </div>
         ) : (
@@ -124,10 +131,13 @@ export const ProductMainCatalog = ({
             onSort={onSort}
             onPrevPage={onPrevPage}
             onNextPage={onNextPage}
+            onPageChange={onPageChange}
             selectedSort={selectedSort}
             startProduct={startProduct}
             endProduct={endProduct}
             totalProducts={totalProducts}
+            totalFilters={totalFilters}
+            isProductsLoading={isProductsLoading}
             gridProducts={gridProducts}
             page={page}
             lastPage={lastPage}

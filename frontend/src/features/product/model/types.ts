@@ -1,5 +1,5 @@
 import { Review } from "@/features/review/model/types";
-import { ApiDecimal, PaginationMeta, SortOrder } from "@/features/types/api";
+import { ApiDecimal, PaginationMeta, SortOrder } from "@/shared/api/types";
 import { ReactNode } from "react";
 
 export interface Product {
@@ -98,10 +98,13 @@ export interface ProductCatalogGridProps {
   onSort: (value: SortVariant) => void;
   onPrevPage: () => void;
   onNextPage: () => void;
+  onPageChange: (page: number) => void;
   selectedSort: SortVariant;
   startProduct: number;
   endProduct: number;
   totalProducts: number;
+  totalFilters: number;
+  isProductsLoading: boolean;
   gridProducts: ProductCardItem[];
   page: number;
   lastPage: number;

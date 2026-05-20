@@ -9,8 +9,9 @@ export const HomeHero = ({
   isHeroProductsError,
 }: HomeHeroProps) => {
   return (
-    <div className="bg-[url('/images/home/heroHero.jpg')] bg-cover bg-center">
-      <Container className="tablet:grid-cols-1 tablet:gap-16 tablet:py-24 mobile:grid-cols-1 mobile:gap-12 mobile:py-16 grid grid-cols-2 gap-32 py-36 text-[#f5f5f5]">
+    <div className="relative overflow-hidden">
+      <div className="absolute -inset-6 animate-[hero-zoom_18s_ease-in-out_infinite] bg-[url('/images/home/heroHero.jpg')] bg-cover bg-center will-change-transform" />
+      <Container className="tablet:grid-cols-1 tablet:gap-16 tablet:py-24 mobile:grid-cols-1 mobile:gap-12 mobile:py-16 relative z-10 grid grid-cols-2 gap-32 py-36 text-[#f5f5f5]">
         <section className="mobile:p-6 flex max-w-175 flex-col gap-8 border border-[#f5f5f5]/20 bg-black/28 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur-sm">
           <div className="mobile:text-sm w-fit border border-[#f5f5f5]/15 px-4 py-3 text-base font-bold shadow-sm">
             Furniture
@@ -31,7 +32,7 @@ export const HomeHero = ({
             </Link>
             <Link
               className="xs:w-full flex w-1/2 cursor-pointer items-center justify-center border border-[#f5f5f5]/80 p-6 text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5]/10 hover:shadow-lg active:translate-y-0"
-              href={"/aboutus"}
+              href={"/about_us"}
             >
               Learn more
             </Link>
@@ -53,6 +54,7 @@ export const HomeHero = ({
           ) : (
             heroProducts.map(({ id, title, price, img, stock }) => (
               <HomeHeroProductCard
+                id={id}
                 key={id}
                 title={title}
                 price={price}

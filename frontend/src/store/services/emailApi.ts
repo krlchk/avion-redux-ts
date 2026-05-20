@@ -8,6 +8,17 @@ interface NewsletterSubscriptionResponse {
   message: string;
 }
 
+interface ContactMessageRequest {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+interface ContactMessageResponse {
+  message: string;
+}
+
 export const emailApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     subscribeNewsletter: build.mutation<
@@ -20,7 +31,18 @@ export const emailApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    sendContactMessage: build.mutation<
+      ContactMessageResponse,
+      ContactMessageRequest
+    >({
+      query: (body) => ({
+        url: "/email/contact",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useSubscribeNewsletterMutation } = emailApi;
+export const { useSubscribeNewsletterMutation, useSendContactMessageMutation } =
+  emailApi;

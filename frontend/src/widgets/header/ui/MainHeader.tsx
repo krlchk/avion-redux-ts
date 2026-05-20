@@ -4,12 +4,12 @@ import { Container } from "@/shared/ui";
 
 export const MainHeader = () => {
   return (
-    <div className="bg-[#f5f5f5]">
+    <div>
       <Container className="mobile:flex-wrap mobile:py-7 flex items-center justify-between gap-6 py-10">
         <div className="flex items-center justify-center gap-2">
-          <p className="xs:text-lg text-xl leading-6 font-bold text-black uppercase">
+          <Link href={"/"} className="xs:text-lg text-xl leading-6 font-bold text-black uppercase">
             Avion
-          </p>
+          </Link>
         </div>
 
         <div className="mobile:order-3 mobile:w-full mobile:justify-center mobile:text-base xs:gap-4 xs:text-sm flex gap-8 text-lg leading-6 font-normal text-black">

@@ -5,6 +5,8 @@ import { passwordChangedTemplate } from './templates/password-changed.template';
 import { welcomeTemplate } from './templates/welcome-registration.template';
 import { TwoFactorTemplate } from './templates/two-factor.template';
 import { newsletterSubscriptionTemplate } from './templates/newsletter-subscription.template';
+import { contactMessageTemplate } from './templates/contact-message.template';
+import { ContactMessageDto } from './dto/contact-message.dto';
 
 @Injectable()
 export class EmailService {
@@ -67,6 +69,16 @@ export class EmailService {
       from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
       to: email,
       subject: 'Welcome to the Avion newsletter',
+      html,
+    });
+  }
+  async sendContactMessage(dto: ContactMessageDto) {
+    const html = contactMessageTemplate(dto);
+    await this.transporter.sendMail({
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      to: process.env.EMAIL_CONTACT_TO || process.env.EMAIL_USER,
+      replyTo: dto.email,
+      subject: `New contact request from ${dto.name}`,
       html,
     });
   }

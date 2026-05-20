@@ -109,7 +109,7 @@ export const TopHeader = () => {
         </div>
         <div className="mobile:text-center tablet:text-center flex items-center justify-center gap-3">
           <Phone />
-          <p>(097) - 962 - 37 - 22</p>
+          <p>+ (437) - 402 - 2459</p>
         </div>
       </Container>
     </div>

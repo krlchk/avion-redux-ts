@@ -2,7 +2,7 @@ import { SortQueryMapType } from "./types";
 
 export const PRODUCTS_PER_PAGE = 9;
 
-export const defaultPriceRange = [99, 9999];
+export const defaultPriceRange: [number, number] = [100, 2000];
 
 export const sortOptions = [
   { value: "latest", title: "Sort by latest" },

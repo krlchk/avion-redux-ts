@@ -12,7 +12,7 @@ export const HomeAboutUs = () => {
           </p>
           <Link
             className="mobile:mt-6 mobile:w-full mt-8 flex w-1/2 cursor-pointer items-center justify-center border border-[#f5f5f5]/80 p-5 text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5]/10 hover:shadow-lg active:translate-y-0"
-            href={"/aboutus"}
+            href={"/about_us"}
           >
             Learn more about us
           </Link>

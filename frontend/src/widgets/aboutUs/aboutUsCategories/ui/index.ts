@@ -1,0 +1,1 @@
+export { AboutUsCategories } from "./AboutUsCategories";

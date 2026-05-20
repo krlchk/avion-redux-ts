@@ -47,6 +47,33 @@ export class UsersService {
 
     return { data };
   }
+  async findDesignerById(id: string) {
+    const designer = await this.prisma.user.findFirst({
+      where: {
+        id,
+        role: 'DESIGNER',
+      },
+      select: {
+        id: true,
+        name: true,
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
+    });
+
+    if (!designer) {
+      throw new NotFoundException(`Designer with id:${id} not found`);
+    }
+
+    return {
+      id: designer.id,
+      name: designer.name,
+      productsCount: designer._count.products,
+    };
+  }
   async getProfile(email: string) {
     const user = await this.findByEmail(email);
     return new UserEntity(user);

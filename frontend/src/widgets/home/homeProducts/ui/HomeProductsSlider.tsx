@@ -1,5 +1,4 @@
-import { Loader } from "@/shared/ui";
-import { ProductCard } from "@/shared/ui/ProductCard";
+import { Loader, ProductCard } from "@/shared/ui";
 import { AnimatePresence, motion } from "motion/react";
 import { HomeProductsSliderProps } from "../model/types";
 
@@ -47,6 +46,7 @@ export const HomeProductsSlider = ({
             products.map((product) => (
               <ProductCard
                 key={product.id}
+                id={product.id}
                 title={product.title}
                 image={product.image}
                 price={product.price}

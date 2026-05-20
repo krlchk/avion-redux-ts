@@ -8,6 +8,7 @@ import { useGetDesignersQuery } from "@/store/services/usersApi";
 import { useGetCategoriesQuery } from "@/store/services/categoriesApi";
 import { PriceSlider } from "./PriceSlider";
 import { useMemo } from "react";
+import { defaultPriceRange } from "../../model/catalog.constants";
 
 export const ProductFilters = ({
   className = "",
@@ -17,7 +18,7 @@ export const ProductFilters = ({
   onPriceRangeChange,
   onCategoriesChange,
   onDesignersChange,
-  onResetPage
+  onResetPage,
 }: ProductFiltersProps) => {
   const {
     data: categoriesData,
@@ -68,11 +69,24 @@ export const ProductFilters = ({
     Boolean(categories?.length) &&
     Boolean(designers?.length);
 
+  const handleClearFilters = () => {
+    onPriceRangeChange(defaultPriceRange);
+    onCategoriesChange([]);
+    onDesignersChange([]);
+    onResetPage();
+  };
+
   return (
     <div
       className={`flex flex-col gap-10 text-2xl font-bold text-black ${className}`}
     >
       <div className="flex flex-col gap-5">
+        <button
+          onClick={handleClearFilters}
+          className="mobile:text-base xs:w-full xs:px-4 self-end bg-[#947458] flex items-center justify-center px-14 py-2 text-xl font-medium whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0"
+        >
+          Clear filters
+        </button>
         <p>Filter by Price</p>
         <PriceSlider
           priceRange={priceRange}

@@ -6,7 +6,7 @@ export const ProductFiltersModalWindow = ({
   children,
 }: ProductFiltersModalWindowProps) => {
   return (
-    <div onClick={onClose} className="fixed inset-0 z-10 bg-black/5">
+    <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/5">
       <section
         onClick={(e) => e.stopPropagation()}
         className={`h-full w-1/2 overflow-y-auto border-r border-[#9A7B60] bg-[#f5f5f5] mobile:w-[80%] xs:w-full ${

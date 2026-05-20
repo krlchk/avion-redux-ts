@@ -7,6 +7,7 @@ export interface HomeHeroProps {
 }
 
 export interface HomeHeroProductCardProps {
+  id: string;
   img: string;
   title: string;
   stock: number;

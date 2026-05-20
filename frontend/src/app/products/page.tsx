@@ -1,4 +1,4 @@
-import { ProductCatalog } from "@/features/product/ui/ProductCatalog";
+import { ProductCatalog } from "@/features/product/ui";
 
 type ProductsPageProps = {
   searchParams: Promise<{

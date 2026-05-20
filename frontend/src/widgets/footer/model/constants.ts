@@ -17,11 +17,11 @@ export const shopLinks: FooterLink[] = [
   { href: "/6", label: "Sale" },
 ];
 export const customerLinks: FooterLink[] = [
-  { href: "/1", label: "Orders" },
-  { href: "/2", label: "Addresses" },
-  { href: "/3", label: "Account details" },
+  { href: "/profile", label: "Orders" },
+  { href: "/contact_us", label: "Addresses" },
+  { href: "/profile", label: "Account details" },
 ];
 export const deliveryLinks: FooterLink[] = [
-  { href: "/1", label: "Orders" },
-  { href: "/3", label: "Account details" },
+  { href: "/profile", label: "Orders" },
+  { href: "/profile", label: "Account details" },
 ];
