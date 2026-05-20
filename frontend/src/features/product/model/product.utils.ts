@@ -73,3 +73,27 @@ export const mapProductToCardItem = ({
     isDiscount,
   };
 };
+
+export const getPaginationItems = (page: number, lastPage: number) => {
+  if (lastPage <= 7) {
+    return Array.from({ length: lastPage }, (_, index) => index + 1);
+  }
+
+  if (page <= 4) {
+    return [1, 2, 3, 4, 5, "...", lastPage];
+  }
+
+  if (page >= lastPage - 3) {
+    return [
+      1,
+      "...",
+      lastPage - 4,
+      lastPage - 3,
+      lastPage - 2,
+      lastPage - 1,
+      lastPage,
+    ];
+  }
+
+  return [1, "...", page - 1, page, page + 1, "...", lastPage];
+};

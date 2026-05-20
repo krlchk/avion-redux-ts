@@ -1,43 +1,53 @@
-import { ArrowDown } from "@/shared/icons";
-import {
-  ProductCatalogGridProps,
-  SortDropdownParams,
-  SortVariant,
-} from "../../model/types";
-import { ProductCard, SimpleButton } from "@/shared/ui";
-import { sortOptions } from "../../model/catalog.constants";
-import { useEffect, useRef, useState } from "react";
+import { ProductCatalogGridProps } from "../../model/types";
+import { Loader, ProductCard } from "@/shared/ui";
+import { SortDropdown } from "./SortDropdown";
+import { getPaginationItems } from "../../model/product.utils";
+import { ArrowLeft, ArrowRight } from "@/shared/icons";
 
 export const ProductCatalogGrid = ({
   onOpen,
   onSort,
   onPrevPage,
   onNextPage,
+  onPageChange,
   selectedSort,
   startProduct,
   endProduct,
   totalProducts,
+  totalFilters,
+  isProductsLoading,
   gridProducts,
   page,
   lastPage,
 }: ProductCatalogGridProps) => {
   return (
-    <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-3/4 flex-col py-16">
-      <div className="mobile:flex-col mobile:items-stretch flex items-center justify-between gap-4 font-medium text-black/60">
+    <div className="tablet:w-full mobile:w-full mobile:py-10 flex w-full flex-col py-16">
+      <div className="mobile:flex-col mobile:items-stretch sticky top-0 z-20 flex w-full items-center justify-between gap-4 bg-[#f5f5f5]/85 py-4 font-medium text-black/60 backdrop-blur-xs">
         <p className="mobile:text-xl xs:text-base text-2xl">
           Showing {startProduct}-{endProduct} of {totalProducts} results
         </p>
-        <div className="xs:flex-col flex justify-end gap-2">
-          <button
-            onClick={onOpen}
-            className="tablet:block mobile:block mobile:text-base xs:w-full xs:px-4 hidden self-end bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-[#f5f5f5]"
-          >
-            Filters
-          </button>
+        <div className="xs:flex-col relative flex justify-end gap-2">
           <SortDropdown onSort={onSort} selectedSort={selectedSort} />
+          <div className="xs:w-full relative self-end">
+            <button
+              onClick={onOpen}
+              className="mobile:text-base xs:w-full xs:px-4 flex items-center justify-center bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0"
+            >
+              Filters
+            </button>
+            {totalFilters > 0 && (
+              <div className="pointer-events-none absolute -top-2 -right-2 flex h-6 min-w-6 items-center justify-center rounded-full border border-[#f5f5f5] bg-[#ccab8f] px-1.5 text-sm font-bold text-[#f5f5f5] shadow-sm">
+                {totalFilters}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      {gridProducts && gridProducts.length > 0 ? (
+      {isProductsLoading ? (
+        <div className="mt-6 flex min-h-130 items-center justify-center">
+          <Loader />
+        </div>
+      ) : gridProducts && gridProducts.length > 0 ? (
         <>
           <section className="tablet:grid-cols-2 mobile:grid-cols-1 mobile:gap-8 mt-6 grid grid-cols-3 gap-6">
             {gridProducts.map((product) => {
@@ -56,17 +66,57 @@ export const ProductCatalogGrid = ({
           </section>
           <div className="mt-16 flex justify-between">
             {page > 1 ? (
-              <SimpleButton onClick={onPrevPage} text="Prev" />
+              <button
+                onClick={onPrevPage}
+                className="group mobile:text-base flex h-10 min-w-10 cursor-pointer items-center justify-center border border-[#947458] px-3 text-xl font-bold transition-all duration-300 hover:-translate-y-1 hover:border-[#947458] hover:shadow-lg active:translate-y-0"
+              >
+                <ArrowLeft className="size-5 transition-colors group-hover:stroke-[#947458]" />
+              </button>
             ) : (
               <div />
             )}
 
-            <div className="mobile:text-base flex h-10 w-10 items-center justify-center border border-[#947458] text-xl font-bold text-black/60 transition-colors hover:bg-[#947458] hover:text-[#f5f5f5]">
-              {page}
+            <div className="flex items-center justify-center gap-2">
+              {getPaginationItems(page, lastPage).map(
+                (paginationItem, index) => {
+                  if (typeof paginationItem === "string") {
+                    return (
+                      <span
+                        key={`ellipsis-${index}`}
+                        className="mobile:text-base flex h-10 items-center px-1 text-xl font-bold text-black/40"
+                      >
+                        ...
+                      </span>
+                    );
+                  }
+
+                  const isActivePage = paginationItem === page;
+
+                  return (
+                    <button
+                      key={paginationItem}
+                      type="button"
+                      onClick={() => onPageChange(paginationItem)}
+                      className={`mobile:text-base flex h-10 min-w-10 cursor-pointer items-center justify-center border border-[#947458] px-3 text-xl font-bold transition-colors ${
+                        isActivePage
+                          ? "bg-[#947458] text-[#f5f5f5]"
+                          : "text-black/60 hover:bg-[#947458] hover:text-[#f5f5f5]"
+                      }`}
+                    >
+                      {paginationItem}
+                    </button>
+                  );
+                },
+              )}
             </div>
 
             {page < lastPage ? (
-              <SimpleButton onClick={onNextPage} text="Next" />
+              <button
+                onClick={onNextPage}
+                className="group mobile:text-base flex h-10 min-w-10 cursor-pointer items-center justify-center border border-[#947458] px-3 text-xl font-bold transition-all duration-300 hover:-translate-y-1 hover:border-[#947458] hover:shadow-lg active:translate-y-0"
+              >
+                <ArrowRight className="size-5 transition-colors group-hover:stroke-[#947458]" />
+              </button>
             ) : (
               <div />
             )}
@@ -75,84 +125,6 @@ export const ProductCatalogGrid = ({
       ) : (
         <div className="mt-20 h-full text-center text-xl font-medium text-black">
           Product not found
-        </div>
-      )}
-    </div>
-  );
-};
-
-const SortDropdown = ({ selectedSort, onSort }: SortDropdownParams) => {
-  const [isSortOpen, setIsSortOpen] = useState(false);
-  const sortDropdownRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        sortDropdownRef.current &&
-        !sortDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsSortOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
-
-  const selectedSortOption = sortOptions.find(
-    (option) => option.value === selectedSort,
-  );
-
-  const handleSortSelect = (value: SortVariant) => {
-    onSort(value);
-    setIsSortOpen(false);
-  };
-  return (
-    <div ref={sortDropdownRef} className="xs:w-full relative min-w-65 shrink-0">
-      <button
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded={isSortOpen}
-        onClick={() => setIsSortOpen((previousValue) => !previousValue)}
-        className="mobile:text-base xs:w-full flex w-full cursor-pointer items-center justify-between border border-[#947458] bg-[#f5f5f5] px-4 py-2 text-xl font-medium text-black/70 transition-colors hover:border-[#7f6249]"
-      >
-        <span className="truncate">
-          {selectedSortOption?.title ?? "Sort by latest"}
-        </span>
-        <ArrowDown
-          className={`shrink-0 transition-transform duration-200 ${
-            isSortOpen ? "rotate-180" : ""
-          }`}
-          stroke="#947458"
-        />
-      </button>
-
-      {isSortOpen && (
-        <div className="absolute top-full right-0 z-20 mt-2 w-full overflow-hidden border border-[#947458] bg-[#f5f5f5] p-2">
-          <ul role="listbox" className="flex flex-col gap-1">
-            {sortOptions.map(({ value, title }) => {
-              const isSelected = value === selectedSort;
-
-              return (
-                <li key={value}>
-                  <button
-                    type="button"
-                    onClick={() => handleSortSelect(value as SortVariant)}
-                    className={`mobile:text-base flex w-full items-center rounded-xl px-4 py-3 text-left text-xl font-medium transition-colors ${
-                      isSelected
-                        ? "bg-[#947458] text-[#f5f5f5]"
-                        : "text-black/70 hover:bg-[#eeedec]"
-                    }`}
-                  >
-                    {title}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
         </div>
       )}
     </div>
