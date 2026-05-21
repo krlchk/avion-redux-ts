@@ -1,3 +1,4 @@
+import type { CreateOrderItem } from "@/store/services/ordersApi";
 import type { Product } from "@/features/product/model/types";
 import type { CartItem } from "@/store/slices/cartSlice";
 
@@ -20,4 +21,5 @@ export interface CartSummaryProps {
   isPromoOpen: boolean;
   onPromoToggle: () => void;
   subtotal: string;
+  checkoutProducts: CreateOrderItem[];
 }

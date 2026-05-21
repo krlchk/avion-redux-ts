@@ -53,6 +53,14 @@ export const CartTable = () => {
   }, 0);
 
   const formattedSubtotal = formatCartPrice(subtotal);
+  const checkoutProducts = [
+    ...cartProducts.map((p) => {
+      return {
+        productId: p.item.id,
+        quantity: p.item.count,
+      };
+    }),
+  ];
 
   return (
     <Container className="py-16 text-black">
@@ -80,8 +88,9 @@ export const CartTable = () => {
         </div>
 
         <CartSummary
+          checkoutProducts={checkoutProducts}
           isPromoOpen={isPromoOpen}
-          isCheckoutDisabled={cartItems.length === 0}
+          isCheckoutDisabled={checkoutProducts.length === 0}
           subtotal={formattedSubtotal}
           onPromoToggle={() => setIsPromoOpen((isOpen) => !isOpen)}
         />

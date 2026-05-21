@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleWishlist } from "@/store/slices/wishlistSlice";
 import { Like } from "@/shared/icons";
 import { addToCart } from "@/store/slices/cartSlice";
+import { useRouter } from "next/navigation";
 
 export const ProductDetails = ({ productId }: ProductDetailsProps) => {
   const {
@@ -69,6 +70,8 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
     0,
   );
   const addToCartAmount = Math.min(selectedAmount, availableCartAmount);
+
+  const router = useRouter();
 
   if (isLoading) {
     return (
@@ -227,8 +230,10 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
                 type="button"
                 onClick={() => {
                   if (addToCartAmount <= 0) return;
-
-                  dispatch(addToCart({ id: product.id, count: addToCartAmount }));
+                  dispatch(
+                    addToCart({ id: product.id, count: addToCartAmount }),
+                  );
+                  router.push("/cart");
                 }}
                 disabled={product.stock === 0 || availableCartAmount === 0}
                 className="mobile:w-full cursor-pointer bg-[#947458] px-14 py-4 text-xl font-bold whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:bg-[#947458] disabled:hover:shadow-none"
