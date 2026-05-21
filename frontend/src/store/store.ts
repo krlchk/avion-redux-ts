@@ -14,16 +14,18 @@ import {
   REGISTER,
   persistStore,
 } from "redux-persist";
+import { cartReducer } from "./slices/cartSlice";
 
 const rootReducer = combineReducers({
   wishlist: wishlistReducer,
+  cart: cartReducer,
   [baseApi.reducerPath]: baseApi.reducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["wishlist"],
+  whitelist: ["wishlist", "cart"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

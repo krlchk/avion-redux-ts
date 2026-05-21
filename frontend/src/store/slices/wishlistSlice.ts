@@ -8,6 +8,14 @@ const initialState: WishlistState = {
   likedProductIds: [],
 };
 
+const getLikedProductIds = (state: WishlistState) => {
+  if (!Array.isArray(state.likedProductIds)) {
+    state.likedProductIds = [];
+  }
+
+  return state.likedProductIds;
+};
+
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
@@ -17,18 +25,19 @@ const wishlistSlice = createSlice({
     },
     toggleWishlist: (state, action: PayloadAction<string>) => {
       const productId = action.payload;
-      const isLiked = state.likedProductIds.includes(productId);
+      const likedProductIds = getLikedProductIds(state);
+      const isLiked = likedProductIds.includes(productId);
 
       if (isLiked) {
-        state.likedProductIds = state.likedProductIds.filter(
+        state.likedProductIds = likedProductIds.filter(
           (id) => id !== productId,
         );
       } else {
-        state.likedProductIds.push(action.payload);
+        likedProductIds.push(action.payload);
       }
     },
     removeProduct: (state, action: PayloadAction<string>) => {
-      state.likedProductIds = state.likedProductIds.filter(
+      state.likedProductIds = getLikedProductIds(state).filter(
         (id) => id !== action.payload,
       );
     },

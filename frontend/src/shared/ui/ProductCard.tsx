@@ -21,7 +21,7 @@ export const ProductCard = ({
   const imageKey = typeof image === "string" ? image : image?.src;
   const dispatch = useAppDispatch();
   const likedProductIds = useAppSelector(
-    (state) => state.wishlist.likedProductIds,
+    (state) => state.wishlist.likedProductIds ?? [],
   );
 
   const isLiked = likedProductIds.includes(id);

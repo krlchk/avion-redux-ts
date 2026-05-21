@@ -6,7 +6,10 @@ import { Cart, Like, Profile } from "@/shared/icons";
 
 export const MainHeader = () => {
   const likedProductIds = useAppSelector(
-    (state) => state.wishlist.likedProductIds,
+    (state) => state.wishlist.likedProductIds ?? [],
+  );
+  const cartProducts = useAppSelector(
+    (state) => state.cart.cartProducts ?? [],
   );
   return (
     <div>
@@ -62,11 +65,11 @@ export const MainHeader = () => {
             >
               <Cart fill="none" />
             </Link>
-            {/* {likedProductIds.length > 0 ? (
+            {cartProducts.length > 0 ? (
               <div className="pointer-events-none absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full border border-[#f5f5f5] bg-[#ccab8f] px-1.5 text-xs font-semibold text-[#f5f5f5] shadow-sm">
-                {likedProductIds.length}
+                {cartProducts.length}
               </div>
-            ) : null} */}
+            ) : null}
           </div>
         </div>
       </Container>

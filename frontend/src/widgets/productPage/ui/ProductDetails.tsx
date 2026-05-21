@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleWishlist } from "@/store/slices/wishlistSlice";
 import { Like } from "@/shared/icons";
+import { addToCart } from "@/store/slices/cartSlice";
 
 export const ProductDetails = ({ productId }: ProductDetailsProps) => {
   const {
@@ -56,8 +57,18 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
 
   const dispatch = useAppDispatch();
   const likedProductIds = useAppSelector(
-    (state) => state.wishlist.likedProductIds,
+    (state) => state.wishlist.likedProductIds ?? [],
   );
+  const currentCartItem = useAppSelector((state) =>
+    (state.cart.cartProducts ?? []).find(
+      (cartProduct) => cartProduct.id === product?.id,
+    ),
+  );
+  const availableCartAmount = Math.max(
+    maxAmount - (currentCartItem?.count ?? 0),
+    0,
+  );
+  const addToCartAmount = Math.min(selectedAmount, availableCartAmount);
 
   if (isLoading) {
     return (
@@ -190,12 +201,12 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
               ) : (
                 <div className="flex items-center gap-8">
                   <p className="text-xl font-bold text-black">Amount:</p>
-                  <div className="flex h-14 items-center bg-[#eeedec] text-xl font-medium text-black/60">
+                  <div className="flex h-14 min-w-38 items-center justify-between border border-black/10 bg-[#f5f5f5] text-xl font-medium text-black">
                     <button
                       type="button"
                       onClick={decreaseAmount}
                       disabled={selectedAmount <= 1}
-                      className="h-full cursor-pointer px-6 text-black/30 transition-colors hover:text-[#947458] disabled:cursor-not-allowed disabled:text-black/15"
+                      className="h-full w-full cursor-pointer text-black/70 transition-colors hover:text-[#947458] disabled:cursor-not-allowed disabled:text-black/20"
                     >
                       -
                     </button>
@@ -204,7 +215,7 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
                       type="button"
                       onClick={increaseAmount}
                       disabled={selectedAmount >= product.stock}
-                      className="h-full cursor-pointer px-6 text-black/30 transition-colors hover:text-[#947458] disabled:cursor-not-allowed disabled:text-black/15"
+                      className="h-full w-full cursor-pointer text-black/70 transition-colors hover:text-[#947458] disabled:cursor-not-allowed disabled:text-black/20"
                     >
                       +
                     </button>
@@ -213,10 +224,16 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
               )}
 
               <button
-                disabled={product.stock === 0}
-                className="mobile:w-full bg-[#947458] px-14 py-4 text-xl font-bold whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:bg-[#947458] disabled:hover:shadow-none"
+                type="button"
+                onClick={() => {
+                  if (addToCartAmount <= 0) return;
+
+                  dispatch(addToCart({ id: product.id, count: addToCartAmount }));
+                }}
+                disabled={product.stock === 0 || availableCartAmount === 0}
+                className="mobile:w-full cursor-pointer bg-[#947458] px-14 py-4 text-xl font-bold whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:bg-[#947458] disabled:hover:shadow-none"
               >
-                Add to cart
+                {availableCartAmount === 0 ? "Already in cart" : "Add to cart"}
               </button>
             </div>
           </div>
