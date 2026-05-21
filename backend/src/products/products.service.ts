@@ -63,6 +63,12 @@ export class ProductsService {
     const where: Prisma.ProductWhereInput = {};
     const orderBy: Prisma.ProductOrderByWithRelationInput = {};
 
+    if (dto.ids?.length) {
+      where.id = {
+        in: dto.ids,
+      };
+    }
+
     if (dto.designerIds && dto.designerIds.length > 0) {
       where.designerId = { in: dto.designerIds };
     }

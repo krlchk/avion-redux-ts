@@ -2,7 +2,7 @@
 @config "../../tailwind.config.ts";
 
 :root {
-  --background: #ffffff;
+  --background: #f5f5f5;
   --foreground: #171717;
 }
 
@@ -12,13 +12,6 @@
   --font-sans: var(--font-dm-sans-loaded);
   --font-mono: var(--font-geist-mono);
   --font-dm-sans: var(--font-dm-sans-loaded);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

@@ -4,14 +4,13 @@ import { ProductReviewItem } from "../model/types";
 
 interface ProductReviewsProps {
   reviews: ProductReviewItem[];
+  averageRating: number;
 }
 
-export const ProductReviews = ({ reviews }: ProductReviewsProps) => {
-  const averageRating =
-    reviews.length > 0
-      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
-      : 0;
-
+export const ProductReviews = ({
+  reviews,
+  averageRating,
+}: ProductReviewsProps) => {
   return (
     <section className="mt-20 border-t border-[#947458]/20 pt-14 text-black">
       <div className="mobile:flex-col mobile:items-start flex items-end justify-between gap-4">

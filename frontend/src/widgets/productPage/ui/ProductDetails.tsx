@@ -11,6 +11,10 @@ import { ProductReviews } from "./ProductReviews";
 import { useGetReviewByProductIdQuery } from "@/store/services/reviewsApi";
 import { mapProductReviewsToItems } from "../model/productPage.utils";
 import { ProductReviewForm } from "./ProductReviewForm";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { toggleWishlist } from "@/store/slices/wishlistSlice";
+import { Like } from "@/shared/icons";
 
 export const ProductDetails = ({ productId }: ProductDetailsProps) => {
   const {
@@ -30,9 +34,30 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
     product?.id ?? skipToken,
   );
 
+  const [amount, setAmount] = useState(1);
+  const maxAmount = product?.stock ?? 1;
+  const selectedAmount = maxAmount > 0 ? Math.min(amount, maxAmount) : 1;
+
+  const increaseAmount = () => {
+    setAmount((currentAmount) =>
+      Math.min(Math.min(currentAmount, maxAmount) + 1, maxAmount),
+    );
+  };
+
+  const decreaseAmount = () => {
+    setAmount((currentAmount) =>
+      Math.max(Math.min(currentAmount, maxAmount) - 1, 1),
+    );
+  };
+
   const reviews = reviewsData?.data
     ? mapProductReviewsToItems(reviewsData.data)
     : [];
+
+  const dispatch = useAppDispatch();
+  const likedProductIds = useAppSelector(
+    (state) => state.wishlist.likedProductIds,
+  );
 
   if (isLoading) {
     return (
@@ -63,14 +88,26 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
       <section className="tablet:grid-cols-1 tablet:gap-10 mobile:grid-cols-1 mobile:gap-8 grid grid-cols-2 gap-16 text-black">
         <div className="tablet:mx-auto tablet:max-w-150 mobile:max-w-none relative aspect-4/5 w-full overflow-hidden rounded-3xl bg-[#eeedec]">
           {product.img ? (
-            <Image
-              src={product.img}
-              alt={product.title}
-              fill
-              unoptimized
-              sizes="(max-width: 834px) 100vw, (max-width: 1279px) 600px, 50vw"
-              className="object-cover"
-            />
+            <div>
+              <Image
+                src={product.img}
+                alt={product.title}
+                fill
+                unoptimized
+                sizes="(max-width: 834px) 100vw, (max-width: 1279px) 600px, 50vw"
+                className="object-cover"
+              />
+              <div
+                onClick={() => dispatch(toggleWishlist(product.id))}
+                className="group/like absolute top-5 right-5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#947458]/35 bg-[#f5f5f5] transition-all duration-300 hover:border-[#947458] hover:shadow-md"
+              >
+                <Like
+                  className="text-[#947458] transition-colors duration-300 group-hover/like:fill-[#947458]"
+                  stroke="currentColor"
+                  fill={`${likedProductIds.includes(product.id) ? "#947458" : "none"}`}
+                />
+              </div>
+            </div>
           ) : (
             <div className="flex h-full w-full items-center justify-center font-bold text-[#c0bebd]">
               Image not provided
@@ -87,7 +124,7 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
               {category && (
                 <p className="text-2xl font-bold text-black">
                   Category:{" "}
-                  <span className="font-medium text-[#947458]">
+                  <span className="font-medium text-black/60">
                     {category.name}
                   </span>
                 </p>
@@ -95,9 +132,15 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
               {designer && (
                 <p className="text-2xl font-bold text-black">
                   Designer:{" "}
-                  <span className="font-medium text-[#947458]">
+                  <span className="font-medium text-black/60">
                     {designer.name}
                   </span>
+                </p>
+              )}
+              {maxAmount && (
+                <p className="text-2xl font-bold text-black">
+                  Stock:{" "}
+                  <span className="font-medium text-black/60">{maxAmount}</span>
                 </p>
               )}
             </div>
@@ -142,27 +185,44 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
             </div>
 
             <div className="mobile:flex-col mobile:items-stretch mt-16 flex items-center justify-between gap-6">
-              <div className="flex items-center gap-8">
-                <p className="text-xl font-bold text-black">Amount:</p>
-                <div className="flex h-14 items-center bg-[#eeedec] text-xl font-medium text-black/60">
-                  <button className="h-full px-6 text-black/30 transition-colors hover:text-[#947458]">
-                    -
-                  </button>
-                  <span className="px-4 text-black">1</span>
-                  <button className="h-full px-6 text-black/30 transition-colors hover:text-[#947458]">
-                    +
-                  </button>
+              {product.stock === 0 ? (
+                <div>Out of stock</div>
+              ) : (
+                <div className="flex items-center gap-8">
+                  <p className="text-xl font-bold text-black">Amount:</p>
+                  <div className="flex h-14 items-center bg-[#eeedec] text-xl font-medium text-black/60">
+                    <button
+                      type="button"
+                      onClick={decreaseAmount}
+                      disabled={selectedAmount <= 1}
+                      className="h-full cursor-pointer px-6 text-black/30 transition-colors hover:text-[#947458] disabled:cursor-not-allowed disabled:text-black/15"
+                    >
+                      -
+                    </button>
+                    <span className="px-4 text-black">{selectedAmount}</span>
+                    <button
+                      type="button"
+                      onClick={increaseAmount}
+                      disabled={selectedAmount >= product.stock}
+                      className="h-full cursor-pointer px-6 text-black/30 transition-colors hover:text-[#947458] disabled:cursor-not-allowed disabled:text-black/15"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <button className="mobile:w-full bg-[#947458] px-14 py-4 text-xl font-bold whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0">
+              <button
+                disabled={product.stock === 0}
+                className="mobile:w-full bg-[#947458] px-14 py-4 text-xl font-bold whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:bg-[#947458] disabled:hover:shadow-none"
+              >
                 Add to cart
               </button>
             </div>
           </div>
         </div>
       </section>
-      <ProductReviews reviews={reviews} />
+      <ProductReviews reviews={reviews} averageRating={product.averageRating} />
       <ProductReviewForm productId={product.id} />
     </Container>
   );

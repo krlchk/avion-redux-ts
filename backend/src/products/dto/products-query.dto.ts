@@ -72,13 +72,23 @@ export class ProductsQueryDto {
   @IsEnum(SortOrder)
   sortOrder: SortOrder;
 
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
   @Transform(({ value }: { value: string | string[] | undefined }) => {
     if (value === undefined) return undefined;
     if (Array.isArray(value)) return value;
     if (typeof value === 'string') return [value];
   })
-  @IsOptional()
-  @IsArray()
-  @IsUUID('4', { each: true })
   designerIds: string[];
+
+  @IsOptional()
+  @IsUUID('4', { each: true })
+  @IsArray()
+  @Transform(({ value }: { value: string | string[] | undefined }) => {
+    if (value === undefined) return undefined;
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') return [value];
+  })
+  ids?: string[];
 }

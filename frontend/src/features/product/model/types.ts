@@ -35,6 +35,7 @@ export interface ProductQuery {
   sortBy?: ProductSortBy;
   sortOrder?: SortOrder;
   designerIds?: string[];
+  ids?: string[];
 }
 
 export interface ProductResponse {

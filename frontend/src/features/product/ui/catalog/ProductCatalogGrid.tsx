@@ -31,7 +31,7 @@ export const ProductCatalogGrid = ({
           <div className="xs:w-full relative self-end">
             <button
               onClick={onOpen}
-              className="mobile:text-base xs:w-full xs:px-4 flex items-center justify-center bg-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg active:translate-y-0"
+              className="mobile:text-base xs:w-full xs:px-4 flex items-center justify-center bg-[#947458] border border-[#947458] px-14 py-2 text-xl font-medium whitespace-nowrap text-[#f5f5f5] transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:border-[#a9825f] hover:shadow-lg active:translate-y-0"
             >
               Filters
             </button>
