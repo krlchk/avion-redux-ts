@@ -3,6 +3,7 @@ import {
   Designer,
   User,
   UserResponse,
+  ProfileResponse,
 } from "@/features/user/model/types";
 import { baseApi } from "./baseApi";
 
@@ -33,6 +34,11 @@ export const usersApi = baseApi.injectEndpoints({
       query: (id) => `/users/${id}`,
       providesTags: ["Users"],
     }),
+
+    profile: build.query<ProfileResponse, void>({
+      query: () => `/users/profile`,
+      providesTags: ["Users"],
+    }),
   }),
 });
 
@@ -41,4 +47,5 @@ export const {
   useGetDesignersQuery,
   useGetDesignerByIdQuery,
   useGetUserByIdQuery,
+  useProfileQuery,
 } = usersApi;

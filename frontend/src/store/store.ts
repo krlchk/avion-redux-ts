@@ -3,6 +3,7 @@ import { baseApi } from "./services/baseApi";
 import "./services/productsApi";
 import "./services/categoriesApi";
 import { wishlistReducer } from "./slices/wishlistSlice";
+import { authReducer } from "./slices/authSlice";
 import storage from "redux-persist/lib/storage";
 import persistReducer from "redux-persist/es/persistReducer";
 import {
@@ -15,8 +16,10 @@ import {
   persistStore,
 } from "redux-persist";
 import { cartReducer } from "./slices/cartSlice";
+import "./services/authApi";
 
 const rootReducer = combineReducers({
+  auth: authReducer,
   wishlist: wishlistReducer,
   cart: cartReducer,
   [baseApi.reducerPath]: baseApi.reducer,
@@ -25,7 +28,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["wishlist", "cart"],
+  whitelist: ["auth", "wishlist", "cart"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

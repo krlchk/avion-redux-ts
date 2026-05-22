@@ -12,11 +12,21 @@ export interface Designer {
   productsCount: number;
 }
 
-type Role = "CUSTOMER" | "ADMIN" | "DESIGNER";
+export type Role = "CUSTOMER" | "ADMIN" | "DESIGNER";
 
 export interface UserResponse {
   data: User[];
 }
 export interface DesignerResponse {
   data: Designer[];
+}
+
+export interface ProfileResponse {
+  id: string;
+  email: string;
+  name: string;
+  role: Role;
+  createdAt: string;
+  updatedAt: string;
+  isTwoFactorEnabled: boolean;
 }
