@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useProfileQuery } from "@/store/services/usersApi";
 import { logout } from "@/store/slices/authSlice";
 import { ProfileLogin } from "./ProfileLogin";
+import { formatProfileDate } from "../model/profile.utils";
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
@@ -130,12 +131,4 @@ const ProfileField = ({ label, value }: { label: string; value: string }) => {
       <p className="text-lg font-bold text-black">{value}</p>
     </div>
   );
-};
-
-const formatProfileDate = (date: string) => {
-  return new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(date));
 };

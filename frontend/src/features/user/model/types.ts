@@ -30,3 +30,9 @@ export interface ProfileResponse {
   updatedAt: string;
   isTwoFactorEnabled: boolean;
 }
+
+export interface CreateUserRequest {
+  email: string;
+  name: string;
+  password: string;
+}

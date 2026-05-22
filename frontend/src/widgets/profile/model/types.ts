@@ -22,3 +22,16 @@ export interface OtpFormProps {
   token: string | null;
   step: LoginStep;
 }
+
+export interface RegisterFormProps {
+  handleSubmit: FormSubmitHandler;
+  name: string;
+  setName: (e: string) => void;
+  email: string;
+  setEmail: (e: string) => void;
+  password: string;
+  setPassword: (e: string) => void;
+  isLoading: boolean;
+  message: string;
+  isRegistered: boolean;
+}

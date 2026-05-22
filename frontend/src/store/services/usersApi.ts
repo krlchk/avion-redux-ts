@@ -4,6 +4,7 @@ import {
   User,
   UserResponse,
   ProfileResponse,
+  CreateUserRequest,
 } from "@/features/user/model/types";
 import { baseApi } from "./baseApi";
 
@@ -39,6 +40,15 @@ export const usersApi = baseApi.injectEndpoints({
       query: () => `/users/profile`,
       providesTags: ["Users"],
     }),
+
+    createUser: build.mutation<User, CreateUserRequest>({
+      query: (body) => ({
+        url: "/users",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Users"],
+    }),
   }),
 });
 
@@ -48,4 +58,5 @@ export const {
   useGetDesignerByIdQuery,
   useGetUserByIdQuery,
   useProfileQuery,
+  useCreateUserMutation,
 } = usersApi;
