@@ -1,11 +1,6 @@
 import { Star } from "@/shared/icons";
 
-import { ProductReviewItem } from "../model/types";
-
-interface ProductReviewsProps {
-  reviews: ProductReviewItem[];
-  averageRating: number;
-}
+import type { ProductReviewsProps } from "../model/types";
 
 export const ProductReviews = ({
   reviews,

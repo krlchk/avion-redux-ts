@@ -1,7 +1,8 @@
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
+import type { MainLayoutProps } from "../model/types";
 
-export const MainLayout = ({ children }: { children: React.ReactNode }) => {
+export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <>
       <Header />

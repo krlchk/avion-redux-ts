@@ -6,13 +6,13 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import type { Product } from "@/features/product/model/types";
 import { Container } from "@/shared/ui";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import type { CartItem } from "@/store/model/types";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import {
   decreaseCartProduct,
   increaseCartProduct,
   removeCartProduct,
 } from "@/store/slices/cartSlice";
-import type { CartItem } from "@/store/slices/cartSlice";
 import { formatCartPrice } from "../model/cart.utils";
 import { CartProductRow } from "./CartProductRow";
 import { CartStatusMessage } from "./CartStatusMessage";

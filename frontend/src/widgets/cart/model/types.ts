@@ -1,6 +1,5 @@
-import type { CreateOrderItem } from "@/store/services/ordersApi";
 import type { Product } from "@/features/product/model/types";
-import type { CartItem } from "@/store/slices/cartSlice";
+import type { CartItem, CreateOrderItem } from "@/store/model/types";
 
 export interface CartProductRowProps {
   item: CartItem;

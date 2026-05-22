@@ -1,56 +1,17 @@
-import { ProfileResponse } from "@/features/user/model/types";
+import type {
+  ForgotPasswordRequest,
+  LoginRequest,
+  LoginResponse,
+  PasswordMessageResponse,
+  ResetPasswordRequest,
+  ToggleTwoFactorRequest,
+  ToggleTwoFactorResponse,
+  TwoFactorVerifyRequest,
+  TwoFactorVerifyResponse,
+  VerifyPasswordOtpRequest,
+  VerifyPasswordOtpResponse,
+} from "../model/types";
 import { baseApi } from "./baseApi";
-
-export type LoginResponse =
-  | {
-      token: string;
-      requiresTwoFactor?: false;
-      tempToken?: never;
-    }
-  | {
-      requiresTwoFactor: true;
-      tempToken: string;
-      token?: never;
-    };
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-interface TwoFactorVerifyResponse {
-  token: string;
-}
-interface TwoFactorVerifyRequest {
-  tempToken: string;
-  otp: string;
-}
-
-interface ForgotPasswordRequest {
-  email: string;
-}
-
-interface PasswordMessageResponse {
-  message: string;
-}
-
-interface VerifyPasswordOtpRequest {
-  email: string;
-  otp: string;
-}
-
-interface VerifyPasswordOtpResponse {
-  resetToken: string;
-}
-
-interface ResetPasswordRequest {
-  resetToken: string;
-  newPassword: string;
-}
-
-interface ToggleTwoFactorRequest {
-  enabled: boolean;
-}
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -103,7 +64,10 @@ export const authApi = baseApi.injectEndpoints({
         invalidatesTags: ["Auth"],
       },
     ),
-    toggleTwoFactor: build.mutation<ProfileResponse, ToggleTwoFactorRequest>({
+    toggleTwoFactor: build.mutation<
+      ToggleTwoFactorResponse,
+      ToggleTwoFactorRequest
+    >({
       query: (body) => ({
         url: "/auth/me/2fa",
         method: "PATCH",

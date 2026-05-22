@@ -43,6 +43,11 @@ export interface ProductResponse {
   meta: PaginationMeta;
 }
 
+export interface ProductCatalogProps {
+  initialSearchTerm: string;
+  initialCategoryId: string;
+}
+
 export type ProductSortBy = "createdAt" | "price";
 
 export interface ProductFiltersModalWindowProps {
