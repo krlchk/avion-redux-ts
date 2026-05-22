@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 
 import { FormSubmitHandler } from "@/shared/model/types";
-import { Container, Loader } from "@/shared/ui";
+import { Container } from "@/shared/ui";
 import { useCreateUserMutation } from "@/store/services/usersApi";
 import { getRegisterErrorMessage } from "../model/profile.utils";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { RegisterForm } from "./RegisterForm";
 

@@ -6,25 +6,46 @@ import { FormSubmitHandler } from "@/shared/model/types";
 import { Container } from "@/shared/ui";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
+  useForgotPasswordMutation,
   useLoginMutation,
+  useResetPasswordMutation,
   useTwoFactorVerifyMutation,
+  useVerifyPasswordOtpMutation,
 } from "@/store/services/authApi";
 import { setTempToken, setToken } from "@/store/slices/authSlice";
-import { getLoginErrorMessage } from "../model/profile.utils";
+import {
+  getLoginErrorMessage,
+  getPasswordResetErrorMessage,
+} from "../model/profile.utils";
+import { ForgotPasswordForm } from "./ForgotPasswordForm";
 import { LoginForm } from "./LoginForm";
 import { OtpForm } from "./OtpForm";
-import { LoginStep } from "../model/types";
+import { LoginStep, ProfileMessageType } from "../model/types";
+import { ResetOtpForm } from "./ResetOtpForm";
+import { ResetPasswordForm } from "./ResetPasswordForm";
 
 export const ProfileLogin = () => {
   const dispatch = useAppDispatch();
-  const { token, tempToken } = useAppSelector((state) => state.auth);
+  const { tempToken } = useAppSelector((state) => state.auth);
   const [login, { isLoading }] = useLoginMutation();
   const [twoFactorVerify, { isLoading: isTwoFactorVerifyLoading }] =
     useTwoFactorVerifyMutation();
+  const [forgotPassword, { isLoading: isForgotPasswordLoading }] =
+    useForgotPasswordMutation();
+  const [verifyPasswordOtp, { isLoading: isVerifyPasswordOtpLoading }] =
+    useVerifyPasswordOtpMutation();
+  const [resetPassword, { isLoading: isResetPasswordLoading }] =
+    useResetPasswordMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] =
+    useState<ProfileMessageType>("error");
   const [otp, setOtp] = useState("");
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetOtp, setResetOtp] = useState("");
+  const [resetToken, setResetToken] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [step, setStep] = useState<LoginStep>("login");
 
   const handleLoginSubmit: FormSubmitHandler = async (e) => {
@@ -32,6 +53,7 @@ export const ProfileLogin = () => {
     setMessage("");
 
     if (!email.trim() || !password.trim()) {
+      setMessageType("error");
       setMessage("Email and password are required.");
       return;
     }
@@ -45,14 +67,17 @@ export const ProfileLogin = () => {
       if (response.requiresTwoFactor) {
         setStep("otp");
         dispatch(setTempToken(response.tempToken));
+        setMessageType("success");
         setMessage("Enter the verification code sent to your email.");
         return;
       }
 
       dispatch(setToken(response.token));
       setPassword("");
+      setMessageType("success");
       setMessage("You are signed in.");
     } catch (error) {
+      setMessageType("error");
       setMessage(getLoginErrorMessage(error));
     }
   };
@@ -62,12 +87,14 @@ export const ProfileLogin = () => {
     setMessage("");
 
     if (!otp.trim()) {
+      setMessageType("error");
       setMessage("Verification code is required.");
       return;
     }
 
     try {
       if (!tempToken) {
+        setMessageType("error");
         setMessage("Verification session expired. Please login again.");
         setStep("login");
         return;
@@ -82,10 +109,112 @@ export const ProfileLogin = () => {
       setPassword("");
       setOtp("");
       setStep("login");
+      setMessageType("success");
       setMessage("You are signed in.");
     } catch (error) {
+      setMessageType("error");
       setMessage(getLoginErrorMessage(error));
     }
+  };
+
+  const handleForgotPasswordSubmit: FormSubmitHandler = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (!resetEmail.trim()) {
+      setMessageType("error");
+      setMessage("Email is required.");
+      return;
+    }
+
+    try {
+      await forgotPassword({ email: resetEmail.trim() }).unwrap();
+      setStep("resetOtp");
+      setMessageType("success");
+      setMessage("We sent a reset code to your email.");
+    } catch (error) {
+      setMessageType("error");
+      setMessage(getPasswordResetErrorMessage(error));
+    }
+  };
+
+  const handleResetOtpSubmit: FormSubmitHandler = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (resetOtp.trim().length !== 6) {
+      setMessageType("error");
+      setMessage("Enter the 6-digit code from your email.");
+      return;
+    }
+
+    try {
+      const response = await verifyPasswordOtp({
+        email: resetEmail.trim(),
+        otp: resetOtp.trim(),
+      }).unwrap();
+
+      setResetToken(response.resetToken);
+      setStep("reset");
+      setMessageType("success");
+      setMessage("Code verified. Create your new password.");
+    } catch (error) {
+      setMessageType("error");
+      setMessage(getPasswordResetErrorMessage(error));
+    }
+  };
+
+  const handleResetPasswordSubmit: FormSubmitHandler = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (newPassword.trim().length < 6) {
+      setMessageType("error");
+      setMessage("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (!resetToken) {
+      setMessageType("error");
+      setMessage("Reset session expired. Please request a new code.");
+      setStep("forgot");
+      return;
+    }
+
+    try {
+      await resetPassword({
+        resetToken,
+        newPassword,
+      }).unwrap();
+
+      setStep("login");
+      setPassword("");
+      setResetEmail("");
+      setResetOtp("");
+      setResetToken("");
+      setNewPassword("");
+      setMessageType("success");
+      setMessage("Password changed. You can sign in now.");
+    } catch (error) {
+      setMessageType("error");
+      setMessage(getPasswordResetErrorMessage(error));
+    }
+  };
+
+  const handleOpenForgotPassword = () => {
+    setMessage("");
+    setMessageType("error");
+    setResetEmail(email);
+    setStep("forgot");
+  };
+
+  const handleBackToLogin = () => {
+    setMessage("");
+    setMessageType("error");
+    setResetOtp("");
+    setResetToken("");
+    setNewPassword("");
+    setStep("login");
   };
 
   return (
@@ -125,8 +254,8 @@ export const ProfileLogin = () => {
               setPassword={setPassword}
               isLoading={isLoading}
               message={message}
-              token={token}
-              step={step}
+              messageType={messageType}
+              onForgotPassword={handleOpenForgotPassword}
             />
           )}
           {step === "otp" && (
@@ -136,8 +265,40 @@ export const ProfileLogin = () => {
               setOtp={setOtp}
               isLoading={isTwoFactorVerifyLoading}
               message={message}
-              token={token}
-              step={step}
+              messageType={messageType}
+            />
+          )}
+          {step === "forgot" && (
+            <ForgotPasswordForm
+              handleSubmit={handleForgotPasswordSubmit}
+              email={resetEmail}
+              setEmail={setResetEmail}
+              isLoading={isForgotPasswordLoading}
+              message={message}
+              messageType={messageType}
+              onBackToLogin={handleBackToLogin}
+            />
+          )}
+          {step === "resetOtp" && (
+            <ResetOtpForm
+              handleSubmit={handleResetOtpSubmit}
+              otp={resetOtp}
+              setOtp={setResetOtp}
+              isLoading={isVerifyPasswordOtpLoading}
+              message={message}
+              messageType={messageType}
+              onBackToLogin={handleBackToLogin}
+            />
+          )}
+          {step === "reset" && (
+            <ResetPasswordForm
+              handleSubmit={handleResetPasswordSubmit}
+              password={newPassword}
+              setPassword={setNewPassword}
+              isLoading={isResetPasswordLoading}
+              message={message}
+              messageType={messageType}
+              onBackToLogin={handleBackToLogin}
             />
           )}
         </Container>

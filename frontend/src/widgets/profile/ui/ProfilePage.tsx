@@ -1,15 +1,31 @@
 "use client";
 
+import { useState } from "react";
+
 import { Container, Loader } from "@/shared/ui";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useToggleTwoFactorMutation } from "@/store/services/authApi";
 import { useProfileQuery } from "@/store/services/usersApi";
 import { logout } from "@/store/slices/authSlice";
 import { ProfileLogin } from "./ProfileLogin";
-import { formatProfileDate } from "../model/profile.utils";
+import {
+  formatProfileDate,
+  getProfileActionErrorMessage,
+} from "../model/profile.utils";
+import { ProfileConfirmAction, ProfileMessageType } from "../model/types";
+import { ProfileConfirmModal } from "./ProfileConfirmModal";
+import { ProfileField } from "./ProfileField";
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.auth.token);
+  const [toggleTwoFactor, { isLoading: isToggleTwoFactorLoading }] =
+    useToggleTwoFactorMutation();
+  const [actionMessage, setActionMessage] = useState("");
+  const [actionMessageType, setActionMessageType] =
+    useState<ProfileMessageType>("success");
+  const [confirmAction, setConfirmAction] =
+    useState<ProfileConfirmAction | null>(null);
   const {
     data: profile,
     isError,
@@ -62,6 +78,55 @@ export const ProfilePage = () => {
     return null;
   }
 
+  const handleToggleTwoFactor = async () => {
+    setActionMessage("");
+
+    try {
+      await toggleTwoFactor({
+        enabled: !profile.isTwoFactorEnabled,
+      }).unwrap();
+
+      setActionMessageType("success");
+      setActionMessage(
+        profile.isTwoFactorEnabled
+          ? "Two-factor authentication disabled."
+          : "Two-factor authentication enabled.",
+      );
+    } catch (error) {
+      setActionMessageType("error");
+      setActionMessage(getProfileActionErrorMessage(error));
+    }
+  };
+
+  const handleConfirmAction = async () => {
+    if (confirmAction === "logout") {
+      dispatch(logout());
+      return;
+    }
+
+    if (confirmAction === "twoFactor") {
+      await handleToggleTwoFactor();
+      setConfirmAction(null);
+    }
+  };
+
+  const isTwoFactorConfirm = confirmAction === "twoFactor";
+  const confirmTitle = isTwoFactorConfirm
+    ? profile.isTwoFactorEnabled
+      ? "Disable two-factor authentication?"
+      : "Enable two-factor authentication?"
+    : "Log out of your account?";
+  const confirmDescription = isTwoFactorConfirm
+    ? profile.isTwoFactorEnabled
+      ? "You will no longer need a verification code when signing in. Your account will be easier to access, but less protected."
+      : "Next time you sign in, we will send a verification code to your email before opening your account."
+    : "You will leave your current session and return to the login screen.";
+  const confirmButtonText = isTwoFactorConfirm
+    ? profile.isTwoFactorEnabled
+      ? "Disable 2FA"
+      : "Enable 2FA"
+    : "Logout";
+
   return (
     <section className="bg-[#f5f5f5]">
       <div className="w-full bg-[url('/images/auth/login.jpg')] bg-cover bg-center py-44">
@@ -87,13 +152,40 @@ export const ProfilePage = () => {
                 Your profile keeps orders, checkout details and review access in
                 one calm place.
               </p>
-              <button
-                type="button"
-                onClick={() => dispatch(logout())}
-                className="mt-8 cursor-pointer border border-[#f5f5f5]/70 px-8 py-3 text-base font-medium tracking-[0.12em] uppercase transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5] hover:text-[#947458] hover:shadow-lg"
-              >
-                Logout
-              </button>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <button
+                  type="button"
+                  onClick={() => setConfirmAction("twoFactor")}
+                  disabled={isToggleTwoFactorLoading}
+                  className="flex min-w-44 cursor-pointer items-center justify-center border border-[#f5f5f5]/70 px-8 py-3 text-base font-medium tracking-[0.12em] uppercase transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5] hover:text-[#947458] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isToggleTwoFactorLoading ? (
+                    <Loader styles="h-5 w-5 border-2 border-[#f5f5f5]/40 border-t-[#f5f5f5]" />
+                  ) : profile.isTwoFactorEnabled ? (
+                    "Disable 2FA"
+                  ) : (
+                    "Enable 2FA"
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmAction("logout")}
+                  className="cursor-pointer border border-[#f5f5f5]/70 px-8 py-3 text-base font-medium tracking-[0.12em] uppercase transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5] hover:text-[#947458] hover:shadow-lg"
+                >
+                  Logout
+                </button>
+              </div>
+              {actionMessage && (
+                <p
+                  className={`mt-4 text-sm font-medium ${
+                    actionMessageType === "success"
+                      ? "text-[#f5f5f5]/85"
+                      : "text-[#ffb4b4]"
+                  }`}
+                >
+                  {actionMessage}
+                </p>
+              )}
             </div>
           </section>
 
@@ -118,17 +210,16 @@ export const ProfilePage = () => {
           </div>
         </Container>
       </div>
+      {confirmAction && (
+        <ProfileConfirmModal
+          title={confirmTitle}
+          description={confirmDescription}
+          confirmText={confirmButtonText}
+          isLoading={isTwoFactorConfirm && isToggleTwoFactorLoading}
+          onCancel={() => setConfirmAction(null)}
+          onConfirm={handleConfirmAction}
+        />
+      )}
     </section>
-  );
-};
-
-const ProfileField = ({ label, value }: { label: string; value: string }) => {
-  return (
-    <div className="flex items-center justify-between gap-6 border-b border-black/10 pb-5 mobile:flex-col mobile:items-start">
-      <p className="text-sm font-medium uppercase tracking-[0.16em] text-black/40">
-        {label}
-      </p>
-      <p className="text-lg font-bold text-black">{value}</p>
-    </div>
   );
 };

@@ -1,3 +1,4 @@
+import { ProfileResponse } from "@/features/user/model/types";
 import { baseApi } from "./baseApi";
 
 export type LoginResponse =
@@ -25,6 +26,32 @@ interface TwoFactorVerifyRequest {
   otp: string;
 }
 
+interface ForgotPasswordRequest {
+  email: string;
+}
+
+interface PasswordMessageResponse {
+  message: string;
+}
+
+interface VerifyPasswordOtpRequest {
+  email: string;
+  otp: string;
+}
+
+interface VerifyPasswordOtpResponse {
+  resetToken: string;
+}
+
+interface ResetPasswordRequest {
+  resetToken: string;
+  newPassword: string;
+}
+
+interface ToggleTwoFactorRequest {
+  enabled: boolean;
+}
+
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     login: build.mutation<LoginResponse, LoginRequest>({
@@ -46,7 +73,52 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+    forgotPassword: build.mutation<
+      PasswordMessageResponse,
+      ForgotPasswordRequest
+    >({
+      query: (body) => ({
+        url: "/auth/password/forgot",
+        method: "POST",
+        body,
+      }),
+    }),
+    verifyPasswordOtp: build.mutation<
+      VerifyPasswordOtpResponse,
+      VerifyPasswordOtpRequest
+    >({
+      query: (body) => ({
+        url: "/auth/password/verify",
+        method: "POST",
+        body,
+      }),
+    }),
+    resetPassword: build.mutation<PasswordMessageResponse, ResetPasswordRequest>(
+      {
+        query: (body) => ({
+          url: "/auth/password/reset",
+          method: "POST",
+          body,
+        }),
+        invalidatesTags: ["Auth"],
+      },
+    ),
+    toggleTwoFactor: build.mutation<ProfileResponse, ToggleTwoFactorRequest>({
+      query: (body) => ({
+        url: "/auth/me/2fa",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Auth", "Users"],
+    }),
   }),
 });
 
-export const { useLoginMutation, useTwoFactorVerifyMutation } = authApi;
+export const {
+  useForgotPasswordMutation,
+  useLoginMutation,
+  useResetPasswordMutation,
+  useToggleTwoFactorMutation,
+  useTwoFactorVerifyMutation,
+  useVerifyPasswordOtpMutation,
+} = authApi;
