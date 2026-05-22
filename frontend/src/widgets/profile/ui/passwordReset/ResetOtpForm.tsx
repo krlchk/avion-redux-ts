@@ -1,23 +1,24 @@
 import { Loader } from "@/shared/ui";
-import { OtpFormProps } from "../model/types";
+import { ResetOtpFormProps } from "../../model/types";
 
-export const OtpForm = ({
-  handleOtpSubmit,
+export const ResetOtpForm = ({
+  handleSubmit,
   otp,
   setOtp,
   isLoading,
   message,
   messageType,
-}: OtpFormProps) => {
+  onBackToLogin,
+}: ResetOtpFormProps) => {
   return (
     <form
-      onSubmit={handleOtpSubmit}
-      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5]/95 p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+      onSubmit={handleSubmit}
+      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
     >
       <div>
-        <h2 className="text-3xl font-bold">Verification code</h2>
+        <h2 className="text-3xl font-bold">Check your email</h2>
         <p className="mt-8 text-base leading-7 font-medium text-black/50">
-          Enter the 6-digit code we sent to your email.
+          Enter the 6-digit code from the email to continue.
         </p>
       </div>
 
@@ -45,6 +46,14 @@ export const OtpForm = ({
         ) : (
           "Verify code"
         )}
+      </button>
+
+      <button
+        type="button"
+        onClick={onBackToLogin}
+        className="mt-5 cursor-pointer text-sm font-bold text-black/45 transition-colors hover:text-[#947458]"
+      >
+        Back to login
       </button>
 
       {message && (

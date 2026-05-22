@@ -64,7 +64,7 @@ export const ContactUsForm = () => {
     <section className="tablet:mt-0 flex items-center">
       <form
         onSubmit={handleSubmit}
-        className="mobile:px-5 mobile:py-8 w-full border border-[#f5f5f5]/55 bg-[#f5f5f5]/95 px-10 py-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.2)] backdrop-blur-sm"
+        className="mobile:px-5 mobile:py-8 w-full border border-[#f5f5f5]/55 bg-[#f5f5f5] px-10 py-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.2)] backdrop-blur-sm"
       >
         <h2 className="mobile:text-3xl text-3xl leading-10 font-bold">
           Get in touch

@@ -1,34 +1,36 @@
 import { Loader } from "@/shared/ui";
-import { ResetPasswordFormProps } from "../model/types";
+import { OtpFormProps } from "../../model/types";
 
-export const ResetPasswordForm = ({
-  handleSubmit,
-  password,
-  setPassword,
+export const OtpForm = ({
+  handleOtpSubmit,
+  otp,
+  setOtp,
   isLoading,
   message,
   messageType,
-  onBackToLogin,
-}: ResetPasswordFormProps) => {
+}: OtpFormProps) => {
   return (
     <form
-      onSubmit={handleSubmit}
-      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5]/95 p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+      onSubmit={handleOtpSubmit}
+      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
     >
       <div>
-        <h2 className="text-3xl font-bold">Create new password</h2>
+        <h2 className="text-3xl font-bold">Verification code</h2>
         <p className="mt-8 text-base leading-7 font-medium text-black/50">
-          Choose a new password with at least 6 characters.
+          Enter the 6-digit code we sent to your email.
         </p>
       </div>
 
       <label className="mt-8 flex flex-col gap-2 text-base font-medium">
-        New password
+        Code
         <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="New password..."
+          value={otp}
+          onChange={(e) =>
+            setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+          }
+          type="text"
+          inputMode="numeric"
+          placeholder="000000"
           className="h-12 border border-black/10 px-4 text-base font-normal transition-colors outline-none placeholder:text-black/35 focus:border-[#947458]"
         />
       </label>
@@ -41,16 +43,8 @@ export const ResetPasswordForm = ({
         {isLoading ? (
           <Loader styles="h-6 w-6 border-2 border-[#f5f5f5]/40 border-t-[#f5f5f5]" />
         ) : (
-          "Update password"
+          "Verify code"
         )}
-      </button>
-
-      <button
-        type="button"
-        onClick={onBackToLogin}
-        className="mt-5 cursor-pointer text-sm font-bold text-black/45 transition-colors hover:text-[#947458]"
-      >
-        Back to login
       </button>
 
       {message && (

@@ -1,6 +1,6 @@
 import { Loader } from "@/shared/ui";
 import Link from "next/link";
-import { RegisterFormProps } from "../model/types";
+import { RegisterFormProps } from "../../model/types";
 
 export const RegisterForm = ({
   handleSubmit,
@@ -17,7 +17,7 @@ export const RegisterForm = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5]/95 p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
     >
       <div>
         <h2 className="text-3xl font-bold">Register</h2>

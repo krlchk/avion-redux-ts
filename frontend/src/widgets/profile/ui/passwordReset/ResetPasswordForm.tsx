@@ -1,37 +1,34 @@
 import { Loader } from "@/shared/ui";
-import { ResetOtpFormProps } from "../model/types";
+import { ResetPasswordFormProps } from "../../model/types";
 
-export const ResetOtpForm = ({
+export const ResetPasswordForm = ({
   handleSubmit,
-  otp,
-  setOtp,
+  password,
+  setPassword,
   isLoading,
   message,
   messageType,
   onBackToLogin,
-}: ResetOtpFormProps) => {
+}: ResetPasswordFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5]/95 p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+      className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl"
     >
       <div>
-        <h2 className="text-3xl font-bold">Check your email</h2>
+        <h2 className="text-3xl font-bold">Create new password</h2>
         <p className="mt-8 text-base leading-7 font-medium text-black/50">
-          Enter the 6-digit code from the email to continue.
+          Choose a new password with at least 6 characters.
         </p>
       </div>
 
       <label className="mt-8 flex flex-col gap-2 text-base font-medium">
-        Code
+        New password
         <input
-          value={otp}
-          onChange={(e) =>
-            setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
-          }
-          type="text"
-          inputMode="numeric"
-          placeholder="000000"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          placeholder="New password..."
           className="h-12 border border-black/10 px-4 text-base font-normal transition-colors outline-none placeholder:text-black/35 focus:border-[#947458]"
         />
       </label>
@@ -44,7 +41,7 @@ export const ResetOtpForm = ({
         {isLoading ? (
           <Loader styles="h-6 w-6 border-2 border-[#f5f5f5]/40 border-t-[#f5f5f5]" />
         ) : (
-          "Verify code"
+          "Update password"
         )}
       </button>
 

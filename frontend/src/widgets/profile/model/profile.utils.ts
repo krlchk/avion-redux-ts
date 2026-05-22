@@ -90,3 +90,14 @@ export const formatProfileDate = (date: string) => {
     year: "numeric",
   }).format(new Date(date));
 };
+
+export const formatProfileOrderPrice = (price: string | number) => {
+  return `$${Number(price).toLocaleString("en-US", {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+  })}`;
+};
+
+export const formatProfileOrderStatus = (status: string) => {
+  return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+};

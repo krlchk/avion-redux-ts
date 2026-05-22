@@ -16,13 +16,12 @@ import { setTempToken, setToken } from "@/store/slices/authSlice";
 import {
   getLoginErrorMessage,
   getPasswordResetErrorMessage,
-} from "../model/profile.utils";
-import { ForgotPasswordForm } from "./ForgotPasswordForm";
+} from "../../model/profile.utils";
+import { ForgotPasswordForm } from "../passwordReset";
 import { LoginForm } from "./LoginForm";
 import { OtpForm } from "./OtpForm";
-import { LoginStep, ProfileMessageType } from "../model/types";
-import { ResetOtpForm } from "./ResetOtpForm";
-import { ResetPasswordForm } from "./ResetPasswordForm";
+import { LoginStep, ProfileMessageType } from "../../model/types";
+import { ResetOtpForm, ResetPasswordForm } from "../passwordReset";
 
 export const ProfileLogin = () => {
   const dispatch = useAppDispatch();

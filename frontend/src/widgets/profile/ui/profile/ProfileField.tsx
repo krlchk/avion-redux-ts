@@ -1,4 +1,4 @@
-import { ProfileFieldProps } from "../model/types";
+import { ProfileFieldProps } from "../../model/types";
 
 export const ProfileField = ({ label, value }: ProfileFieldProps) => {
   return (

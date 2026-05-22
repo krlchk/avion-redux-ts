@@ -1,4 +1,5 @@
 import { ProfileResponse } from "@/features/user/model/types";
+import type { OrderStatus } from "@/features/order/model/types";
 
 export type LoginResponse =
   | {
@@ -81,6 +82,10 @@ export interface CreateOrderItem {
 export interface CreateOrderRequest {
   items: CreateOrderItem[];
   promoCode?: string;
+}
+
+export interface MyOrdersRequest {
+  status?: OrderStatus;
 }
 
 export interface AuthState {

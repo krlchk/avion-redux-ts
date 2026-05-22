@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { clearCart } from "@/store/slices/cartSlice";
 import { getCreateOrderErrorMessage } from "../model/cart.utils";
 import type { CartSummaryProps } from "../model/types";
+import type { CreateOrderRequest } from "@/store/model/types";
 
 export const CartSummary = ({
   isCheckoutDisabled,
@@ -29,10 +30,16 @@ export const CartSummary = ({
     }
 
     try {
-      await createOrder({
+      const trimmedPromoCode = promoCode.trim();
+      const orderPayload: CreateOrderRequest = {
         items: checkoutProducts,
-        promoCode: promoCode.trim() || undefined,
-      }).unwrap();
+      };
+
+      if (trimmedPromoCode) {
+        orderPayload.promoCode = trimmedPromoCode;
+      }
+
+      await createOrder(orderPayload).unwrap();
       dispatch(clearCart());
       setPromoCode("");
     } catch (error) {

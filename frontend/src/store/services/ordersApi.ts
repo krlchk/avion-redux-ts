@@ -1,9 +1,16 @@
-import { Order } from "@/features/order/model/types";
-import type { CreateOrderRequest } from "../model/types";
+import { Order, OrdersResponse } from "@/features/order/model/types";
+import type { CreateOrderRequest, MyOrdersRequest } from "../model/types";
 import { baseApi } from "./baseApi";
 
 export const ordersApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    getMyOrders: build.query<OrdersResponse, MyOrdersRequest | void>({
+      query: (params) => ({
+        url: "/orders/my",
+        params: params ?? undefined,
+      }),
+      providesTags: ["Orders"],
+    }),
     createOrder: build.mutation<Order, CreateOrderRequest>({
       query: (body) => ({
         url: "/orders",
@@ -15,4 +22,4 @@ export const ordersApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateOrderMutation } = ordersApi;
+export const { useCreateOrderMutation, useGetMyOrdersQuery } = ordersApi;

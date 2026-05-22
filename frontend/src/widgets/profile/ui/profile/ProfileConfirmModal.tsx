@@ -1,5 +1,5 @@
 import { Loader } from "@/shared/ui";
-import { ProfileConfirmModalProps } from "../model/types";
+import { ProfileConfirmModalProps } from "../../model/types";
 
 export const ProfileConfirmModal = ({
   title,
@@ -16,7 +16,7 @@ export const ProfileConfirmModal = ({
       aria-modal="true"
       aria-labelledby="profile-confirm-title"
     >
-      <div className="mobile:p-6 w-full max-w-lg border border-[#f5f5f5]/35 bg-[#f5f5f5]/95 p-8 text-black shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl">
+      <div className="mobile:p-6 w-full max-w-lg border border-[#f5f5f5]/35 bg-[#f5f5f5] p-8 text-black shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl">
         <p
           id="profile-confirm-title"
           className="text-2xl leading-8 font-bold"

@@ -1,4 +1,5 @@
 import { FormSubmitHandler } from "@/shared/model/types";
+import type { Order, OrderItem } from "@/features/order/model/types";
 
 export type LoginStep = "login" | "otp" | "forgot" | "resetOtp" | "reset";
 export type ProfileMessageType = "success" | "error";
@@ -79,4 +80,25 @@ export interface ProfileConfirmModalProps {
   isLoading: boolean;
   onCancel: () => void;
   onConfirm: () => void;
+}
+
+export interface ProfileOrderRowProps {
+  order: Order;
+}
+
+export interface ProfileOrderItemRowProps {
+  item: OrderItem;
+}
+
+export interface ProfileOrderMetaProps {
+  label: string;
+  value: string;
+  className?: string;
+  valueClassName?: string;
+}
+
+export interface ProfileOrderPriceRowProps {
+  label: string;
+  value: string;
+  isTotal?: boolean;
 }

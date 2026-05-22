@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { FormSubmitHandler } from "@/shared/model/types";
 import { Container } from "@/shared/ui";
 import { useCreateUserMutation } from "@/store/services/usersApi";
-import { getRegisterErrorMessage } from "../model/profile.utils";
+import { getRegisterErrorMessage } from "../../model/profile.utils";
 import { useRouter } from "next/navigation";
 import { RegisterForm } from "./RegisterForm";
 

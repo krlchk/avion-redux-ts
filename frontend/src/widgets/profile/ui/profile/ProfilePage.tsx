@@ -7,12 +7,13 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useToggleTwoFactorMutation } from "@/store/services/authApi";
 import { useProfileQuery } from "@/store/services/usersApi";
 import { logout } from "@/store/slices/authSlice";
-import { ProfileLogin } from "./ProfileLogin";
+import { ProfileLogin } from "../auth";
+import { ProfileOrders } from "../orders";
 import {
   formatProfileDate,
   getProfileActionErrorMessage,
-} from "../model/profile.utils";
-import { ProfileConfirmAction, ProfileMessageType } from "../model/types";
+} from "../../model/profile.utils";
+import { ProfileConfirmAction, ProfileMessageType } from "../../model/types";
 import { ProfileConfirmModal } from "./ProfileConfirmModal";
 import { ProfileField } from "./ProfileField";
 
@@ -55,7 +56,7 @@ export const ProfilePage = () => {
       <section className="bg-[#f5f5f5]">
         <div className="w-full bg-[url('/images/auth/login.jpg')] bg-cover bg-center py-44">
           <Container className="border border-[#f5f5f5]/20 bg-black/30 px-14 py-14 text-[#f5f5f5] shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-md mobile:px-5 mobile:py-10">
-            <div className="mx-auto max-w-2xl border border-[#f5f5f5]/25 bg-[#f5f5f5]/95 p-10 text-center text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl mobile:p-6">
+            <div className="mx-auto max-w-2xl border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-center text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl mobile:p-6">
               <p className="text-2xl font-bold">Unable to load profile</p>
               <p className="mt-3 text-base leading-7 font-medium text-black/50">
                 Your session may have expired. Please sign in again.
@@ -133,7 +134,7 @@ export const ProfilePage = () => {
         <Container className="tablet:grid-cols-1 tablet:gap-12 tablet:px-10 mobile:grid-cols-1 mobile:gap-10 mobile:px-5 mobile:py-10 grid grid-cols-2 gap-12 border border-[#f5f5f5]/20 bg-black/30 px-14 py-14 text-[#f5f5f5] shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-md">
           <section className="mobile:py-0 flex flex-col justify-between py-10">
             <div>
-              <p className="text-sm font-bold tracking-[0.18em] text-[#f5f5f5]/75 uppercase">
+              <p className="text-lg font-bold tracking-[0.18em] text-[#f5f5f5]/75 uppercase">
                 Avion profile
               </p>
               <h1 className="mobile:text-4xl mobile:leading-12 mt-8 text-5xl leading-16.25 font-bold">
@@ -189,7 +190,7 @@ export const ProfilePage = () => {
             </div>
           </section>
 
-          <div className="border border-[#f5f5f5]/25 bg-[#f5f5f5]/95 p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl mobile:p-6">
+          <div className="border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl mobile:p-6">
             <h2 className="text-3xl font-bold">Account details</h2>
             <p className="mt-4 text-base leading-7 font-medium text-black/50">
               Your current profile information.
@@ -208,6 +209,10 @@ export const ProfilePage = () => {
               />
             </div>
           </div>
+        </Container>
+            <Container className="tablet:gap-12 mt-10 tablet:px-10 mobile:gap-10 mobile:px-5 mobile:py-10 grid gap-12 border border-[#f5f5f5]/20 bg-black/30 px-14 py-14 text-[#f5f5f5] shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-md">
+
+          <ProfileOrders />
         </Container>
       </div>
       {confirmAction && (

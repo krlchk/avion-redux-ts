@@ -58,7 +58,21 @@ export class OrdersService {
     const data = await this.prisma.order.findMany({
       where,
       orderBy: { createdAt: 'desc' },
-      include: { items: true, promoCode: true },
+      include: {
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                title: true,
+                img: true,
+                price: true,
+              },
+            },
+          },
+        },
+        promoCode: true,
+      },
     });
 
     return { data };
