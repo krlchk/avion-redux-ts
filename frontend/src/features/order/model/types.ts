@@ -1,4 +1,5 @@
 import { ApiDecimal } from "@/shared/api/types";
+import type { User } from "@/features/user/model/types";
 
 export interface OrderItemProduct {
   id: string;
@@ -48,8 +49,13 @@ export interface Order {
   promoDiscountAmount: ApiDecimal;
   promoCodeId: string | null;
   promoCode?: PromoCode | null;
+  user?: User | null;
 }
 
 export interface OrdersResponse {
   data: Order[];
+}
+
+export interface OrdersRequest {
+  status?: OrderStatus;
 }

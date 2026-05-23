@@ -6,6 +6,7 @@ import {
   ProfileResponse,
   CreateUserRequest,
   UpdateUserRequest,
+  GetUserByEmailRequest,
 } from "@/features/user/model/types";
 import { baseApi } from "./baseApi";
 
@@ -34,6 +35,11 @@ export const usersApi = baseApi.injectEndpoints({
 
     getUserById: build.query<User, string>({
       query: (id) => `/users/${id}`,
+      providesTags: ["Users"],
+    }),
+
+    getUserByEmail: build.query<User, GetUserByEmailRequest>({
+      query: ({ email }) => `/users/email/${email}`,
       providesTags: ["Users"],
     }),
 
@@ -66,7 +72,9 @@ export const {
   useGetUsersQuery,
   useGetDesignersQuery,
   useGetDesignerByIdQuery,
+  useGetUserByEmailQuery,
   useGetUserByIdQuery,
+  useLazyGetUserByEmailQuery,
   useProfileQuery,
   useCreateUserMutation,
   useUpdateUserMutation,

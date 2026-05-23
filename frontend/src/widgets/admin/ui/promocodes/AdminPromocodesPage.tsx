@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { PromoCode } from "@/features/promocode/model/types";
+import { Search } from "@/shared/icons";
 import { useClientPagination } from "@/shared/model/pagination";
 import { Loader, PaginationControls } from "@/shared/ui";
 import {
@@ -42,7 +43,25 @@ export const AdminPromocodesPage = () => {
     null,
   );
   const [toggleMessage, setToggleMessage] = useState("");
+  const [promocodeSearch, setPromocodeSearch] = useState("");
   const promocodes = useMemo(() => data?.data ?? [], [data]);
+  const filteredPromocodes = useMemo(() => {
+    const normalizedSearch = promocodeSearch.trim().toLowerCase();
+
+    if (!normalizedSearch) return promocodes;
+
+    return promocodes.filter((promocode) => {
+      const promocodeFields = [
+        promocode.code,
+        promocode.title ?? "",
+        promocode.id,
+      ];
+
+      return promocodeFields.some((field) =>
+        field.toLowerCase().includes(normalizedSearch),
+      );
+    });
+  }, [promocodeSearch, promocodes]);
   const {
     page,
     setPage,
@@ -54,7 +73,7 @@ export const AdminPromocodesPage = () => {
     onPrevPage,
     onNextPage,
   } = useClientPagination({
-    items: promocodes,
+    items: filteredPromocodes,
     itemsPerPage: ADMIN_PROMOCODES_PER_PAGE,
   });
 
@@ -96,6 +115,29 @@ export const AdminPromocodesPage = () => {
         </button>
       </div>
 
+      <div className="mt-8">
+        <label className="grid max-w-xl gap-2">
+          <span className="text-xs font-bold tracking-[0.16em] text-black/40 uppercase">
+            Promocode search
+          </span>
+          <div className="relative">
+            <input
+              value={promocodeSearch}
+              onChange={(event) => {
+                setPromocodeSearch(event.target.value);
+                setPage(1);
+              }}
+              placeholder="Search by promocode, title or id"
+              className="w-full border border-[#947458] bg-white py-3 pr-12 pl-4 text-base font-medium outline-none transition-colors focus:border-[#947458]"
+            />
+            <Search
+              className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
+              stroke="#947458"
+            />
+          </div>
+        </label>
+      </div>
+
       {isLoading && (
         <div className="flex min-h-80 items-center justify-center">
           <Loader />
@@ -121,9 +163,9 @@ export const AdminPromocodesPage = () => {
               <p className="text-right">Actions</p>
             </div>
 
-            {promocodes.length === 0 ? (
+            {filteredPromocodes.length === 0 ? (
               <div className="py-12 text-center text-base font-medium text-black/45">
-                No promocodes yet.
+                No promocodes found.
               </div>
             ) : (
               paginatedItems.map((promocode) => (

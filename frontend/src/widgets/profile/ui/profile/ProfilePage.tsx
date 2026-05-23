@@ -145,6 +145,7 @@ export const ProfilePage = () => {
   const handleConfirmAction = async () => {
     if (confirmAction === "logout") {
       dispatch(logout());
+      setConfirmAction(null);
       return;
     }
 
@@ -170,7 +171,8 @@ export const ProfilePage = () => {
       ? "Disable 2FA"
       : "Enable 2FA"
     : "Logout";
-  const canAccessAdmin = profile.role === "ADMIN" || profile.role === "DESIGNER";
+  const canAccessAdmin =
+    profile.role === "ADMIN" || profile.role === "DESIGNER";
 
   return (
     <section className="bg-[#f5f5f5]">
@@ -260,7 +262,7 @@ export const ProfilePage = () => {
                         value={nameValue}
                         onChange={(event) => setNameValue(event.target.value)}
                         disabled={isUpdateUserLoading}
-                        className="mobile:w-full min-w-64 border border-black/15 bg-[#f5f5f5] px-4 py-3 text-lg font-bold text-black outline-none transition-colors focus:border-[#947458] disabled:opacity-60"
+                        className="mobile:w-full min-w-64 border border-black/15 bg-[#f5f5f5] px-4 py-3 text-lg font-bold text-black transition-colors outline-none focus:border-[#947458] disabled:opacity-60"
                       />
                       <button
                         type="button"

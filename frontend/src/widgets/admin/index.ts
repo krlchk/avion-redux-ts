@@ -1,8 +1,12 @@
 export { AdminCategoriesPage } from "./ui/categories/AdminCategoriesPage";
 export { AdminCategoryFormModal } from "./ui/categories/AdminCategoryFormModal";
 export { AdminDashboard } from "./ui/AdminDashboard";
+export { AdminOrdersPage } from "./ui/orders/AdminOrdersPage";
 export { AdminProductFormModal } from "./ui/products/AdminProductFormModal";
 export { AdminProductsPage } from "./ui/products/AdminProductsPage";
 export { AdminPromocodeFormModal } from "./ui/promocodes/AdminPromocodeFormModal";
 export { AdminPromocodesPage } from "./ui/promocodes/AdminPromocodesPage";
+export { AdminReviewsPage } from "./ui/reviews/AdminReviewsPage";
 export { AdminShell } from "./ui/AdminShell";
+export { AdminUserFormModal } from "./ui/users/AdminUserFormModal";
+export { AdminUsersPage } from "./ui/users/AdminUsersPage";

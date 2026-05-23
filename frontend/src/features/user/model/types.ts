@@ -41,3 +41,7 @@ export interface UpdateUserRequest {
   id: string;
   name: string;
 }
+
+export interface GetUserByEmailRequest {
+  email: string;
+}

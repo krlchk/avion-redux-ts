@@ -16,6 +16,10 @@ export interface ReviewResponse {
   meta: ReviewsMeta;
 }
 
+export interface ReviewsResponse {
+  data: Review[];
+}
+
 export interface ReviewsMeta {
   averageRating: number;
   reviewsCount: number;
