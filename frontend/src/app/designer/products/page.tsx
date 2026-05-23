@@ -1,11 +1,11 @@
 import { AdminProductsPage, AdminShell } from "@/widgets/admin";
 
-const AdminProducts = () => {
+const DesignerProducts = () => {
   return (
-    <AdminShell activeSection="products" panel="admin">
+    <AdminShell activeSection="products" panel="designer">
       <AdminProductsPage />
     </AdminShell>
   );
 };
 
-export default AdminProducts;
+export default DesignerProducts;

@@ -3,14 +3,19 @@ import { navLinks } from "../model/constants";
 import { Container } from "@/shared/ui";
 import { useAppSelector } from "@/store/hooks";
 import { Cart, Like, Profile } from "@/shared/icons";
+import { useProfileQuery } from "@/store/services/usersApi";
 
 export const MainHeader = () => {
   const likedProductIds = useAppSelector(
     (state) => state.wishlist.likedProductIds ?? [],
   );
-  const cartProducts = useAppSelector(
-    (state) => state.cart.cartProducts ?? [],
-  );
+  const cartProducts = useAppSelector((state) => state.cart.cartProducts ?? []);
+  const token = useAppSelector((state) => state.auth.token);
+  console.log(token);
+
+  const { data: profile } = useProfileQuery(undefined, {
+    skip: !token,
+  });
   return (
     <div>
       <Container className="mobile:flex-wrap mobile:py-7 flex items-center justify-between gap-6 py-10">
@@ -20,6 +25,12 @@ export const MainHeader = () => {
             className="xs:text-lg text-xl leading-6 font-bold text-black uppercase"
           >
             Avion
+            {profile?.role === "ADMIN" && (
+              <p className="mt-1 text-lg font-light text-[#947458]">ADMIN</p>
+            )}
+            {profile?.role === "DESIGNER" && (
+              <p className="mt-1 text-lg font-light text-[#947458]">DESIGNER</p>
+            )}
           </Link>
         </div>
 

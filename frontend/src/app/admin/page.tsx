@@ -2,8 +2,8 @@ import { AdminDashboard, AdminShell } from "@/widgets/admin";
 
 const Admin = () => {
   return (
-    <AdminShell activeSection="dashboard">
-      <AdminDashboard />
+    <AdminShell activeSection="dashboard" panel="admin">
+      <AdminDashboard panel="admin" />
     </AdminShell>
   );
 };

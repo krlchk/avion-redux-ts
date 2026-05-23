@@ -2,7 +2,7 @@ import { AdminOrdersPage, AdminShell } from "@/widgets/admin";
 
 const AdminOrders = () => {
   return (
-    <AdminShell activeSection="orders">
+    <AdminShell activeSection="orders" panel="admin">
       <AdminOrdersPage />
     </AdminShell>
   );

@@ -129,3 +129,5 @@ export interface ProfileOrderPaymentFormProps {
   onPaymentConfirmed: (message: string) => void;
   onPaymentFailed: (message: string) => void;
 }
+
+export const PROFILE_ORDERS_PER_PAGE = 5;

@@ -202,10 +202,12 @@ export const ProfilePage = () => {
               <div className="mt-8 flex flex-wrap gap-4">
                 {canAccessAdmin && (
                   <Link
-                    href="/admin"
+                    href={profile.role === "DESIGNER" ? "/designer" : "/admin"}
                     className="flex min-w-44 cursor-pointer items-center justify-center border border-[#f5f5f5]/70 px-8 py-3 text-base font-medium tracking-[0.12em] uppercase transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5] hover:text-[#947458] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    Admin panel
+                    {profile.role === "DESIGNER"
+                      ? "Designer panel"
+                      : "Admin panel"}
                   </Link>
                 )}
                 <button

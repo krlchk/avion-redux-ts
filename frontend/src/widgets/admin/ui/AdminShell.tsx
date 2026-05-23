@@ -8,7 +8,17 @@ import { adminNavigationItems } from "../model/constants";
 import type { AdminShellProps } from "../model/types";
 import { ProfileLogin } from "@/widgets/profile";
 
-export const AdminShell = ({ children, activeSection }: AdminShellProps) => {
+const getPanelHref = (href: string, isDesignerPanel: boolean) => {
+  if (!isDesignerPanel) return href;
+
+  return href === "/admin" ? "/designer" : href.replace("/admin", "/designer");
+};
+
+export const AdminShell = ({
+  children,
+  activeSection,
+  panel,
+}: AdminShellProps) => {
   const token = useAppSelector((state) => state.auth.token);
   const {
     data: profile,
@@ -42,15 +52,19 @@ export const AdminShell = ({ children, activeSection }: AdminShellProps) => {
     );
   }
 
-  const isAdminUser = profile.role === "ADMIN" || profile.role === "DESIGNER";
+  const isDesignerPanel =
+    panel === "designer" || (!panel && profile.role === "DESIGNER");
+  const canAccessPanel = isDesignerPanel
+    ? profile.role === "DESIGNER"
+    : profile.role === "ADMIN";
 
-  if (!isAdminUser) {
+  if (!canAccessPanel) {
     return (
       <section className="bg-[#f5f5f5] py-20">
         <Container className="text-center">
           <p className="text-2xl font-bold text-black">Access denied</p>
           <p className="mt-3 text-base font-medium text-black/50">
-            This area is available only for admins and designers.
+            This area is available only for authorized team members.
           </p>
         </Container>
       </section>
@@ -65,8 +79,11 @@ export const AdminShell = ({ children, activeSection }: AdminShellProps) => {
     <section className="bg-[#f5f5f5] py-12">
       <Container className="grid grid-cols-[260px_1fr] gap-8 tablet:grid-cols-1 mobile:grid-cols-1">
         <aside className="border max-h-145 border-black/10 bg-white p-6 text-black shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
-          <Link href="/admin" className="text-2xl font-bold uppercase">
-            Admin
+          <Link
+            href={isDesignerPanel ? "/designer" : "/admin"}
+            className="text-2xl font-bold uppercase"
+          >
+            {isDesignerPanel ? "Designer" : "Admin"}
           </Link>
           <p className="mt-2 text-sm font-medium text-black/45">
             {profile.name}
@@ -79,7 +96,7 @@ export const AdminShell = ({ children, activeSection }: AdminShellProps) => {
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={getPanelHref(item.href, isDesignerPanel)}
                   className={`border px-4 py-3 text-sm font-bold tracking-[0.12em] uppercase transition-colors ${
                     isActive
                       ? "border-[#947458] bg-[#947458] text-[#f5f5f5]"

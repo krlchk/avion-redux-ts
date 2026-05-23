@@ -1,9 +1,11 @@
-import { Loader } from "@/shared/ui";
+import { useClientPagination } from "@/shared/model/pagination";
+import { Loader, PaginationControls } from "@/shared/ui";
 import { useGetMyOrdersQuery } from "@/store/services/ordersApi";
 import { useState } from "react";
 import { ProfileOrderRow } from "./ProfileOrderRow";
 import type { ProfileOrderStatusFilter } from "../../model/types";
 import { ProfileOrdersFilter } from "./ProfileOrdersFilter";
+import { PROFILE_ORDERS_PER_PAGE } from "../../model/profile.utils";
 
 export const ProfileOrders = () => {
   const [selectedStatus, setSelectedStatus] =
@@ -14,6 +16,22 @@ export const ProfileOrders = () => {
 
   const { data, isError, isLoading } = useGetMyOrdersQuery(ordersQuery);
   const orders = data?.data ?? [];
+  const {
+    page,
+    setPage,
+    lastPage,
+    paginatedItems,
+    onPrevPage,
+    onNextPage,
+  } = useClientPagination({
+    items: orders,
+    itemsPerPage: PROFILE_ORDERS_PER_PAGE,
+  });
+
+  const handleStatusSelect = (status: ProfileOrderStatusFilter) => {
+    setSelectedStatus(status);
+    setPage(1);
+  };
 
   return (
     <>
@@ -33,7 +51,7 @@ export const ProfileOrders = () => {
           </p>
           <ProfileOrdersFilter
             selectedStatus={selectedStatus}
-            setSelectedStatus={setSelectedStatus}
+            setSelectedStatus={handleStatusSelect}
           />
         </div>
 
@@ -65,9 +83,19 @@ export const ProfileOrders = () => {
 
           {!isLoading &&
             !isError &&
-            orders.map((order) => (
+            paginatedItems.map((order) => (
               <ProfileOrderRow key={order.id} order={order} />
             ))}
+
+          {!isLoading && !isError && orders.length > 0 && (
+            <PaginationControls
+              page={page}
+              lastPage={lastPage}
+              onPageChange={setPage}
+              onPrevPage={onPrevPage}
+              onNextPage={onNextPage}
+            />
+          )}
         </div>
       </div>
     </>

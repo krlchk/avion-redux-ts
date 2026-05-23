@@ -2,7 +2,7 @@ import { AdminPromocodesPage, AdminShell } from "@/widgets/admin";
 
 const AdminPromocodes = () => {
   return (
-    <AdminShell activeSection="promocodes">
+    <AdminShell activeSection="promocodes" panel="admin">
       <AdminPromocodesPage />
     </AdminShell>
   );
