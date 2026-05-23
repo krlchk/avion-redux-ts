@@ -7,6 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { PromocodesService } from './promocodes.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,6 +16,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 import { CreatePromoCodeDto } from './dto/create-promocode.dto';
 import { ToggleActivatePromoCode } from './dto/toggle-activate-promocode.dto';
+import { ValidatePromoCodeDto } from './dto/validate-promocode.dto';
 
 @Controller('promocodes')
 export class PromocodesController {
@@ -24,6 +26,13 @@ export class PromocodesController {
   @Roles(Role.ADMIN)
   getAll() {
     return this.promocodesService.getAll();
+  }
+
+  @Get('validate')
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+  validate(@Query() dto: ValidatePromoCodeDto) {
+    return this.promocodesService.validateForCustomer(dto.code);
   }
 
   @Post()

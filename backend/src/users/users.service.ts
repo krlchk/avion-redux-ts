@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,7 +8,7 @@ import { PrismaService } from 'src/prisma.service';
 import { hash, genSalt } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { EmailService } from 'src/email/email.service';
 
 @Injectable()
@@ -127,7 +128,11 @@ export class UsersService {
 
     return new UserEntity(user);
   }
-  async update(id: string, dto: UpdateUserDto) {
+  async update(id: string, dto: UpdateUserDto, currentUser: UserEntity) {
+    if (currentUser.role !== Role.ADMIN && currentUser.id !== id) {
+      throw new ForbiddenException('You are not allowed to update this user');
+    }
+
     const user = await this.prisma.user.update({
       where: {
         id: id,

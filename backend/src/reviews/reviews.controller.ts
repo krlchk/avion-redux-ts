@@ -15,13 +15,17 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
   getAllReviews() {
     return this.reviewsService.getAllReviews();
   }
