@@ -24,6 +24,11 @@ export interface Product {
   averageRating: number;
 }
 
+export type ProductMutationResponse = Omit<
+  Product,
+  "reviews" | "finalPrice" | "reviewsCount" | "averageRating"
+>;
+
 export interface ProductQuery {
   page?: number;
   limit?: number;
@@ -41,6 +46,34 @@ export interface ProductQuery {
 export interface ProductResponse {
   data: Product[];
   meta: PaginationMeta;
+}
+
+export interface MyProductsResponse {
+  data: Product[];
+}
+
+export interface ProductFormPayload {
+  title: string;
+  description?: string;
+  img?: string;
+  image?: File;
+  price: number;
+  stock: number;
+  width?: number;
+  height?: number;
+  depth?: number;
+  categoryId: string;
+}
+
+export interface UpdateProductRequest {
+  id: string;
+  data: Partial<ProductFormPayload>;
+}
+
+export interface ProductDiscountRequest {
+  id: string;
+  discountPercent?: number;
+  discountUntil?: string;
 }
 
 export interface ProductCatalogProps {

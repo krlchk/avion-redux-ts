@@ -36,3 +36,8 @@ export interface CreateUserRequest {
   name: string;
   password: string;
 }
+
+export interface UpdateUserRequest {
+  id: string;
+  name: string;
+}

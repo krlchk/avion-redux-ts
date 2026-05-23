@@ -5,6 +5,7 @@ import {
   UserResponse,
   ProfileResponse,
   CreateUserRequest,
+  UpdateUserRequest,
 } from "@/features/user/model/types";
 import { baseApi } from "./baseApi";
 
@@ -49,6 +50,15 @@ export const usersApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Users"],
     }),
+
+    updateUser: build.mutation<ProfileResponse, UpdateUserRequest>({
+      query: ({ id, ...body }) => ({
+        url: `/users/${id}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Users"],
+    }),
   }),
 });
 
@@ -59,4 +69,5 @@ export const {
   useGetUserByIdQuery,
   useProfileQuery,
   useCreateUserMutation,
+  useUpdateUserMutation,
 } = usersApi;

@@ -5,8 +5,12 @@ import { useState } from "react";
 import { Container, Loader } from "@/shared/ui";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useToggleTwoFactorMutation } from "@/store/services/authApi";
-import { useProfileQuery } from "@/store/services/usersApi";
+import {
+  useProfileQuery,
+  useUpdateUserMutation,
+} from "@/store/services/usersApi";
 import { logout } from "@/store/slices/authSlice";
+import Link from "next/link";
 import { ProfileLogin } from "../auth";
 import { ProfileOrders } from "../orders";
 import {
@@ -22,9 +26,16 @@ export const ProfilePage = () => {
   const token = useAppSelector((state) => state.auth.token);
   const [toggleTwoFactor, { isLoading: isToggleTwoFactorLoading }] =
     useToggleTwoFactorMutation();
+  const [updateUser, { isLoading: isUpdateUserLoading }] =
+    useUpdateUserMutation();
   const [actionMessage, setActionMessage] = useState("");
   const [actionMessageType, setActionMessageType] =
     useState<ProfileMessageType>("success");
+  const [nameMessage, setNameMessage] = useState("");
+  const [nameMessageType, setNameMessageType] =
+    useState<ProfileMessageType>("success");
+  const [isNameEditing, setIsNameEditing] = useState(false);
+  const [nameValue, setNameValue] = useState("");
   const [confirmAction, setConfirmAction] =
     useState<ProfileConfirmAction | null>(null);
   const {
@@ -99,6 +110,38 @@ export const ProfilePage = () => {
     }
   };
 
+  const handleSaveName = async () => {
+    const trimmedName = nameValue.trim();
+    setNameMessage("");
+
+    if (!trimmedName) {
+      setNameMessageType("error");
+      setNameMessage("Name cannot be empty.");
+      return;
+    }
+
+    if (trimmedName === profile.name) {
+      setIsNameEditing(false);
+      return;
+    }
+
+    try {
+      await updateUser({ id: profile.id, name: trimmedName }).unwrap();
+      setNameMessageType("success");
+      setNameMessage("Name updated.");
+      setIsNameEditing(false);
+    } catch (error) {
+      setNameMessageType("error");
+      setNameMessage(getProfileActionErrorMessage(error));
+    }
+  };
+
+  const handleCancelNameEdit = () => {
+    setNameValue(profile.name);
+    setNameMessage("");
+    setIsNameEditing(false);
+  };
+
   const handleConfirmAction = async () => {
     if (confirmAction === "logout") {
       dispatch(logout());
@@ -127,6 +170,7 @@ export const ProfilePage = () => {
       ? "Disable 2FA"
       : "Enable 2FA"
     : "Logout";
+  const canAccessAdmin = profile.role === "ADMIN" || profile.role === "DESIGNER";
 
   return (
     <section className="bg-[#f5f5f5]">
@@ -154,6 +198,14 @@ export const ProfilePage = () => {
                 one calm place.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
+                {canAccessAdmin && (
+                  <Link
+                    href="/admin"
+                    className="flex min-w-44 cursor-pointer items-center justify-center border border-[#f5f5f5]/70 px-8 py-3 text-base font-medium tracking-[0.12em] uppercase transition-all duration-300 hover:-translate-y-1 hover:bg-[#f5f5f5] hover:text-[#947458] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Admin panel
+                  </Link>
+                )}
                 <button
                   type="button"
                   onClick={() => setConfirmAction("twoFactor")}
@@ -196,7 +248,72 @@ export const ProfilePage = () => {
               Your current profile information.
             </p>
             <div className="mt-8 grid gap-5">
-              <ProfileField label="Name" value={profile.name} />
+              <div className="border-b border-black/10 pb-5">
+                <div className="mobile:flex-col mobile:items-start flex items-center justify-between gap-6">
+                  <p className="text-sm font-medium tracking-[0.16em] text-black/40 uppercase">
+                    Name
+                  </p>
+
+                  {isNameEditing ? (
+                    <div className="mobile:w-full flex flex-wrap justify-end gap-3">
+                      <input
+                        value={nameValue}
+                        onChange={(event) => setNameValue(event.target.value)}
+                        disabled={isUpdateUserLoading}
+                        className="mobile:w-full min-w-64 border border-black/15 bg-[#f5f5f5] px-4 py-3 text-lg font-bold text-black outline-none transition-colors focus:border-[#947458] disabled:opacity-60"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSaveName}
+                        disabled={isUpdateUserLoading}
+                        className="flex min-w-24 cursor-pointer items-center justify-center bg-[#947458] px-5 py-3 text-sm font-bold tracking-[0.12em] text-white uppercase transition-all duration-300 hover:bg-[#a9825f] disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {isUpdateUserLoading ? (
+                          <Loader styles="h-5 w-5 border-2 border-[#f5f5f5]/40 border-t-[#f5f5f5]" />
+                        ) : (
+                          "Save"
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancelNameEdit}
+                        disabled={isUpdateUserLoading}
+                        className="cursor-pointer border border-black/20 px-5 py-3 text-sm font-bold tracking-[0.12em] text-black/65 uppercase transition-all duration-300 hover:border-[#947458] hover:text-[#947458] disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-4">
+                      <p className="text-lg font-bold text-black">
+                        {profile.name}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setNameValue(profile.name);
+                          setNameMessage("");
+                          setIsNameEditing(true);
+                        }}
+                        className="cursor-pointer border border-black/20 px-4 py-2 text-xs font-bold tracking-[0.12em] text-black/55 uppercase transition-all duration-300 hover:border-[#947458] hover:text-[#947458]"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {nameMessage && (
+                  <p
+                    className={`mt-3 text-right text-sm font-medium ${
+                      nameMessageType === "success"
+                        ? "text-[#947458]"
+                        : "text-[#FB5454]"
+                    }`}
+                  >
+                    {nameMessage}
+                  </p>
+                )}
+              </div>
               <ProfileField label="Email" value={profile.email} />
               <ProfileField label="Role" value={profile.role} />
               <ProfileField

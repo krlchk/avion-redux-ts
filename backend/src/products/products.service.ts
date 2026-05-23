@@ -202,7 +202,8 @@ export class ProductsService {
   // GET MY PRODUCTS
   async findMyProducts(user: UserEntity) {
     if (user.role === 'DESIGNER') {
-      return this.findByDesignerId(user.id);
+      const data = await this.findByDesignerId(user.id);
+      return { data };
     }
     if (user.role === 'ADMIN') {
       const products = await this.prisma.product.findMany({
@@ -226,15 +227,17 @@ export class ProductsService {
     user: UserEntity,
   ): Promise<Product> {
     const product = await this.getById(id);
-    const category = await this.prisma.category.findUnique({
-      where: {
-        id: dto.categoryId,
-      },
-    });
-    if (!category) {
-      throw new NotFoundException(
-        `You can not update this product because category with id:${dto.categoryId} not found`,
-      );
+    if (dto.categoryId !== undefined) {
+      const category = await this.prisma.category.findUnique({
+        where: {
+          id: dto.categoryId,
+        },
+      });
+      if (!category) {
+        throw new NotFoundException(
+          `You can not update this product because category with id:${dto.categoryId} not found`,
+        );
+      }
     }
 
     if (user.role === Role.ADMIN) {
