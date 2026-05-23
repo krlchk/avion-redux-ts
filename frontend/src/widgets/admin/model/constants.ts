@@ -47,3 +47,4 @@ export const adminNavigationItems: AdminNavigationItem[] = [
 
 export const ADMIN_PRODUCTS_PER_PAGE = 9;
 export const ADMIN_CATEGORIES_PER_PAGE = 9;
+export const ADMIN_PROMOCODES_PER_PAGE = 9;
