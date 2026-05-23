@@ -44,3 +44,5 @@ export const adminNavigationItems: AdminNavigationItem[] = [
     roles: ["ADMIN"],
   },
 ];
+
+export const ADMIN_PRODUCTS_PER_PAGE = 9;

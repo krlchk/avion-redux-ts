@@ -2,14 +2,49 @@
 
 import { Loader, PaginationControls } from "@/shared/ui";
 import { useClientPagination } from "@/shared/model/pagination";
-import { useGetMyProductsQuery } from "@/store/services/productsApi";
-import { useMemo } from "react";
-
-const ADMIN_PRODUCTS_PER_PAGE = 9;
+import {
+  useDeleteProductMutation,
+  useGetMyProductsQuery,
+} from "@/store/services/productsApi";
+import type { Product, SortVariant } from "@/features/product/model/types";
+import { useMemo, useState } from "react";
+import { ADMIN_PRODUCTS_PER_PAGE } from "../model/constants";
+import { AdminProductFormModal } from "./AdminProductFormModal";
+import { SortDropdown } from "@/features/product/ui/catalog/SortDropdown";
+import { sortQueryMap } from "@/features/product/model/catalog.constants";
+import { ProfileConfirmModal } from "@/widgets/profile/ui/profile/ProfileConfirmModal";
+import { getProfileActionErrorMessage } from "@/widgets/profile/model/profile.utils";
 
 export const AdminProductsPage = () => {
   const { data, isError, isLoading } = useGetMyProductsQuery();
+  const [deleteProduct, { isLoading: isDeleteProductLoading }] =
+    useDeleteProductMutation();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+  const [deleteMessage, setDeleteMessage] = useState("");
+  const [selectedSort, setSelectedSort] = useState<SortVariant>("latest");
   const products = useMemo(() => data?.data ?? [], [data]);
+  const sortedProducts = useMemo(() => {
+    const selectedSortConfig = sortQueryMap[selectedSort];
+
+    return [...products].sort((firstProduct, secondProduct) => {
+      const firstValue =
+        selectedSortConfig.sortBy === "price"
+          ? Number(firstProduct.price)
+          : new Date(firstProduct.createdAt).getTime();
+      const secondValue =
+        selectedSortConfig.sortBy === "price"
+          ? Number(secondProduct.price)
+          : new Date(secondProduct.createdAt).getTime();
+
+      if (selectedSortConfig.sortOrder === "asc") {
+        return firstValue - secondValue;
+      }
+
+      return secondValue - firstValue;
+    });
+  }, [products, selectedSort]);
   const {
     page,
     setPage,
@@ -21,9 +56,27 @@ export const AdminProductsPage = () => {
     onPrevPage,
     onNextPage,
   } = useClientPagination({
-    items: products,
+    items: sortedProducts,
     itemsPerPage: ADMIN_PRODUCTS_PER_PAGE,
   });
+
+  const handleSort = (sort: SortVariant) => {
+    setSelectedSort(sort);
+    setPage(1);
+  };
+
+  const handleDeleteProduct = async () => {
+    if (!deletingProduct) return;
+
+    setDeleteMessage("");
+
+    try {
+      await deleteProduct(deletingProduct.id).unwrap();
+      setDeletingProduct(null);
+    } catch (error) {
+      setDeleteMessage(getProfileActionErrorMessage(error));
+    }
+  };
 
   return (
     <div className="border border-black/10 bg-white p-8 text-black shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
@@ -38,12 +91,16 @@ export const AdminProductsPage = () => {
           </p>
         </div>
 
-        <button
-          type="button"
-          className="cursor-pointer bg-[#947458] px-6 py-3 text-sm font-bold tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#a9825f]"
-        >
-          New product
-        </button>
+        <div className="xs:flex-col flex items-center gap-3">
+          <SortDropdown selectedSort={selectedSort} onSort={handleSort} />
+          <button
+            type="button"
+            onClick={() => setIsCreateModalOpen(true)}
+            className="xs:w-full cursor-pointer bg-[#947458] px-6 py-3 text-sm font-bold tracking-[0.12em] whitespace-nowrap text-white uppercase transition-colors hover:bg-[#a9825f]"
+          >
+            New product
+          </button>
+        </div>
       </div>
 
       {isLoading && (
@@ -99,9 +156,20 @@ export const AdminProductsPage = () => {
                   <div className="flex justify-end gap-2">
                     <button
                       type="button"
+                      onClick={() => setEditingProduct(product)}
                       className="cursor-pointer border border-black/15 px-3 py-2 text-xs font-bold tracking-[0.12em] text-black/55 uppercase transition-colors hover:border-[#947458] hover:text-[#947458]"
                     >
                       Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDeleteMessage("");
+                        setDeletingProduct(product);
+                      }}
+                      className="cursor-pointer border border-[#FB5454]/35 px-3 py-2 text-xs font-bold tracking-[0.12em] text-[#FB5454] uppercase transition-colors hover:border-[#FB5454] hover:bg-[#FB5454]/5"
+                    >
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -117,6 +185,31 @@ export const AdminProductsPage = () => {
             onNextPage={onNextPage}
           />
         </div>
+      )}
+
+      {isCreateModalOpen && (
+        <AdminProductFormModal onClose={() => setIsCreateModalOpen(false)} />
+      )}
+
+      {editingProduct && (
+        <AdminProductFormModal
+          product={editingProduct}
+          onClose={() => setEditingProduct(null)}
+        />
+      )}
+
+      {deletingProduct && (
+        <ProfileConfirmModal
+          title="Delete product?"
+          description={`This will permanently remove "${deletingProduct.title}" from the catalog.${deleteMessage ? ` ${deleteMessage}` : ""}`}
+          confirmText="Delete"
+          isLoading={isDeleteProductLoading}
+          onCancel={() => {
+            setDeleteMessage("");
+            setDeletingProduct(null);
+          }}
+          onConfirm={handleDeleteProduct}
+        />
       )}
     </div>
   );
