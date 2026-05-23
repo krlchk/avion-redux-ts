@@ -11,6 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { EmailModule } from './email/email.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { PromocodesModule } from './promocodes/promocodes.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PromocodesModule } from './promocodes/promocodes.module';
     EmailModule,
     ReviewsModule,
     PromocodesModule,
+    AiModule,
   ],
 })
 export class AppModule {}

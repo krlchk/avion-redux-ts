@@ -17,6 +17,7 @@ import { toggleWishlist } from "@/store/slices/wishlistSlice";
 import { Like } from "@/shared/icons";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useRouter } from "next/navigation";
+import { ProductAiAssistant } from "./ai/ProductAiAssistant";
 
 export const ProductDetails = ({ productId }: ProductDetailsProps) => {
   const {
@@ -244,6 +245,7 @@ export const ProductDetails = ({ productId }: ProductDetailsProps) => {
           </div>
         </div>
       </section>
+      <ProductAiAssistant productId={product.id} productTitle={product.title} />
       <ProductReviews reviews={reviews} averageRating={product.averageRating} />
       <ProductReviewForm productId={product.id} />
     </Container>
