@@ -6,7 +6,8 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { Order, OrderStatus, PromoCode } from '@prisma/client';
+import { Order, OrderStatus, PromoCode, Role } from '@prisma/client';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class OrdersService {
@@ -230,8 +231,12 @@ export class OrdersService {
   //   });
   // }
 
-  async cancelOrder(orderId: string) {
+  async cancelOrder(orderId: string, user: UserEntity) {
     const order = await this.getByIdForAdmin(orderId);
+    if (user.role !== Role.ADMIN && order.userId !== user.id) {
+      throw new ForbiddenException('You are not allowed to cancel this order');
+    }
+
     if (order.status !== 'PENDING')
       throw new BadRequestException('Order must be with status PENDING');
 

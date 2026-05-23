@@ -31,7 +31,10 @@ export const ProfileOrders = () => {
           <p className="text-sm font-bold tracking-[0.18em] text-[#947458] uppercase">
             {orders.length} orders
           </p>
-          <ProfileOrdersFilter selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus} />
+          <ProfileOrdersFilter
+            selectedStatus={selectedStatus}
+            setSelectedStatus={setSelectedStatus}
+          />
         </div>
 
         <div className="mt-9">
@@ -56,7 +59,7 @@ export const ProfileOrders = () => {
 
           {!isLoading && !isError && orders.length === 0 && (
             <div className="flex min-h-36 items-center justify-center border-b border-black/10 text-center text-base font-medium text-black/45">
-              You do not have orders yet.
+              You do not have {selectedStatus} orders yet.
             </div>
           )}
 

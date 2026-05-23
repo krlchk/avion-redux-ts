@@ -66,11 +66,13 @@ export class OrdersController {
     return this.ordersService.create(dto, user.id);
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id/cancel')
-  cancelOrder(@Param('id', ParseUUIDPipe) orderId: string) {
-    return this.ordersService.cancelOrder(orderId);
+  cancelOrder(
+    @Param('id', ParseUUIDPipe) orderId: string,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.ordersService.cancelOrder(orderId, user);
   }
 
   //FUTURE

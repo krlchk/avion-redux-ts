@@ -7,6 +7,7 @@ import { clearCart } from "@/store/slices/cartSlice";
 import { getCreateOrderErrorMessage } from "../model/cart.utils";
 import type { CartSummaryProps } from "../model/types";
 import type { CreateOrderRequest } from "@/store/model/types";
+import { useRouter } from "next/navigation";
 
 export const CartSummary = ({
   isCheckoutDisabled,
@@ -20,6 +21,8 @@ export const CartSummary = ({
   const [orderMessage, setOrderMessage] = useState("");
   const [createOrder, { isLoading, isSuccess, reset }] =
     useCreateOrderMutation();
+
+  const router = useRouter();
 
   const handleCheckout = async () => {
     setOrderMessage("");
@@ -42,6 +45,7 @@ export const CartSummary = ({
       await createOrder(orderPayload).unwrap();
       dispatch(clearCart());
       setPromoCode("");
+      router.push("/profile");
     } catch (error) {
       setOrderMessage(getCreateOrderErrorMessage(error));
     }

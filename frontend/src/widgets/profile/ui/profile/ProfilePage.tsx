@@ -55,8 +55,8 @@ export const ProfilePage = () => {
     return (
       <section className="bg-[#f5f5f5]">
         <div className="w-full bg-[url('/images/auth/login.jpg')] bg-cover bg-center py-44">
-          <Container className="border border-[#f5f5f5]/20 bg-black/30 px-14 py-14 text-[#f5f5f5] shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-md mobile:px-5 mobile:py-10">
-            <div className="mx-auto max-w-2xl border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-center text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl mobile:p-6">
+          <Container className="mobile:px-5 mobile:py-10 border border-[#f5f5f5]/20 bg-black/30 px-14 py-14 text-[#f5f5f5] shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-md">
+            <div className="mobile:p-6 mx-auto max-w-2xl border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-center text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl">
               <p className="text-2xl font-bold">Unable to load profile</p>
               <p className="mt-3 text-base leading-7 font-medium text-black/50">
                 Your session may have expired. Please sign in again.
@@ -190,7 +190,7 @@ export const ProfilePage = () => {
             </div>
           </section>
 
-          <div className="border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl mobile:p-6">
+          <div className="mobile:p-6 border border-[#f5f5f5]/25 bg-[#f5f5f5] p-10 text-black shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-xl">
             <h2 className="text-3xl font-bold">Account details</h2>
             <p className="mt-4 text-base leading-7 font-medium text-black/50">
               Your current profile information.
@@ -210,8 +210,7 @@ export const ProfilePage = () => {
             </div>
           </div>
         </Container>
-            <Container className="tablet:gap-12 mt-10 tablet:px-10 mobile:gap-10 mobile:px-5 mobile:py-10 grid gap-12 border border-[#f5f5f5]/20 bg-black/30 px-14 py-14 text-[#f5f5f5] shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-md">
-
+        <Container className="tablet:gap-12 tablet:px-10 mobile:gap-10 mobile:px-5 mobile:py-10 mt-10 grid gap-12 border border-[#f5f5f5]/20 bg-black/30 px-14 py-14 text-[#f5f5f5] shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-md">
           <ProfileOrders />
         </Container>
       </div>
