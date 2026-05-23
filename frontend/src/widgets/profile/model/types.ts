@@ -4,6 +4,7 @@ import type {
   OrderItem,
   OrderStatus,
 } from "@/features/order/model/types";
+import { Dispatch, SetStateAction } from "react";
 
 export type LoginStep = "login" | "otp" | "forgot" | "resetOtp" | "reset";
 export type ProfileMessageType = "success" | "error";
@@ -112,4 +113,14 @@ export type ProfileOrderStatusFilter = OrderStatus | "ALL";
 export interface ProfileOrdersFilterProps {
   selectedStatus: ProfileOrderStatusFilter;
   setSelectedStatus: (value: ProfileOrderStatusFilter) => void;
+}
+
+export type PaymentNotice = {
+  type: "success" | "error";
+  message: string;
+};
+
+export interface ProfilePaymentNoticeModalProps {
+  paymentNotice: PaymentNotice;
+  setPaymentNotice: Dispatch<SetStateAction<PaymentNotice | null>>;
 }

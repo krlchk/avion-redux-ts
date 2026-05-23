@@ -5,10 +5,15 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { FormEvent, useState } from "react";
+import type { ComponentProps } from "react";
+import { useState } from "react";
 import { Loader } from "@/shared/ui";
 import { useConfirmOrderPaymentMutation } from "@/store/services/paymentsApi";
-import { getProfileActionErrorMessage, ProfileOrderPaymentFormProps, ProfileOrderPaymentModalProps } from "../../model/profile.utils";
+import {
+  getProfileActionErrorMessage,
+  ProfileOrderPaymentFormProps,
+  ProfileOrderPaymentModalProps,
+} from "../../model/profile.utils";
 
 const stripePublishableKey =
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";
@@ -16,11 +21,14 @@ const stripePromise = stripePublishableKey
   ? loadStripe(stripePublishableKey)
   : null;
 
+type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;
+
 const ProfileOrderPaymentForm = ({
   orderId,
   paymentIntentId,
   onClose,
   onPaymentConfirmed,
+  onPaymentFailed,
 }: ProfileOrderPaymentFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -31,7 +39,7 @@ const ProfileOrderPaymentForm = ({
 
   const isLoading = isStripeSubmitting || isConfirmPaymentLoading;
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: FormSubmitHandler = async (event) => {
     event.preventDefault();
     setErrorMessage("");
 
@@ -52,7 +60,10 @@ const ProfileOrderPaymentForm = ({
       });
 
       if (result.error) {
-        setErrorMessage(result.error.message ?? "Unable to complete payment.");
+        onPaymentFailed(
+          "Payment was not successful. Our operator will contact you.",
+        );
+        onClose();
         return;
       }
 
@@ -64,10 +75,15 @@ const ProfileOrderPaymentForm = ({
         paymentIntentId: completedPaymentIntentId,
       }).unwrap();
 
-      onPaymentConfirmed(response.message);
+      onPaymentConfirmed(
+        `${response.message}. Payment successful. Our operator will contact you.`,
+      );
       onClose();
     } catch (error) {
-      setErrorMessage(getProfileActionErrorMessage(error));
+      onPaymentFailed(
+        `${getProfileActionErrorMessage(error)} Our operator will contact you.`,
+      );
+      onClose();
     } finally {
       setIsStripeSubmitting(false);
     }
@@ -114,6 +130,7 @@ export const ProfileOrderPaymentModal = ({
   paymentIntentId,
   onClose,
   onPaymentConfirmed,
+  onPaymentFailed,
 }: ProfileOrderPaymentModalProps) => {
   return (
     <div
@@ -138,6 +155,7 @@ export const ProfileOrderPaymentModal = ({
                 paymentIntentId={paymentIntentId}
                 onClose={onClose}
                 onPaymentConfirmed={onPaymentConfirmed}
+                onPaymentFailed={onPaymentFailed}
               />
             </Elements>
           ) : (

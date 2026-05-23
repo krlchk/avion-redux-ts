@@ -119,6 +119,7 @@ export interface ProfileOrderPaymentModalProps {
   paymentIntentId: string;
   onClose: () => void;
   onPaymentConfirmed: (message: string) => void;
+  onPaymentFailed: (message: string) => void;
 }
 
 export interface ProfileOrderPaymentFormProps {
@@ -126,4 +127,5 @@ export interface ProfileOrderPaymentFormProps {
   paymentIntentId: string;
   onClose: () => void;
   onPaymentConfirmed: (message: string) => void;
+  onPaymentFailed: (message: string) => void;
 }

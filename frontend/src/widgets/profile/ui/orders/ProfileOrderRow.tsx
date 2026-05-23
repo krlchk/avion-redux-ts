@@ -2,33 +2,34 @@ import { ArrowDown } from "@/shared/icons";
 import { useCreatePaymentIntentMutation } from "@/store/services/paymentsApi";
 import { useCancelOrderMutation } from "@/store/services/ordersApi";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import {
   formatProfileDate,
   formatProfileOrderPrice,
   formatProfileOrderStatus,
   getProfileActionErrorMessage,
 } from "../../model/profile.utils";
-import type { ProfileOrderRowProps } from "../../model/types";
+import type { PaymentNotice, ProfileOrderRowProps } from "../../model/types";
 import { ProfileConfirmModal } from "../profile/ProfileConfirmModal";
 import { ProfileOrderItemRow } from "./ProfileOrderItemRow";
 import { ProfileOrderMeta } from "./ProfileOrderMeta";
 import { ProfileOrderPaymentModal } from "./ProfileOrderPaymentModal";
 import { ProfileOrderPriceRow } from "./ProfileOrderPriceRow";
+import { ProfilePaymentNoticeModal } from "./ProfilePaymentNoticeModal";
 
 export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
   const [cancelErrorMessage, setCancelErrorMessage] = useState("");
-  const [paymentMessage, setPaymentMessage] = useState("");
-  const [paymentErrorMessage, setPaymentErrorMessage] = useState("");
+  const [paymentNotice, setPaymentNotice] = useState<PaymentNotice | null>(
+    null,
+  );
   const [paymentIntent, setPaymentIntent] = useState<{
     clientSecret: string;
     paymentIntentId: string;
   } | null>(null);
-  const [
-    createPaymentIntent,
-    { isLoading: isCreatePaymentIntentLoading },
-  ] = useCreatePaymentIntentMutation();
+  const [createPaymentIntent, { isLoading: isCreatePaymentIntentLoading }] =
+    useCreatePaymentIntentMutation();
   const [cancelOrder, { isLoading: isCancelLoading }] =
     useCancelOrderMutation();
   const promoCodeLabel = order.promoCode
@@ -50,15 +51,15 @@ export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
   };
 
   const handlePayOrder = async () => {
-    setPaymentMessage("");
-    setPaymentErrorMessage("");
-
     try {
       const nextPaymentIntent = await createPaymentIntent(order.id).unwrap();
       setPaymentIntent(nextPaymentIntent);
     } catch (error) {
       setPaymentIntent(null);
-      setPaymentErrorMessage(getProfileActionErrorMessage(error));
+      setPaymentNotice({
+        type: "error",
+        message: `${getProfileActionErrorMessage(error)} Our operator will contact you.`,
+      });
     }
   };
 
@@ -180,16 +181,6 @@ export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
                   {cancelErrorMessage}
                 </p>
               )}
-              {paymentMessage && (
-                <p className="w-full text-right text-sm font-medium text-[#947458]">
-                  {paymentMessage}
-                </p>
-              )}
-              {paymentErrorMessage && (
-                <p className="w-full text-right text-sm font-medium text-[#FB5454]">
-                  {paymentErrorMessage}
-                </p>
-              )}
             </div>
           )}
         </div>
@@ -212,12 +203,30 @@ export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
           clientSecret={paymentIntent.clientSecret}
           paymentIntentId={paymentIntent.paymentIntentId}
           onClose={() => setPaymentIntent(null)}
-          onPaymentConfirmed={(message) => {
-            setPaymentMessage(message);
-            setPaymentErrorMessage("");
+          onPaymentConfirmed={() => {
+            setPaymentNotice({
+              type: "success",
+              message: "Payment successful. Our operator will contact you.",
+            });
+          }}
+          onPaymentFailed={(message) => {
+            setPaymentNotice({
+              type: "error",
+              message,
+            });
           }}
         />
       )}
+
+      {paymentNotice &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <ProfilePaymentNoticeModal
+            paymentNotice={paymentNotice}
+            setPaymentNotice={setPaymentNotice}
+          />,
+          document.body,
+        )}
     </article>
   );
 };
