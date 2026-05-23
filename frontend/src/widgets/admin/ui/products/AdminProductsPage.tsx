@@ -8,7 +8,7 @@ import {
 } from "@/store/services/productsApi";
 import type { Product, SortVariant } from "@/features/product/model/types";
 import { useMemo, useState } from "react";
-import { ADMIN_PRODUCTS_PER_PAGE } from "../model/constants";
+import { ADMIN_PRODUCTS_PER_PAGE } from "../../model/constants";
 import { AdminProductFormModal } from "./AdminProductFormModal";
 import { SortDropdown } from "@/features/product/ui/catalog/SortDropdown";
 import { sortQueryMap } from "@/features/product/model/catalog.constants";
