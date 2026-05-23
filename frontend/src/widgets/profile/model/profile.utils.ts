@@ -1,3 +1,5 @@
+import { ProfileOrderStatusFilter } from "./types";
+
 export const getLoginErrorMessage = (error: unknown) => {
   if (!isBaseQueryError(error)) {
     return "Something went wrong. Please try again.";
@@ -101,3 +103,13 @@ export const formatProfileOrderPrice = (price: string | number) => {
 export const formatProfileOrderStatus = (status: string) => {
   return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
 };
+
+export const orderStatusFilterOptions: {
+  value: ProfileOrderStatusFilter;
+  title: string;
+}[] = [
+  { value: "ALL", title: "All statuses" },
+  { value: "PENDING", title: "Pending" },
+  { value: "PAID", title: "Paid" },
+  { value: "CANCELLED", title: "Cancelled" },
+];

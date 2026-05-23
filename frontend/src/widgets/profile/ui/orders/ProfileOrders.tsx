@@ -1,9 +1,18 @@
-import { Container, Loader } from "@/shared/ui";
+import { Loader } from "@/shared/ui";
 import { useGetMyOrdersQuery } from "@/store/services/ordersApi";
+import { useState } from "react";
 import { ProfileOrderRow } from "./ProfileOrderRow";
+import type { ProfileOrderStatusFilter } from "../../model/types";
+import { ProfileOrdersFilter } from "./ProfileOrdersFilter";
 
 export const ProfileOrders = () => {
-  const { data, isError, isLoading } = useGetMyOrdersQuery();
+  const [selectedStatus, setSelectedStatus] =
+    useState<ProfileOrderStatusFilter>("ALL");
+
+  const ordersQuery =
+    selectedStatus === "ALL" ? undefined : { status: selectedStatus };
+
+  const { data, isError, isLoading } = useGetMyOrdersQuery(ordersQuery);
   const orders = data?.data ?? [];
 
   return (
@@ -22,6 +31,7 @@ export const ProfileOrders = () => {
           <p className="text-sm font-bold tracking-[0.18em] text-[#947458] uppercase">
             {orders.length} orders
           </p>
+          <ProfileOrdersFilter selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus} />
         </div>
 
         <div className="mt-9">

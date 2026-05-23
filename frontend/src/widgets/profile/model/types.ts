@@ -1,5 +1,9 @@
 import { FormSubmitHandler } from "@/shared/model/types";
-import type { Order, OrderItem } from "@/features/order/model/types";
+import type {
+  Order,
+  OrderItem,
+  OrderStatus,
+} from "@/features/order/model/types";
 
 export type LoginStep = "login" | "otp" | "forgot" | "resetOtp" | "reset";
 export type ProfileMessageType = "success" | "error";
@@ -101,4 +105,11 @@ export interface ProfileOrderPriceRowProps {
   label: string;
   value: string;
   isTotal?: boolean;
+}
+
+export type ProfileOrderStatusFilter = OrderStatus | "ALL";
+
+export interface ProfileOrdersFilterProps {
+  selectedStatus: ProfileOrderStatusFilter;
+  setSelectedStatus: (value: ProfileOrderStatusFilter) => void;
 }
