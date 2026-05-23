@@ -26,7 +26,8 @@ import { Role } from '@prisma/client';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.DESIGNER)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('email/:email')
   getByEmail(@Param('email') email: string) {
@@ -58,7 +59,8 @@ export class UsersController {
     return this.usersService.findDesignerById(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.DESIGNER)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   getById(@Param('id', ParseUUIDPipe) id: string) {
@@ -76,7 +78,11 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateUserDto) {
-    return this.usersService.update(id, dto);
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateUserDto,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.usersService.update(id, dto, user);
   }
 }

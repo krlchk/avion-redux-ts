@@ -82,7 +82,14 @@ export class ReviewsService {
       );
     }
 
-    if (ordersWithProduct.userId === userId) {
+    const existingReview = await this.prisma.review.findFirst({
+      where: {
+        userId: userId,
+        productId: dto.productId,
+      },
+    });
+
+    if (existingReview) {
       throw new BadRequestException('You already left review on this product');
     }
 

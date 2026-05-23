@@ -5,11 +5,7 @@ import { ProductBenefits } from "./ProductBenefits";
 import { ProductMainCatalog } from "./ProductMainCatalog";
 import { ProductFeature } from "./ProductFeature";
 import { useState } from "react";
-
-export interface ProductCatalogProps {
-  initialSearchTerm: string;
-  initialCategoryId: string;
-}
+import type { ProductCatalogProps } from "../model/types";
 
 export const ProductCatalog = ({
   initialCategoryId,

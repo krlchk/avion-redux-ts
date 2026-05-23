@@ -3,7 +3,6 @@ import {
   Param,
   Post,
   UseGuards,
-  Headers,
   UsePipes,
   ValidationPipe,
   Body,
@@ -12,7 +11,7 @@ import { PaymentsService } from './payments.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { ConfirmOrderPaymentDto } from './dto/confrim-order-payments.dto';
+import { ConfirmOrderPaymentDto } from './dto/confirm-order-payment.dto';
 
 @Controller('payments')
 export class PaymentsController {
@@ -24,7 +23,7 @@ export class PaymentsController {
     return this.paymentsService.createPaymentIntent(orderId, user.id);
   }
 
-  @Post('confrim')
+  @Post('confirm')
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   confirm(

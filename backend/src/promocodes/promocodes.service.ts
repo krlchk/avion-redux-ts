@@ -42,6 +42,33 @@ export class PromocodesService {
     }
     return promoCode;
   }
+  async validateForCustomer(code: string) {
+    const promoCode = await this.findByCode(code);
+    const now = new Date();
+
+    if (!promoCode.isActive) {
+      throw new BadRequestException('Promo code not active');
+    }
+
+    if (
+      promoCode.maxUses !== null &&
+      promoCode.maxUses <= promoCode.usedCount
+    ) {
+      throw new BadRequestException('Promo code limit exceeded');
+    }
+
+    if (promoCode.expiresAt !== null && promoCode.expiresAt < now) {
+      throw new BadRequestException('Promo code expired');
+    }
+
+    return {
+      code: promoCode.code,
+      title: promoCode.title,
+      type: promoCode.type,
+      value: promoCode.value,
+      expiresAt: promoCode.expiresAt,
+    };
+  }
   async toggleActivatePromoCode(code: string, isActive: boolean) {
     const normalizedCode = code.toUpperCase();
     await this.findByCode(normalizedCode);

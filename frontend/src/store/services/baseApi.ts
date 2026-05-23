@@ -4,6 +4,16 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api",
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as { auth?: { token?: string | null } }).auth
+        ?.token;
+
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
     paramsSerializer: (params) => {
       const searchParams = new URLSearchParams();
 

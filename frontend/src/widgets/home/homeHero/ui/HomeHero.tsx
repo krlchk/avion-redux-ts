@@ -10,7 +10,7 @@ export const HomeHero = ({
 }: HomeHeroProps) => {
   return (
     <div className="relative overflow-hidden">
-      <div className="absolute -inset-6 animate-[hero-zoom_18s_ease-in-out_infinite] bg-[url('/images/home/heroHero.jpg')] bg-cover bg-center will-change-transform" />
+      <div className="absolute -inset-6 animate-[hero-zoom_18s_ease-in-out_infinite] bg-[url('/images/home/MB.jpg')] bg-cover bg-center will-change-transform" />
       <Container className="tablet:grid-cols-1 tablet:gap-16 tablet:py-24 mobile:grid-cols-1 mobile:gap-12 mobile:py-16 relative z-10 grid grid-cols-2 gap-32 py-36 text-[#f5f5f5]">
         <section className="mobile:p-6 flex max-w-175 flex-col gap-8 border border-[#f5f5f5]/20 bg-black/28 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur-sm">
           <div className="mobile:text-sm w-fit border border-[#f5f5f5]/15 px-4 py-3 text-base font-bold shadow-sm">

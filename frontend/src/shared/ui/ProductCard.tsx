@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "./Loader";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { toggleWishlist } from "@/store/slices/wishlistSlice";
 
 export const ProductCard = ({
   id,
@@ -17,6 +19,12 @@ export const ProductCard = ({
   isDiscount,
 }: ProductCardProps) => {
   const imageKey = typeof image === "string" ? image : image?.src;
+  const dispatch = useAppDispatch();
+  const likedProductIds = useAppSelector(
+    (state) => state.wishlist.likedProductIds ?? [],
+  );
+
+  const isLiked = likedProductIds.includes(id);
 
   return (
     <Link
@@ -52,10 +60,18 @@ export const ProductCard = ({
           {badge}
         </div>
       )}
-      <div className="group/like absolute right-2.5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#947458]/35 bg-[#f5f5f5] transition-all duration-300 hover:border-[#947458] hover:shadow-md">
+      <div
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dispatch(toggleWishlist(id));
+        }}
+        className="group/like absolute right-2.5 bottom-28 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#947458]/35 bg-[#f5f5f5] transition-all duration-300 hover:border-[#947458] hover:shadow-md"
+      >
         <Like
           className="text-[#947458] transition-colors duration-300 group-hover/like:fill-[#947458]"
           stroke="currentColor"
+          fill={`${isLiked ? "#947458" : "none"}`}
         />
       </div>
     </Link>

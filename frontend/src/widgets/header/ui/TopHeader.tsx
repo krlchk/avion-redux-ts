@@ -5,6 +5,7 @@ import { Container, Loader } from "@/shared/ui";
 import { useGetCategoriesQuery } from "@/store/services/categoriesApi";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import type { CategoryDropdownProps } from "../model/types";
 
 export const TopHeader = () => {
   const { data, isLoading, isError } = useGetCategoriesQuery();
@@ -115,12 +116,6 @@ export const TopHeader = () => {
     </div>
   );
 };
-
-interface CategoryDropdownProps {
-  selectedCategoryId: string;
-  onSelect: (value: string) => void;
-  options: { value: string; label: string }[];
-}
 
 const CategoryDropdown = ({
   selectedCategoryId,

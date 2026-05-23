@@ -63,6 +63,12 @@ export class ProductsService {
     const where: Prisma.ProductWhereInput = {};
     const orderBy: Prisma.ProductOrderByWithRelationInput = {};
 
+    if (dto.ids?.length) {
+      where.id = {
+        in: dto.ids,
+      };
+    }
+
     if (dto.designerIds && dto.designerIds.length > 0) {
       where.designerId = { in: dto.designerIds };
     }
@@ -196,7 +202,8 @@ export class ProductsService {
   // GET MY PRODUCTS
   async findMyProducts(user: UserEntity) {
     if (user.role === 'DESIGNER') {
-      return this.findByDesignerId(user.id);
+      const data = await this.findByDesignerId(user.id);
+      return { data };
     }
     if (user.role === 'ADMIN') {
       const products = await this.prisma.product.findMany({
@@ -220,15 +227,17 @@ export class ProductsService {
     user: UserEntity,
   ): Promise<Product> {
     const product = await this.getById(id);
-    const category = await this.prisma.category.findUnique({
-      where: {
-        id: dto.categoryId,
-      },
-    });
-    if (!category) {
-      throw new NotFoundException(
-        `You can not update this product because category with id:${dto.categoryId} not found`,
-      );
+    if (dto.categoryId !== undefined) {
+      const category = await this.prisma.category.findUnique({
+        where: {
+          id: dto.categoryId,
+        },
+      });
+      if (!category) {
+        throw new NotFoundException(
+          `You can not update this product because category with id:${dto.categoryId} not found`,
+        );
+      }
     }
 
     if (user.role === Role.ADMIN) {

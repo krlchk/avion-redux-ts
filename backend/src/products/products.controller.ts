@@ -89,7 +89,15 @@ export class ProductsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateProductDto,
     @CurrentUser() user: UserEntity,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
+    if (image) {
+      return this.filesService
+        .uploadFile(image)
+        .then((imgUrl) =>
+          this.productsService.update(id, { ...dto, img: imgUrl }, user),
+        );
+    }
     return this.productsService.update(id, dto, user);
   }
 

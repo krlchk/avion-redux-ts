@@ -8,7 +8,8 @@ export interface ContainerProps {
 
 export interface SimpleButtonProps {
   text: string | React.ReactNode;
-  onClick?: () => void;
+  onClick?: React.ComponentProps<"button">["onClick"];
+  styles?: string;
 }
 
 export interface LoaderProps {
