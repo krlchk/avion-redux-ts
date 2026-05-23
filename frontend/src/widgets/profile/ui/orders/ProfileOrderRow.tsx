@@ -1,4 +1,5 @@
 import { ArrowDown } from "@/shared/icons";
+import { useCreatePaymentIntentMutation } from "@/store/services/paymentsApi";
 import { useCancelOrderMutation } from "@/store/services/ordersApi";
 import { useState } from "react";
 import {
@@ -11,12 +12,23 @@ import type { ProfileOrderRowProps } from "../../model/types";
 import { ProfileConfirmModal } from "../profile/ProfileConfirmModal";
 import { ProfileOrderItemRow } from "./ProfileOrderItemRow";
 import { ProfileOrderMeta } from "./ProfileOrderMeta";
+import { ProfileOrderPaymentModal } from "./ProfileOrderPaymentModal";
 import { ProfileOrderPriceRow } from "./ProfileOrderPriceRow";
 
 export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
   const [cancelErrorMessage, setCancelErrorMessage] = useState("");
+  const [paymentMessage, setPaymentMessage] = useState("");
+  const [paymentErrorMessage, setPaymentErrorMessage] = useState("");
+  const [paymentIntent, setPaymentIntent] = useState<{
+    clientSecret: string;
+    paymentIntentId: string;
+  } | null>(null);
+  const [
+    createPaymentIntent,
+    { isLoading: isCreatePaymentIntentLoading },
+  ] = useCreatePaymentIntentMutation();
   const [cancelOrder, { isLoading: isCancelLoading }] =
     useCancelOrderMutation();
   const promoCodeLabel = order.promoCode
@@ -34,6 +46,19 @@ export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
     } catch (error) {
       setIsCancelConfirmOpen(false);
       setCancelErrorMessage(getProfileActionErrorMessage(error));
+    }
+  };
+
+  const handlePayOrder = async () => {
+    setPaymentMessage("");
+    setPaymentErrorMessage("");
+
+    try {
+      const nextPaymentIntent = await createPaymentIntent(order.id).unwrap();
+      setPaymentIntent(nextPaymentIntent);
+    } catch (error) {
+      setPaymentIntent(null);
+      setPaymentErrorMessage(getProfileActionErrorMessage(error));
     }
   };
 
@@ -133,9 +158,11 @@ export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
             <div className="mt-6 flex flex-wrap justify-end gap-4">
               <button
                 type="button"
-                className="cursor-pointer bg-[#947458] px-7 py-3 text-sm font-bold tracking-[0.12em] text-white uppercase transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg"
+                onClick={handlePayOrder}
+                disabled={isCreatePaymentIntentLoading}
+                className="cursor-pointer bg-[#947458] px-7 py-3 text-sm font-bold tracking-[0.12em] text-white uppercase transition-all duration-300 hover:-translate-y-1 hover:bg-[#a9825f] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Pay order
+                {isCreatePaymentIntentLoading ? "Preparing..." : "Pay order"}
               </button>
               <button
                 type="button"
@@ -153,6 +180,16 @@ export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
                   {cancelErrorMessage}
                 </p>
               )}
+              {paymentMessage && (
+                <p className="w-full text-right text-sm font-medium text-[#947458]">
+                  {paymentMessage}
+                </p>
+              )}
+              {paymentErrorMessage && (
+                <p className="w-full text-right text-sm font-medium text-[#FB5454]">
+                  {paymentErrorMessage}
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -166,6 +203,19 @@ export const ProfileOrderRow = ({ order }: ProfileOrderRowProps) => {
           isLoading={isCancelLoading}
           onCancel={() => setIsCancelConfirmOpen(false)}
           onConfirm={handleCancelOrder}
+        />
+      )}
+
+      {paymentIntent && (
+        <ProfileOrderPaymentModal
+          orderId={order.id}
+          clientSecret={paymentIntent.clientSecret}
+          paymentIntentId={paymentIntent.paymentIntentId}
+          onClose={() => setPaymentIntent(null)}
+          onPaymentConfirmed={(message) => {
+            setPaymentMessage(message);
+            setPaymentErrorMessage("");
+          }}
         />
       )}
     </article>

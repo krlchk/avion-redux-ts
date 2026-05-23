@@ -113,3 +113,17 @@ export const orderStatusFilterOptions: {
   { value: "PAID", title: "Paid" },
   { value: "CANCELLED", title: "Cancelled" },
 ];
+export interface ProfileOrderPaymentModalProps {
+  clientSecret: string;
+  orderId: string;
+  paymentIntentId: string;
+  onClose: () => void;
+  onPaymentConfirmed: (message: string) => void;
+}
+
+export interface ProfileOrderPaymentFormProps {
+  orderId: string;
+  paymentIntentId: string;
+  onClose: () => void;
+  onPaymentConfirmed: (message: string) => void;
+}

@@ -88,6 +88,21 @@ export interface MyOrdersRequest {
   status?: OrderStatus;
 }
 
+export interface CreatePaymentIntentResponse {
+  paymentIntentId: string;
+  clientSecret: string;
+}
+
+export interface ConfirmOrderPaymentRequest {
+  orderId: string;
+  paymentIntentId: string;
+}
+
+export interface ConfirmOrderPaymentResponse {
+  status: string;
+  message: string;
+}
+
 export interface AuthState {
   token: string | null;
   tempToken: string | null;
