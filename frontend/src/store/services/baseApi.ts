@@ -34,6 +34,7 @@ export const baseApi = createApi({
   }),
   tagTypes: [
     "Auth",
+    "Ai",
     "Categories",
     "Orders",
     "Payments",

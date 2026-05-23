@@ -23,7 +23,18 @@ export class OrdersService {
         createdAt: 'desc',
       },
       include: {
-        items: true,
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                title: true,
+                img: true,
+                price: true,
+              },
+            },
+          },
+        },
         user: true,
         promoCode: true,
       },

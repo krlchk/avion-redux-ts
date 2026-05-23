@@ -43,6 +43,13 @@ export class OrdersController {
     return this.ordersService.findAll(status);
   }
 
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @Get('admin/:id')
+  getByIdForAdmin(@Param('id', ParseUUIDPipe) orderId: string) {
+    return this.ordersService.getByIdForAdmin(orderId);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findById(
@@ -50,13 +57,6 @@ export class OrdersController {
     @CurrentUser() user: UserEntity,
   ) {
     return this.ordersService.getById(orderId, user.id);
-  }
-
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.ADMIN)
-  @Get('admin/:id')
-  getByIdForAdmin(@Param('id', ParseUUIDPipe) orderId: string) {
-    return this.ordersService.getByIdForAdmin(orderId);
   }
 
   @UseGuards(AuthGuard('jwt'))

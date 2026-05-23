@@ -5,6 +5,7 @@ import type {
   Category,
   CategoryDetails,
 } from "@/features/category/model/types";
+import { Search } from "@/shared/icons";
 import { useClientPagination } from "@/shared/model/pagination";
 import { Loader, PaginationControls } from "@/shared/ui";
 import {
@@ -27,12 +28,26 @@ export const AdminCategoriesPage = () => {
     null,
   );
   const [deleteMessage, setDeleteMessage] = useState("");
+  const [categorySearch, setCategorySearch] = useState("");
   const categories = useMemo(() => data?.data ?? [], [data]);
+  const filteredCategories = useMemo(() => {
+    const normalizedSearch = categorySearch.trim().toLowerCase();
+
+    if (!normalizedSearch) return categories;
+
+    return categories.filter((category) => {
+      const categoryFields = [category.name, category.id];
+
+      return categoryFields.some((field) =>
+        field.toLowerCase().includes(normalizedSearch),
+      );
+    });
+  }, [categories, categorySearch]);
   const sortedCategories = useMemo(() => {
-    return [...categories].sort((firstCategory, secondCategory) =>
+    return [...filteredCategories].sort((firstCategory, secondCategory) =>
       firstCategory.name.localeCompare(secondCategory.name),
     );
-  }, [categories]);
+  }, [filteredCategories]);
   const {
     page,
     setPage,
@@ -83,6 +98,29 @@ export const AdminCategoriesPage = () => {
         </button>
       </div>
 
+      <div className="mt-8">
+        <label className="grid max-w-xl gap-2">
+          <span className="text-xs font-bold tracking-[0.16em] text-black/40 uppercase">
+            Category search
+          </span>
+          <div className="relative">
+            <input
+              value={categorySearch}
+              onChange={(event) => {
+                setCategorySearch(event.target.value);
+                setPage(1);
+              }}
+              placeholder="Search by category name or id"
+              className="w-full border border-[#947458] bg-white py-3 pr-12 pl-4 text-base font-medium outline-none transition-colors focus:border-[#947458]"
+            />
+            <Search
+              className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
+              stroke="#947458"
+            />
+          </div>
+        </label>
+      </div>
+
       {isLoading && (
         <div className="flex min-h-80 items-center justify-center">
           <Loader />
@@ -104,9 +142,9 @@ export const AdminCategoriesPage = () => {
               <p className="text-right">Actions</p>
             </div>
 
-            {categories.length === 0 ? (
+            {filteredCategories.length === 0 ? (
               <div className="py-12 text-center text-base font-medium text-black/45">
-                No categories yet.
+                No categories found.
               </div>
             ) : (
               paginatedItems.map((category) => (

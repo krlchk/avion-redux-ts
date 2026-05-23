@@ -1,5 +1,6 @@
 "use client";
 
+import { Search } from "@/shared/icons";
 import { Loader, PaginationControls } from "@/shared/ui";
 import { useClientPagination } from "@/shared/model/pagination";
 import {
@@ -24,11 +25,25 @@ export const AdminProductsPage = () => {
   const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortVariant>("latest");
+  const [productSearch, setProductSearch] = useState("");
   const products = useMemo(() => data?.data ?? [], [data]);
+  const filteredProducts = useMemo(() => {
+    const normalizedSearch = productSearch.trim().toLowerCase();
+
+    if (!normalizedSearch) return products;
+
+    return products.filter((product) => {
+      const productFields = [product.title, product.id];
+
+      return productFields.some((field) =>
+        field.toLowerCase().includes(normalizedSearch),
+      );
+    });
+  }, [productSearch, products]);
   const sortedProducts = useMemo(() => {
     const selectedSortConfig = sortQueryMap[selectedSort];
 
-    return [...products].sort((firstProduct, secondProduct) => {
+    return [...filteredProducts].sort((firstProduct, secondProduct) => {
       const firstValue =
         selectedSortConfig.sortBy === "price"
           ? Number(firstProduct.price)
@@ -44,7 +59,7 @@ export const AdminProductsPage = () => {
 
       return secondValue - firstValue;
     });
-  }, [products, selectedSort]);
+  }, [filteredProducts, selectedSort]);
   const {
     page,
     setPage,
@@ -103,6 +118,29 @@ export const AdminProductsPage = () => {
         </div>
       </div>
 
+      <div className="mt-8">
+        <label className="grid max-w-xl gap-2">
+          <span className="text-xs font-bold tracking-[0.16em] text-black/40 uppercase">
+            Product search
+          </span>
+          <div className="relative">
+            <input
+              value={productSearch}
+              onChange={(event) => {
+                setProductSearch(event.target.value);
+                setPage(1);
+              }}
+              placeholder="Search by product name or id"
+              className="w-full border border-[#947458] bg-white py-3 pr-12 pl-4 text-base font-medium outline-none transition-colors focus:border-[#947458]"
+            />
+            <Search
+              className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
+              stroke="#947458"
+            />
+          </div>
+        </label>
+      </div>
+
       {isLoading && (
         <div className="flex min-h-80 items-center justify-center">
           <Loader />
@@ -126,9 +164,9 @@ export const AdminProductsPage = () => {
               <p className="text-right">Actions</p>
             </div>
 
-            {products.length === 0 ? (
+            {filteredProducts.length === 0 ? (
               <div className="py-12 text-center text-base font-medium text-black/45">
-                No products yet.
+                No products found.
               </div>
             ) : (
               paginatedItems.map((product) => (
