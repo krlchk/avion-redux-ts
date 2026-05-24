@@ -133,7 +133,7 @@ export class OrdersService {
           Number(product.price) * (1 - product.discountPercent / 100);
       }
 
-      totalPriceWithoutPromoCodesDiscounts =
+      totalPriceWithoutPromoCodesDiscounts +=
         finalPriceWithoutPromoCodesDiscounts * item.quantity;
 
       subtotalPrice += finalPrice * item.quantity;
